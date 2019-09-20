@@ -1,4 +1,4 @@
-The data used in the ExampleData.gdb file geodatabase was obtained from the following sources: 
+The data used in the ExampleData.gdb file geodatabase was downloaded from the following sources: 
 
 # Diffusion tube data
 https://cleanairgm.com/air-quality-data/diffusion-tubes

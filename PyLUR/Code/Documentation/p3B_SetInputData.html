@@ -1,0 +1,29 @@
+<html>
+<head>
+  <title>University of Manchester Land Use Regression Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Input Data</h1>
+  <h2 style="font-size:125%;font-weight:normal;">Line Feature Class</h2>
+  <p>From the dropdown menu select the line feature class from which you would like to extract data. The line feature class should have a spatial extent that is larger than the study area and
+     the largest buffer distance combined. The line feature class must contain a text field, which identifies a category for each line. If the feature class contains only one category, a dummy text field should
+    be created with all rows set to the same text string. If the Length weighted value or Length * Value aggregation method will be used, the line feature class must also contain a numeric field.</p>
+  <h2 style="font-size:125%;font-weight:normal;">Category Field</h2>
+  <p>From the dropdown menu select the text field, which identifies the category of each line. If the feature class contains only one category, select a dummy text field in which
+  all rows are set to the same text string. </p>
+  <h2 style="font-size:125%;font-weight:normal;">Aggregation Method</h2>
+  <p>Select the aggregation method to be used for this predictor variable.</p>
+  <ul>
+    <li><em>Total length</em> - This will calculate the sum of all line lengths within each buffer and category. <a href="p3_TypeOfPredictor.html#pB" target="blank">Click here</a>
+      for further details. </li>
+    <li><em>Length weighted value</em> - This will calculate a length weighted value within each buffer and category. <a href="p3_TypeOfPredictor.html#pB" target="blank">Click here</a>
+        for further details.
+    <li><em>Length * Value</em> - This will multiply the length of each polygon with a user selected value field. <a href="p3_TypeOfPredictor.html#pB" target="blank">Click here</a>
+          for further details.
+  </ul>
+  <h2 style="font-size:125%;font-weight:normal;">Value Field</h2>
+  <p>From the dropdown menu select the numeric field to be used in the Length weighted value or Length * Value aggregation method. If this field contains missing data, then lines with missing values may be extracted in the
+    intersect analysis. Please be aware that the Length weighted value and Length * Value aggregation methods will ignore rows with missing data and the calculated value will be based on the non-missing data only.
+    After a field has been selected a green tick mark will appear.</p>
+</body>
+</html>

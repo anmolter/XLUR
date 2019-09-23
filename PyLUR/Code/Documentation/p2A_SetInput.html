@@ -1,0 +1,26 @@
+<html>
+<head>
+  <title>University of Manchester Land Use Regression Wizard</title>
+</head>
+<body style="font-family:'Arial';line-height:1.5">
+  <h1 style="color:#4485b8; font-size:150%; font-weight:normal;">Set Data Source</h1>
+  <h2 style="font-size:125%; font-weight:normal;">Select File Geodatabase</h2>
+  <p>Click on the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Browse</span> button to open the directory dialogue.
+    Navigate to the File Geodatabase that contains your receptor points. <strong>This must be a folder with a '.gdb' extension.</strong> Click
+    the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Select Folder</span> button.
+      The file path to the File Geodatabase and a green tick mark will appear. The dropdown menu below will be populated with the names of all point feature classes in this
+      File Geodatabase. Depending on the size of the File Geodatabase this may take a while.</p>
+  <h2 style="font-size:125%; font-weight:normal;">Receptor Points</h2>
+  <p>From the dropdown menu, select the feature class that contains the receptor points. It is recommended to use a feature class that does not contain spatial duplicates, as the presence of spatial
+    duplicates will slow down the performance of the tool.</p>
+    <p> A green tick mark will appear and
+    the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Next ></span>
+  button will be activated. This completes the Receptors from Feature Class step.</p>
+  <p style="border:2px; border-style:solid; border-color:#FF0000;background-color:#ffcccc; padding:5px">If the LUR models contain predictors that are derived from
+    the Inverse distance, Inverse distance squared, Value * Inverse Distance, or Value * Inverse distance squared to the nearest feature, then any receptor points
+    located on top of the nearest feature will result in a division by zero error, because the distance is zero. To prevent this, the wizard will check if
+    the LUR model contains an Inverse distance, Inverse distance squared, Value * Inverse Distance, or Value * Inverse distance squared predictor. If this is the case, the wizard will
+    remove any receptor points located on top of the relevant features. The warning message <em>"Invalid receptor points. See log for details."</em> will appear and the Apply_LOG will record
+    which predictor variable resulted in the removal of receptor points. The Apply_LOG will also record the initial and final number of receptor points used.</p>
+</body>
+</html>

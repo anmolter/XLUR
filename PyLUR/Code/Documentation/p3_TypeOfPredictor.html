@@ -1,0 +1,232 @@
+<html>
+<head>
+  <title>University of Manchester Land Use Regression Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Which Type of Predictor Variable would you like to add?</h1>
+  <a id="import">
+  <p>Predictor variables can be derived from vector data and from raster data. From vector data predictor variables can be extracted based on
+    circular buffers around the monitoring sites or based on the distance to the nearest feature. Since vector data can be polygons,
+    lines or points, this results in six possible types of predictor variables. From raster data only the value of the raster cell that
+    that is spatially coincident with the monitoring site point can be extracted, adding one more possible type of predictor. Therefore, in total seven types of predictor
+    variables can be extracted and entered into the statistical analysis. Each type of variable can produce multiple predictors,
+    depending on additional settings such as the number of buffer distances, the number of categories within a feature class, or the aggregation/extraction method specified.<p>
+  <h2 style="font-size:135%;font-weight:normal;">Types of predictor variables</h2>
+  <ol style="list-style-type: upper-alpha;">
+    <a href="#pA"><li>Polygon Area or Value within Buffer</li></a>
+    <a href="#pB"><li>Line Length or Value within Buffer</li></a>
+    <a href="#pC"><li>Point Count or Value within Buffer</li></a>
+    <br></br>
+    <a href="#pD"><li>Distance to and/or Value of nearest Polygon</li></a>
+    <a href="#pE"><li>Distance to and/or Value of nearest Line</li></a>
+    <a href="#pF"><li>Distance to and/or Value of nearest Point</li></a>
+    <br></br>
+    <a href="#pG"><li>Value of Raster cell</li></a>
+  </ol>
+
+  <h2 style="font-size:135%;font-weight:normal;">Buffer based Predictors</h2>
+  <a id="pA"><h2 style="font-size:125%; font-weight:normal;">Polygon Area or Value within Buffer</h2>
+    <p>For this type of variable a polygon feature class should be used, which has a spatial extent that is larger than that of the study area and the largest buffer distance. The polygon
+      feature class should not contain duplicates or invalid geometries (if uncertain about invalid geometries, run the Check Geometry or Repair Geometry tool prior to running the wizard).
+      The polygon feature class must contain a text field, which identifies a category for each polygon. If the feature class contains only one category of polygon, a dummy text field should
+      be created with all rows set to the same value.</p>
+    <h3 style="font-size:110%;font-weight:normal;">Polygon Area within Buffer</h3>
+    <p><img src="Images\\PolyInBuffer_MultCategories.jpg" alt="PolygonBufferArea" width=400 height=400 /></p>
+    <p>This example diagram is based on a polygon feature class with four categories (A,B,C,D). For a given buffer distance the wizard will calculate the total area (in the squared map unit
+      of the projected coordinate system) of each category within the buffer, e.g.
+      <ul>
+        <li>Total area of category A = Area of A<sub>1</sub> + Area of A<sub>2</sub> + Area A<sub>3 </sub></li>
+        <li>Total area of category B = Area of B<sub>1</sub> + Area of B<sub>2</sub> + Area B<sub>3 </sub></li>
+        <li>Total area of category C = Area of C<sub>1</sub> + Area of C<sub>2</sub> + Area C<sub>3 </sub></li>
+        <li>Total area of category D = Area of D<sub>1</sub> + Area of D<sub>2</sub> + Area D<sub>3 </sub> + Area D<sub>4 </sub></li>
+      </ul>
+    <p>A real life example of this variable type would be a polygon feature class of land use. Each category would contain a different type of land use, for example residential, industrial,
+      commercial etc. Total land areas of each land use category within the circular buffer would be produced, e.g. in m<sup>2</sup> for the British National Grid. </p>
+    <h3 style="font-size:110%;font-weight:normal;">Polygon Value within Buffer</h3>
+    <p><img src="Images\\PolyInBuffer_MultCatValue.jpg" alt="PolygonBufferValue" width=400 height=400 /></p>
+    <p>This example diagram is based on a polygon feature class with four categories (A,B,C,D) and each polygon has a numeric value attribute ("Value"). For a given buffer distance the wizard
+      will calculate the total area weighted value for each category within the buffer, e.g.
+      <ul>
+        <li>Total area weighted value of category A = ((Area of A<sub>1</sub> inside buffer &divide; Total Area of A<sub>1</sub>) &times; Value of A<sub>1</sub>) + ((Area of A<sub>2</sub> inside buffer &divide; Total Area of A<sub>2</sub>) &times; Value of A<sub>2</sub>)</li>
+        <li>Total area weighted value of category B = ((Area of B<sub>1</sub> inside buffer &divide; Total Area of B<sub>1</sub>) &times; Value of B<sub>1</sub>) + ((Area of B<sub>2</sub> inside buffer &divide; Total Area of B<sub>2</sub>) &times; Value of B<sub>2</sub>)</li>
+        <li>Total area weighted value of category C = ((Area of C<sub>1</sub> inside buffer &divide; Total Area of C<sub>1</sub>) &times; Value of C<sub>1</sub>) + ((Area of C<sub>2</sub> inside buffer &divide; Total Area of C<sub>2</sub>) &times; Value of C<sub>2</sub>)</li>
+        <li>Total area weighted value of category D = ((Area of D<sub>1</sub> inside buffer &divide; Total Area of D<sub>1</sub>) &times; Value of D<sub>1</sub>) + ((Area of D<sub>2</sub> inside buffer &divide; Total Area of D<sub>2</sub>) &times; Value of D<sub>2</sub>)</li>
+      </ul>
+    <p>A real life example of this variable type would be a polygon feature class of population density.</p>
+    <p>Alternatively, the wizard can calculate the total sum of the product of the polygon area and the polygon value, e.g.</p>
+    <ul>
+      <li>Total sum of product of area and value of category A = (Area of A<sub>1</sub> inside buffer &times; Value of A<sub>1</sub>) + (Area of A<sub>2</sub> inside buffer &times; Value of A<sub>2</sub>)</li>
+      <li>Total sum of product of area and value of category B = (Area of B<sub>1</sub> inside buffer &times; Value of B<sub>1</sub>) + (Area of B<sub>2</sub> inside buffer &times; Value of B<sub>2</sub>)</li>
+      <li>Total sum of product of area and value of category C = (Area of C<sub>1</sub> inside buffer &times; Value of C<sub>1</sub>) + (Area of C<sub>2</sub> inside buffer &times; Value of C<sub>2</sub>)</li>
+      <li>Total sum of product of area and value of category D = (Area of D<sub>1</sub> inside buffer &times; Value of D<sub>1</sub>) + (Area of D<sub>2</sub> inside buffer &times; Value of D<sub>2</sub>)</li>
+    </ul>
+    <p>A real life example of this variable type would be a polygon feature class of area emission sources such as fugitive emissions from land use categories based on different estimated
+      car parking densities. Another example is anthropogenic heat emissions from different residential land uses depending on housing characteristics and estimated energy use.</p>
+    <a href="#TOP">Back to top</a>
+    </p></a>
+
+  <a id="pB"><h2 style="font-size:125%;font-weight:normal;">Line Length or Value within Buffer</h2>
+    <p>For this type of variable a line feature class should be used, which has a spatial extent that is larger than: the study area + the largest buffer distance. The line
+      feature class should not contain duplicates. The line feature class must contain a text field, which identifies a category for each line. If the feature class contains only
+      one category, a dummy text field should be created with all rows set to the same value.</p>
+    <h3 style="font-size:110%;font-weight:normal;">Line Length within Buffer</h3>
+    <p><img src="Images\\LineInBuffer_MultCat.jpg" alt="LineBufferLength" width=400 height=400 /></p>
+    <p>This example diagram is based on a line feature class with two categories (A,B). For a given buffer distance the wizard will calculate the total length (in the map unit
+      of the projected coordinate system) of each category within the buffer, e.g.
+      <ul>
+        <li>Total length of category A = Length of A<sub>1</sub> + Length of A<sub>2</sub>
+        <li>Total length of category B = Length of B<sub>1</sub> + Length of B<sub>2</sub> + Length B<sub>3</sub> + Length B<sub>4</sub> + Length B<sub>5</sub> + Length B<sub>6</sub></li>
+      </ul>
+    <p>A real life example of this variable type would be a line feature class of roads. Each category would contain a different type of road, for example motorway, local street etc.
+    Total line lengths of each land use category within the circular buffer would be produced, e.g. in m for the British National Grid.</p>
+    <h3 style="font-size:110%;font-weight:normal;">Line Value within Buffer</h3>
+    <p><img src="Images\\LineInBuffer_MultValue.jpg" alt="LineBufferValue" width=400 height=400 /></p>
+    <p>This example diagram is based on a line feature class with two categories (A,B) and each line has a numeric value. For a given buffer distance the wizard will calculate
+      the total length weighted value for each category within the buffer, e.g.
+      <ul>
+        <li>Total length weighted value of category A = ((Length of A<sub>1</sub> inside buffer &divide; Total Length of A<sub>1</sub>) &times; Value of A<sub>1</sub>) + ((Length of A<sub>2</sub> inside buffer &divide; Total Length of A<sub>2</sub>) &times; Value of A<sub>2</sub>)</li>
+        <li>Total length weighted value of category B = ((Length of B<sub>1</sub> inside buffer &divide; Total Length of B<sub>1</sub>) &times; Value of B<sub>1</sub>) +
+          ((Length of B<sub>2</sub> inside buffer &divide; Total Length of B<sub>2</sub>) &times; Value of B<sub>2</sub>) +
+          ((Length of B<sub>3</sub> inside buffer &divide; Total Length of B<sub>3</sub>) &times; Value of B<sub>3</sub>) +
+          ((Length of B<sub>4</sub> inside buffer &divide; Total Length of B<sub>4</sub>) &times; Value of B<sub>4</sub>) +
+          ((Length of B<sub>5</sub> inside buffer &divide; Total Length of B<sub>5</sub>) &times; Value of B<sub>5</sub>) +
+          ((Length of B<sub>6</sub> inside buffer &divide; Total Length of B<sub>6</sub>) &times; Value of B<sub>6</sub>)</li>
+      </ul>
+    <p>A real life example of this variable type would be a line feature class of traffic counts.</p>
+    <p>Alternatively, the wizard can calculate the total sum of the product of the line length and the line value, e.g.</p>
+    <ul>
+      <li>Total sum of product of length and value of category A = (Length of A<sub>1</sub> inside buffer &times; Value of A<sub>1</sub>) + (Length of A<sub>2</sub> inside buffer &times; Value of A<sub>2</sub>)</li>
+      <li>Total sum of product of length and value of category B = (Length of B<sub>1</sub> inside buffer &times; Value of B<sub>1</sub>) + (Length of B<sub>2</sub> inside buffer &times; Value of B<sub>2</sub>) +
+        (Length of B<sub>3</sub> inside buffer &times; Value of B<sub>3</sub>) + (Length of B<sub>4</sub> inside buffer &times; Value of B<sub>4</sub>) +
+        (Length of B<sub>5</sub> inside buffer &times; Value of B<sub>5</sub>) + (Length of B<sub>6</sub> inside buffer &times; Value of B<sub>6</sub>) + </li>
+    </ul>
+    <p>A real life example of this variable type would be a line feature class of proxy emissions loadings represented by average vehicle-kilometres per day.</p>
+    <a href="#TOP">Back to top</a>
+    </p></a>
+
+  <a id="pC"><h2 style="font-size:125%;font-weight:normal;">Point Count or Value within Buffer</h2>
+    <p>For this type of variable a point feature class should be used, which has a spatial extent that is larger than: the study area + the largest buffer distance. The point
+        feature class should not contain duplicates. The point feature class must contain a text field, which identifies a category for each point. If the feature class contains only
+        one category, a dummy text field should be created with all rows set to the same value.</p>
+      <h3 style="font-size:110%;font-weight:normal;">Point Count within Buffer</h3>
+      <p><img src="Images\\PointInBuffer_MultCat.jpg" alt="PointBufferCount" width=400 height=400 /></p>
+      <p>This example diagram is based on a point feature class with three categories (A,B,C). For a given buffer distance the wizard will count the number of points belonging to each category within the buffer, e.g.
+        <ul>
+          <li>Total count of category A = &#123;A<sub>1</sub>, A<sub>2</sub>&#125; </li>
+          <li>Total count of category B = &#123;B<sub>1</sub> &#125;</li>
+          <li>Total count of category C = &#123;C<sub>1</sub>, C<sub>2</sub>&#125;</li>
+        </ul>
+      <p>A real life example of this variable type would be a point feature class of trees. Each category would contain a different tree species, for example <em>Quercus robur, Fagus sylvatica,
+        Cornus sanguinea</em> etc. The count would therefore be the number of individuals of each species within the buffer. Another example would be the count of particular stacks (chimneys) used as
+        a proxy of emission rates.</p>
+      <h3 style="font-size:110%;font-weight:normal;">Point Value within Buffer</h3>
+      <p><img src="Images\\PointInBuffer_MultValue.jpg" alt="PointBufferValue" width=400 height=400 /></p>
+      <p>This example diagram is based on a point feature class with three categories (A,B,C) and each point has a numeric attribute value. For a given buffer distance the wizard will calculate
+        the sum of values for each category within the buffer, e.g.
+        <ul>
+          <li>Sum of values of category A = Value of A<sub>1</sub> + Value of A<sub>2</sub></li>
+          <li>Sum of values of category B = Value of B<sub>1</sub></li>
+          <li>Sum of values of category C = Value of C<sub>1</sub> + Value of C<sub>2</sub></li>
+        </ul>
+      <p>A real life example of this variable type would be a point feature class of chimney stacks with different emission rates (e.g. grammes of NOx per hour).</p>
+      <p>Alternatively, the wizard can calculate the mean or median of the values, e.g.</p>
+      <ul>
+        <li>Mean of values of category A = (Value of A<sub>1</sub> + Value of A<sub>2</sub>) &divide; Number of points within buffer belonging to category A </li>
+        <li>Mean of values of category B = Value of B<sub>1</sub>  &divide; Number of points within buffer belonging to category B</li>
+        <li>Mean of values of category C = (Value of C<sub>1</sub> + Value of C)  &divide; Number of points within buffer belonging to category C<sub>2</sub></li>
+      </ul>
+      <p>A real life example of this variable type would be tree height.</p>
+      <a href="#TOP">Back to top</a>
+    </p></a>
+
+  <h2 style="font-size:135%;font-weight:normal;">Distance based Predictors</h2>
+  <a id="pD"><h2 style="font-size:125%;font-weight:normal;">Distance to and/or Value of nearest Polygon</h2>
+    <p>For this type of variable a polygon feature class should be used, which ideally has a spatial extent that is larger than the study area. The polygon
+      feature class must not contain spatial duplicates or invalid geometries (if uncertain about invalid geometries, run the Check Geometry or Repair Geometry tool prior to running the wizard).</p>
+    <p><img src="Images\\PolygonDistance.jpg" alt="PolygonDistance" width=650 height=350 /></p>
+    <p>This example diagram shows a feature class of non-contiguous polygons with different values for each feature. For each each point feature representing a monitoring site
+      the wizard will identify the nearest polygon and calculate one or more of the
+      following options:
+      <ul>
+        <li>Distance = The distance to the nearest polygon edge (in the map unit of the projected coordinate system)</li>
+        <li>Inverse distance = 1 &divide; distance to the nearest polygon edge</li>
+        <li>Inverse distance squared = 1 &divide; (distance to the nearest polygon edge)<sup>2</sup></li>
+        <li>Value = The value of the nearest polygon</li>
+        <li>Value * Distance = The value of the nearest polygon &times; the distance to the nearest polygon edge</li>
+        <li>Value * Inverse distance = The value of the nearest polygon &times; (1 &divide; distance to the nearest polygon edge)</li>
+        <li>Value * Inverse distance squared = The value of the nearest polygon &times; (1 &divide; (distance to the nearest polygon edge)<sup>2</sup>)</li>
+      </ul></p>
+    <p>A real life example of this variable type would be proximity to water bodies with the potential to reduce air temperatures monitored at weather stations or the impact of
+      fugitive emission sources from industrial sites on air quality. Inverse squared distance values are useful to represent the importance of distance, i.e. to give greater importance
+      to nearby polygon features compared with those further away. A value attribute field might be useful if the size of the feature is important, e.g. livestock densities on agricultural land parcels in the case of ambient ammonia concentrations.</p>
+    <p style="border:2px; border-style:solid; border-color:#FF0000;background-color:#ffcccc; padding:5px">If the monitoring site is located on top of a polygon (i.e. the distance is zero) the Inverse distance,
+      Inverse distance squared, Value * Inverse Distance, and Value * Inverse distance squared options will produce a division by zero error and the result for the feature will be set to <strong>missing</strong>.
+      The Distance and Value * Distance options will produce a result of <strong>zero</strong>. Therefore, the user should carefully inspect the data prior to using
+      these options.</p>
+    <a href="#TOP">Back to top</a>
+    </p></a>
+
+  <a id="pE"><h2 style="font-size:125%;font-weight:normal;">Distance to and/or Value of nearest Line</h2>
+    <p>For this type of variable a line feature class should be used, which ideally has a spatial extent that is larger than the study area. The line
+      feature class must not contain spatial duplicates.</p>
+    <p><img src="Images\\LineDistance.jpg" alt="LineDistance" width=660 height=570 /></p>
+    <p>This example diagram shows a line feature class with different values for each feature. For each point feature representing a monitoring site loaction the wizard will identify the
+      nearest line and calculate one or more of the
+      following options:
+      <ul>
+        <li>Distance = The distance to the nearest line (in the unit of the projected coordinate system)</li>
+        <li>Inverse distance = 1 &divide; distance to the nearest line</li>
+        <li>Inverse distance squared = 1 &divide; (distance to the nearest line)<sup>2</sup></li>
+        <li>Value = The value of the nearest line</li>
+        <li>Value * Distance = The value of the nearest line &times; the distance to the nearest line</li>
+        <li>Value * Inverse distance = The value of the nearest line &times; (1 &divide; distance to the nearest line)</li>
+        <li>Value * Inverse distance squared = The value of the nearest line &times; (1 &divide; (distance to the nearest line)<sup>2</sup>)</li>
+      </ul></p>
+    <p>A real life example of this variable type would be proximity to the nearest road feature to represent the potential for higher ambient air pollutant concentrations due to
+      vehicular emissions or proximity to the nearest river to represent the potential for lower air temperatures at nearby weather stations. Inverse squared distance values are
+      useful to represent the importance of distance, i.e. to give greater importance to nearby line features compared with those further away. A Value attribute field might be useful
+      if the size of the feature is important, e.g. roads with an attribute representing traffic volume.</p>
+    <p style="border:2px; border-style:solid; border-color:#FF0000;background-color:#ffcccc; padding:5px">If the monitoring site is located on top of a line (i.e. the distance is zero) the Inverse distance,
+      Inverse distance squared, Value * Inverse Distance, and Value * Inverse distance squared options will produce a division by zero error and the result for the feature will be set to <strong>missing</strong>.
+      The Distance and Value * Distance options will produce a result of <strong>zero</strong>. Therefore, the user should carefully inspect the data prior to using
+      these options.</p>
+    <a href="#TOP">Back to top</a>
+    </p></a>
+
+
+  <a id="pF"><h2 style="font-size:125%;font-weight:normal;">Distance to and/or Value of nearest Point</h2>
+    <p>For this type of variable a point feature class should be used, which ideally has a spatial extent that is larger than the study area. The point
+      feature class must not contain spatial duplicates.</p>
+    <p><img src="Images\\PointDistance.jpg" alt="PointDistance" width=650 height=583 /></p>
+    <p>This example diagram shows a point feature class with different values for each feature. For each monitoring site the wizard will identify the nearest point and calculate one or more of the
+      following options:
+      <ul>
+        <li>Distance = The distance to the nearest point (in the map unit of the projected coordinate system)</li>
+        <li>Inverse distance = 1 &divide; distance to the nearest point</li>
+        <li>Inverse distance squared = 1 &divide; (distance to the nearest point)<sup>2</sup></li>
+        <li>Value = The value of the nearest point</li>
+        <li>Value * Distance = The value of the nearest point &times; the distance to the nearest point</li>
+        <li>Value * Inverse distance = The value of the nearest point &times; (1 &divide; distance to the nearest point)</li>
+        <li>Value * Inverse distance squared = The value of the nearest point &times; (1 &divide; (distance to the nearest point)<sup>2</sup>)</li>
+      </ul>
+    <p>A real life example of this variable type would be proximity to the nearest point feature representing a chimney stack. In this case closer distances are more likely to result in
+      higher pollutant concentrations. Inverse squared distance values are useful to represent the importance of distance, i.e. to give greater importance to nearby point features compared
+      with those further away. A Value attribute field might be useful if the size of the feature is important, e.g. the emission rate from the chimney stack.</p>
+    <p style="border:2px; border-style:solid; border-color:#FF0000;background-color:#ffcccc; padding:5px">If the monitoring site is located on top of a point (i.e. the distance is zero) the Inverse distance,
+      Inverse distance squared, Value * Inverse Distance, and Value * Inverse distance squared options will produce a division by zero error and the result for the feature will be set to <strong>missing</strong>.
+      The Distance and Value * Distance options will produce a result of <strong>zero</strong>. Therefore, the user should carefully inspect the data prior to using
+      these options.</p>
+    <a href="#TOP">Back to top</a>
+    </p></a>
+
+  <h2 style="font-size:135%;font-weight:normal;">Raster based Predictors</h2>
+  <a id="pG"><h2 style="font-size:125%;font-weight:normal;">Value of Raster cell</h2>
+    <p>For this type of variable a raster grid file should be used, which ideally has a spatial extent that is larger than the study area. The wizard will
+      extract the value of the raster cell that is spatially coincident with the point location representing the monitoring site (dependent variable). </p>
+    <p>An example of the use of this predictor variable type is elevation. Elevation is commonly sourced from a Digital Elevation Model stored as a raster grid.</p>
+
+    <a href="#TOP">Back to top</a>
+    </p></a>
+</a>
+</body>
+</html>

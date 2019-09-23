@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>University of Manchester Land Use Regression Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Variable Name</h1>
+  <h2 style="font-size:125%;font-weight:normal;">Variable Name</h2>
+  <p>Type in a name for the predictor variable to be created. This must be a unique name, i.e. the same name cannot be assigned to two or more different predictor variables. The name must have a length
+    of at least 1 character and can have a maximum length of 20 characters (ISO basic Latin alphabet). The name cannot contain numbers, spaces or special characters. It is recommended to use
+    a name that will help users to identify the input dataset that the predictor was derived from (e.g. use "altitude" rather than "PredictorOne").  
+    Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Enter</span> button.</p>
+  <div style="border:2px; border-style:solid; border-color:#0000FF; background-color:#e6f0ff;padding:5px">
+  <h3 style="font-size:110%; margin-top:0;font-weight:normal;">Name Schema for Value of nearest Raster cell</h3>
+  <p>Predictor variables extracted through this method will appear in the following name schema:</p>
+  <p><em><font color="blue">pG</font>_<font color="green">[name entered by user]</font>_<font color="blue">raster_val</font></em></p>
+  <p>where:</p>
+  <ul>
+    <li><em><font color="blue">pG</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>G</em> indicates the type of predictor
+      variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+    <li><em><font color="blue">raster_val</font></em> - <span style="text-decoration: underline;">set automatically:</span> shows that this is a value extracted from a raster file.</l>
+  </ul>
+  <p><span style="text-decoration: underline;">Example:</span></p>
+  <p><em>pG_digiterrain_raster_val</em> - This predictor variable was extracted from a raster file of digital terrain data. The naming schema shows that a cell value from a raster file was extracted.</p>
+  </div>
+</body>
+</html>

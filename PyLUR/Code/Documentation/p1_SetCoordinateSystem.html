@@ -1,0 +1,22 @@
+<html>
+<head>
+  <title>University of Manchester Land Use Regression Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Coordinate System</h1>
+  <h2 style="font-size:125%;font-weight:normal;">Enter WKID number</h2>
+  <p>The user must specify a <strong>projected</strong> coordinate system for the data. The wizard will automatically create a feature dataset called <em>LURdata</em> inside the <em>[Project name]_[Date_Time].gdb</em>
+    file geodatabase. The specified coordinate system will be used as the spatial reference for the <em>LURdata</em> feature datatset. Feature classes selected during step 2 (Outcomes) and
+    step 3 (Predictors) of the wizard will be imported into the <em>LURdata</em> feature dataset prior to analysis. This ensures that all feature classes used in the analysis have the same spatial reference. Raster
+    files will be projected into the specified coordinate system prior to analysis, due to the fact that they cannot be imported into a feature dataset.</p>
+  <p>ESRI uses the Well-Known ID (WKID) to define the spatial reference. Use <a href="https://desktop.arcgis.com/en/arcmap/latest/map/projections/pdf/projected_coordinate_systems.pdf">this link</a>
+    to find the WKID of the projected coordinate system of your choice. For example the British National Grid is WKID:27700.</p>
+  <p>Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">OK</span> button. If a valid WKID has been entered, the name of the
+    selected coordinate system will be shown. Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">OK</span> button and a green
+    tick mark will appear.</p>
+  <p style="border:2px; border-style:solid; border-color:#FF0000;background-color:#ffcccc; padding:5px">The unit of the coordinate system will determine the unit of the buffer distances. For example, if
+    the coordinate system is defined in metres, then the buffer distances need to be specified in metres. If the coordinate system is defined in feet, then the buffer distances need to be specified
+    in feet.</p>
+
+</body>
+</html>

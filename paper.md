@@ -54,7 +54,7 @@ European Study of Cohorts for Air Pollution Effects (ESCAPE) [@Beelen:2013;@Eeft
 assessment manual [@escape]. Within air pollution research the ESCAPE methodology is used as
 the standard for developing LUR models. PyLUR also allows hybrid LUR models to be developed, based on an extension 
 of the ESCAPE methodology that included the addition of satellite derived data and data from chemical transport 
-models [@de Hoogh:2016]. 
+models [@deHoogh:2016]. 
 
 ## Current application
 

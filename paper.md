@@ -8,7 +8,7 @@ authors:
   - name: Anna Molter
     orcid: 0000-0002-0824-4478
     affiliation: 1
-affiliation:
+affiliations:
  - name: Department of Geography, School of Environment, Education and Development, The University of Manchester
    index: 1
 date: 4 July 2019

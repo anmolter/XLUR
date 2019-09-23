@@ -52,7 +52,7 @@ $(document).ready(function () {
             <div class="col-xs-3">
         <div id="header">
     <h1 class="title">PyLUR Wizard</h1>
-                <h4 class="date"><em>v.2019-09-19</em></h4>
+                <h4 class="date"><em>v.2019-09-23</em></h4>
         </div>
     </div>
 </div>
@@ -123,7 +123,7 @@ $(document).ready(function () {
 <p><img src="Images/manager4e.jpg" /></p>
 <p>After these four packages have been installed, click the back arrow in the menu on the left hand side.</p>
 <ol start="6" style="list-style-type: decimal">
-<li>Click Open another project, browse to the PyLUR.aprx and double-click to open it. In the Catalog window double-click Toolboxes, then double-click PyLUR.tbx. This will open the PyLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.</li>
+<li>Click Open another project, browse to the PyLUR.aprx ArcGIS Pro Project file and double-click to open it. The PyLUR.aprx file can be found in the PyLUR folder in the PyLUR repository. In the Catalog window double-click Toolboxes, then double-click PyLUR.tbx. This will open the PyLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.</li>
 </ol>
 </div>
 <div id="general-information" class="section level1 tabset tabset-pills">
@@ -1819,7 +1819,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <div id="before-you-start" class="section level2">
 <h2>Before you start</h2>
 <ol style="list-style-type: decimal">
-<li>Download ExampleData.gdb.zip from the PyLUR repository on GitHub and unzip the ExampleData.gdb file geodatabase.</li>
+<li>Ensure that you have cloned or downloaded the PyLUR repository from GitHub, including the ExampleData folder.</li>
 <li>Follow the instructions in the <a href="#installation">Installation</a> section to ensure that the additional Python packages required by PyLUR have been installed.</li>
 <li>Create a directory where you would like to store outputs from the model, for example C:\Work\PyLUROutput. Please ensure that you have write access to this directory and that there are no spaces in the file path.</li>
 </ol>
@@ -1827,8 +1827,8 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <div id="starting-the-pylur-wizard" class="section level2">
 <h2>Starting the PyLUR wizard</h2>
 <ol style="list-style-type: decimal">
-<li>Start ArcGIS Pro and open the PyLUR project.</li>
-<li>In the Catalog window right-click Folders and click Add Folder Connection. Create a connection to the directory in which the ExampleData.gdb file geodatabase has been saved.<br />
+<li>Start ArcGIS Pro and open the PyLUR project. The PyLUR.aprx project file can be found in the PyLUR folder in the PyLUR repository.</li>
+<li>In the Catalog window right-click Folders and click Add Folder Connection. Create a connection to the ExampleData.gdb file geodatabase, which is stored in the ExampleData folder in the PyLUR repository.<br />
 </li>
 <li>Double-click toolboxes, double-click PyLUR.tbx, then double-click the BuildLUR script. In the Geoprocessing window on the right click Run. This will open the Build LUR wizard.</li>
 </ol>

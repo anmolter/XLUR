@@ -12,7 +12,7 @@ affiliations:
  - name: Department of Geography, School of Environment, Education and Development, The University of Manchester
    index: 1
 date: 4 July 2019
-bibliography: PyLUR_paper.bib
+bibliography: paper.bib
 ---
 
 # Summary

@@ -11,7 +11,7 @@ The PyLUR tools require a small number of additional Python packages to be insta
 
 1.  Open ArcGIS Pro. Click the About ArcGIS Pro button in the bottom left corner (denoted by the red arrow in the screenshot below). *In ArcGIS Pro v.2.3 this button is called Settings.*
 
-![](Images\manager1.jpg)
+![](https://github.com/anmolter/PyLUR/tree/master/PyLUR/Code/Documentation/Images/manager1.jpg)
 
 1.  In the menu on the left hand side click Python. This will open the Python Package Manager. Click the Manage Environments button.
 

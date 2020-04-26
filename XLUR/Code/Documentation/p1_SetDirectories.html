@@ -1,0 +1,85 @@
+<html>
+<head>
+  <title>XLUR Wizard</title>
+</head>
+<body style="font-family:'Arial';line-height:1.5">
+  <h1 style="color:#4485b8; font-size:150%; font-weight:normal;">Set Directories</h1>
+  <h2 style="font-size:125%; font-weight:normal;">Input File Geodatabase</h2>
+  <p>Click on the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Browse</span> button to open the directory dialog.
+    Navigate to the file geodatabase containing your data. <strong>This must be a folder with a '.gdb' extension.</strong>
+  </p>
+    <p>Click on the file geodatabase, then click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Select Folder</span> button.
+      The file path to the input file geodatabase and a green tick mark will appear. Depending on the size of the file geodatabase this may take a while.</p>
+  <h2 style="font-size:125%; font-weight:normal;">Output Folder</h2>
+  <p>Click on the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Browse</span> button to open the directory dialog.
+    Navigate to a folder where you would like to save your results. <strong>This folder must not have a '.gdb' extension.</strong>
+    You must have write access to this folder. It is recommended to use a folder that has no spaces in its file path. Inside the folder a new folder will be created automatically
+    by the Wizard. The name of this folder will be the project name that you have entered followed by a date
+    and time stamp: <em>[Project name]_[Date_Time]</em>. Inside this folder a number of files will be created throughout the wizard:</p>
+    <style>
+      table {border-collapse:collapse;}
+      th,td {border: 1px solid #808080;
+        padding:5px;
+        text-align: left;}
+      th {background-color: #336699; color: white;}
+      tr:nth-child(even) {background-color: #eee;}
+      tr:nth-child(odd) {background-color: #fff;}
+    </style>
+    <table>
+      <tr>
+        <th align="left">File name</th>
+        <th align="left">Description</th>
+        <th align="left">Created during</th>
+      </tr>
+      <tr>
+        <td>[Project name]_[Date_Time].gdb</td>
+        <td>A file geodatabase containing the feature classes and raster files used to develop the LUR model</td>
+        <td>Settings</td>
+      </tr>
+      <tr>
+        <td>LurSqlDB.sqlite</td>
+        <td>A SQLite database containing intermediate and aggregated data for the statistical analysis</td>
+        <td>Settings</td>
+      </tr>
+      <tr>
+        <td>GOTCHA.txt</td>
+        <td>A text file containing errors caught during processing</td>
+        <td>Settings</td>
+      </tr>
+      <tr>
+        <td>LOG_[Date_Time].txt</td>
+        <td>A text file showing selections made in the wizard and the machine learning steps during the statistical analysis (if done via the wizard)</td>
+        <td>Settings</td>
+      </tr>
+      <tr>
+        <td>Descriptive_analyses_[Date_Time].pdf</td>
+        <td>A pdf of descriptive statistics of the outcome and predictor variables</td>
+        <td>Model</td>
+      </tr>
+      <tr>
+        <td>CorrelationMatrix_Vars_[Date_Time].csv</td>
+        <td>A comma separated text file showing a correlation matrix of all variables</td>
+        <td>Model</td>
+      </tr>
+      <tr>
+        <td>Diagnostic_plots_dep[Outcome variable]_[Date_Time].pdf</td>
+        <td>A pdf of diagnostic plots for the final model of the outcome variable</td>
+        <td>Model</td>
+      </tr>
+      <tr>
+        <td>LOOCV_dep[Outcome variable]_[Date_Time].pdf</td>
+        <td>A pdf of the leave one out cross validation plot</td>
+        <td>Model</td>
+      </tr>
+      <tr>
+        <td>Residuals.csv</td>
+        <td>A comma separated text file of the final model residuals</td>
+        <td>Model</td>
+      </tr>
+    </table>
+  <br>
+  <p>Click on the folder, then click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Select Folder</span> button.
+    The file path to the folder and a green tick mark will appear. Depending on the size of the folder this may take a while.</p>
+
+</body>
+</html>

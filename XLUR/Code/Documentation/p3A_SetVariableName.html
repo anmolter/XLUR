@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>XLUR Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Variable Name</h1>
+  <h2 style="font-size:125%;font-weight:normal;">Variable Name</h2>
+  <p>Type in a name for the predictor variable to be created. This must be a unique name, i.e. the same name cannot be assigned to two or more different predictor variables. The name must have a length
+    of at least 1 character and can have a maximum length of 20 characters (ISO basic Latin alphabet). The name cannot contain numbers, spaces or special characters. It is recommended to use
+    a name that will help users to identify the input dataset that the predictor was derived from (e.g. use "landuse" rather than "PredictorOne").
+    Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Enter</span> button.</p>
+  <div style="border:2px; border-style:solid; border-color:#0000FF;background-color:#e6f0ff; padding:5px">
+  <h3 style="font-size:110%; margin-top:0;font-weight:normal;">Name Schema for Polygon Area or Value within Buffer</h3>
+    Predictor variables extracted through this method will appear in the following name schema:</p>
+    <p><em><font color="blue">pA</font>_<font color="green">[name entered by user]</font>_<font color="blue">[category name]</font>_<font color="blue">[buffer distance]</font>_<font color="blue">[aggregation method]</font></em></p>
+    <p>where:</p>
+    <ul>
+      <li><em><font color="blue">pA</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>A</em> indicates the type of predictor
+        variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+      <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+      <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the polygon feature class must contain a text field, which identifies a category for
+        each polygon. This text field will be selected under <strong>Set Input Data</strong>. This part of the name schema identifies the category that the predictor variable belongs to. If the feature class contains
+        only one category, a dummy text field should be created with all rows set to the same text string. This is the text string that would be shown in this part of the name.</l>
+      <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
+        under <strong>Set Buffer Sizes</strong>.</l>
+      <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
+        <ul>
+        <li><em>sum</em> = sum of polygon area</l>
+        <li><em>wtv</em> = area weighted value</l>
+        <li><em>mtv</em> = area * value</l>
+        </ul>
+      </l>
+    </ul>
+  <p><span style="text-decoration: underline;">Examples:</span></p>
+  <p><em>pA_landusearea_residential_500_sum</em> - This predictor variable was extracted using a land use polygon feature class. The feature class contained a number of land use categories and this predictor
+    contains the total area of residential land use within a 500m buffer</p>
+  <p><em>pA_popdensweighted_dummy_1000_wtv</em> - This predictor variable was extracted using a feature class of population density polygons. This feature class contains only one category, therefore a
+    dummy text field was created and all rows were set to the string "dummy". The naming schema shows that this predictor variable contains area weighted values within a 1000m buffer.</p>
+  </div>
+</body>
+</html>

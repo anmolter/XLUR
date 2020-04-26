@@ -1,0 +1,30 @@
+<html>
+<head>
+  <title>XLUR Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Input Data</h1>
+  <h2 style="font-size:125%;font-weight:normal;">Polygon Feature Class</h2>
+  <p>From the dropdown menu select the polygon feature class from which you would like to extract data. The polygon feature class should have a spatial extent that is larger than: the study area + the largest buffer distance. The polygon
+    feature class should not contain spatial duplicates or invalid geometries (if uncertain about invalid geometries, run the Check Geometry or Repair Geometry tool prior to running the wizard).
+    The polygon feature class must contain a text field, which identifies a category for each polygon. If the feature class contains only one category, a dummy text field should
+    be created with all rows set to the same text string. If the Area weighted value or Area * Value aggregation method will be used, the polygon feature class must also contain a numeric field.</p>
+  <h2 style="font-size:125%;font-weight:normal;">Category Field</h2>
+  <p>From the dropdown menu select the text field, which identifies the category of each polygon. If the feature class contains only one category, select a dummy text field in which
+  all rows are set to the same text string. </p>
+  <h2 style="font-size:125%;font-weight:normal;">Aggregation Method</h2>
+  <p>Select the aggregation method to be used for this predictor variable.</p>
+  <ul>
+    <li><em>Total area</em> - This will calculate the sum of all polygon areas within each buffer and category. <a href="p3_TypeOfPredictor.html#pA" target="_blank">Click here</a>
+      for further details. </li>
+    <li><em>Area weighted value</em> - This will calculate an area weighted value within each buffer and category. <a href="p3_TypeOfPredictor.html#pA" target="blank">Click here</a>
+        for further details.
+    <li><em>Area * Value</em> - This will multiply the area of each polygon with a user selected value field. <a href="p3_TypeOfPredictor.html#pA" target="blank">Click here</a>
+          for further details.
+  </ul>
+  <h2 style="font-size:125%;font-weight:normal;">Value Field</h2>
+  <p>From the dropdown menu select the numeric field to be used in the Area weighted value or Area * Value aggregation method. If this field contains missing data, then polygons with missing values may be extracted in the
+    intersect analysis. Please be aware that the Area weighted value and Area * Value aggregation methods will ignore rows with missing data and the calculated value will be based on the non-missing data only.
+    After a field has been selected a green tick mark will appear.</p>
+</body>
+</html>

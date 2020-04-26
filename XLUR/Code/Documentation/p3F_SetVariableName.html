@@ -1,0 +1,79 @@
+<html>
+<head>
+  <title>XLUR Wizard</title>
+</head>
+<body style="font-family:'Arial'">
+  <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Variable Name</h1>
+  <h2 style="font-size:125%;font-weight:normal;">Variable Name</h2>
+  <p>Type in a name for the predictor variable to be created. This must be a unique name, i.e. the same name cannot be assigned to two or more different predictor variables. The name must have a length
+    of at least 1 character and can have a maximum length of 20 characters (ISO basic Latin alphabet). The name cannot contain numbers, spaces or special characters. It is recommended to use
+    a name that will help users to identify the input dataset that the predictor was derived from (e.g. use "ChimneyDist" rather than "PredictorOne").
+    Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Enter</span> button.</p>
+  <div style="border:2px; border-style:solid; border-color:#0000FF; background-color:#e6f0ff;padding:5px">
+  <h3 style="font-size:110%; margin-top:0;font-weight:normal;">Name Schema for Distance to and/or value of nearest Point</h3>
+  <p>Predictor variables extracted through this method will appear in the following name schema:</p>
+  <p><em><font color="blue">pF</font>_<font color="green">[name entered by user]</font>_<font color="blue">[name of value field or none]</font>_<font color="blue">[distance method]</font></em></p>
+  <p>where:</p>
+  <ul>
+    <li><em><font color="blue">pF</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>F</em> indicates the type of predictor
+      variable. <a href="p3_TypeOfPredictor.html">Click here</a> to see a list of the possible types of predictor variables.</l>
+    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+    <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
+      then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
+      then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
+    <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the distance method used to extract this variable. Distance methods will be set under
+      <strong>Set Method</strong> and are coded as follows:</l>
+    </ul>
+    <style>
+      table {border-collapse:collapse;
+        margin-left:10px}
+      th,td {border: 1px solid #808080;
+        padding:5px;
+        text-align: left;}
+      th {background-color: #336699; color: white;}
+      tr:nth-child(even) {background-color: #eee;}
+      tr:nth-child(odd) {background-color: #fff;}
+    </style>
+    <table>
+      <tr>
+        <th align="left">Distance method</th>
+        <th align="left">Code</th>
+      </tr>
+      <tr>
+        <td>Distance</td>
+        <td>dist</td>
+      </tr>
+      <tr>
+        <td>Inverse distance</td>
+        <td>invd</td>
+      </tr>
+      <tr>
+        <td>Inverse distance squared</td>
+        <td>invsq</td>
+      </tr>
+      <tr>
+        <td>Value</td>
+        <td>val</td>
+      </tr>
+      <tr>
+        <td>Value * Distance</td>
+        <td>valdist</td>
+      </tr>
+      <tr>
+        <td>Value * Inverse distance</td>
+        <td>valinvd</td>
+      </tr>
+      <tr>
+        <td>Value * Inverse distance squared</td>
+        <td>valinvsq</td>
+      </tr>
+    </table>
+  <br>
+  <p><span style="text-decoration: underline;">Examples:</span></p>
+  <p><em>pF_chimneystack_none_invd</em> - This predictor variable was extracted using a point feature class of chimney stacks. The naming schema shows that this predictor variable contains the inverse
+    distance to the nearest chimney stack.</p>
+  <p><em>pF_altitude_height_val</em> - This predictor variable was extracted using a point feature class of altitudes. Each point has an associated height above sea level value
+    and the naming schema shows that this predictor variable contains the height above sea level of the nearest point.</p>
+  </div>
+</body>
+</html>

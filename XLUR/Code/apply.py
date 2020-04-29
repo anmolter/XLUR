@@ -14,7 +14,10 @@ import logging
 import sqlite3
 import time
 import pandas as pd
-from pandas.tools.plotting import table
+try:
+    from pandas.tools.plotting import table
+except ImportError:
+    from pandas.plotting import table
 import numpy as np
 import itertools
 import math

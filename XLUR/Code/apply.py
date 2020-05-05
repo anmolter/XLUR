@@ -7,7 +7,6 @@ from wx.lib.agw import ultimatelistctrl as ULC
 import wx.lib.inspection
 import arcpy
 from arcpy import env
-arcpy.CheckOutExtension("Spatial")
 import sys
 import os
 import logging
@@ -418,7 +417,16 @@ class WizardPanel1(wx.Panel):
             p1and2.append(p[:p.find('_',3)])
 
         p1and2 = list(set(p1and2)) # only keep unique ones
-        #check that files exsist and for A,B,C that cat field exists
+        #check if raster data and check out extension, warning if no license
+        for item in p1and2:
+            if item[0:2]=='pG':
+                try:
+                    arcpy.CheckOutExtension("Spatial")
+                except:
+                    wx.MessageBox('The Spatial Analyst extension could not be activated. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+                    del wait
+
+        #check that files exist and for A,B,C that cat field exists
         for item in p1and2:
             if not arcpy.Exists(lur_fgdb+"\\"+item):
                 log.write('\n +++ERROR+++ '+item+' not found in LUR file geodatabase.')
@@ -1581,423 +1589,427 @@ class WizardPanel3(wx.Panel):
         conn.execute('''INSERT INTO timings VALUES('apply_panel3_ABC','start',datetime(),NULL)''')
         #Buffer+Intersect predictors
         preds_ABC = [i for i in preds if i[:2] in ['pA','pB','pC']]
-        # extract first two parts and filter unique
-        preds_ABC_1to2 = [i[:i.find('_',3)] for i in preds_ABC]
-        preds_ABC_1to2 = list(set(preds_ABC_1to2)) #these are the fc that need to be analysed
-        #extract buffer distances and run multiple ring buffer
-        p4 = [int(i[i.rfind('_',0,len(i)-4)+1:-4]) for i in preds_ABC] # get buffer distances
-        p4 = list(set(p4)) # only unique values
-        arcpy.MultipleRingBuffer_analysis(out_recp, out_fds+"\\MultBuffer", p4, "", "", "NONE") # buffer
-        arcpy.AddMessage('\nbuffer created')
+        if len(preds_ABC)>0:#check that there are ABC predictors
+            # extract first two parts and filter unique
+            preds_ABC_1to2 = [i[:i.find('_',3)] for i in preds_ABC]
+            preds_ABC_1to2 = list(set(preds_ABC_1to2)) #these are the fc that need to be analysed
+            #extract buffer distances and run multiple ring buffer
+            p4 = [int(i[i.rfind('_',0,len(i)-4)+1:-4]) for i in preds_ABC] # get buffer distances
+            p4 = list(set(p4)) # only unique values
+            arcpy.MultipleRingBuffer_analysis(out_recp, out_fds+"\\MultBuffer", p4, "", "", "NONE") # buffer
+            arcpy.AddMessage('\nbuffer created')
 
-        #iterate through feature classes
-        for item in preds_ABC_1to2:
-            arcpy.AddMessage(("\nStarting: "+item))
-            temp_preds_ABC = [i for i in preds_ABC if i.startswith(item+'_')] # get predictor variables belonging to item
-            temp_p4 = [int(i[i.rfind('_',0,len(i)-4)+1:-4]) for i in temp_preds_ABC] # get buffer distances from predictors
-            temp_p4 = list(set(temp_p4)) # only keep unique values
-            temp_p3 = [i[i.find('_',3)+1:i.rfind('_',0,len(i)-4)] for i in temp_preds_ABC] # get categories from predictors
-            temp_p3 = list(set(temp_p3)) # only keep unique values
-            cat_list = conn.execute("SELECT DISTINCT("+item[:2]+"_cat) FROM "+item+";").fetchall() # get all categories in feature class
+            #iterate through feature classes
+            for item in preds_ABC_1to2:
+                arcpy.AddMessage(("\nStarting: "+item))
+                temp_preds_ABC = [i for i in preds_ABC if i.startswith(item+'_')] # get predictor variables belonging to item
+                temp_p4 = [int(i[i.rfind('_',0,len(i)-4)+1:-4]) for i in temp_preds_ABC] # get buffer distances from predictors
+                temp_p4 = list(set(temp_p4)) # only keep unique values
+                temp_p3 = [i[i.find('_',3)+1:i.rfind('_',0,len(i)-4)] for i in temp_preds_ABC] # get categories from predictors
+                temp_p3 = list(set(temp_p3)) # only keep unique values
+                cat_list = conn.execute("SELECT DISTINCT("+item[:2]+"_cat) FROM "+item+";").fetchall() # get all categories in feature class
+                db.commit()
+                arcpy.AddMessage(('\ncat_list size: '+str(sys.getsizeof(cat_list))))
+                cat_list = [str(i[0]) for i in cat_list] # make into list
+
+
+                if sorted(temp_p4)==sorted(p4) and sorted(temp_p3)==sorted(cat_list): #all buffers are used and all categories are used
+                    arcpy.AddMessage('All buffers are used, all categories are used.')
+                    arcpy.PairwiseIntersect_analysis ([out_fds+"\\MultBuffer",out_fds+"\\"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
+                    arcpy.AddMessage(('\nIntersect completed:'+str(item)))
+
+                elif sorted(temp_p4)==sorted(p4) and sorted(temp_p3)!=sorted(cat_list): #all buffers are used, some categories are used
+                    arcpy.AddMessage('All buffers are used, only {0} categories are used.'.format(str(temp_p3)))
+                    where_clause = item[:2]+"_cat IN ('{0}')".format("', '".join(str(p3) for p3 in temp_p3)) # make where clause for sqlite
+                    int_list = conn.execute("SELECT DISTINCT("+item[:2]+"_cat_INT) FROM "+item+" WHERE "+where_clause).fetchall() # get integer IDs from database
+                    db.commit()
+                    arcpy.AddMessage(('\n int_list size: '+str(sys.getsizeof(int_list))))
+                    int_list = [i[0] for i in int_list] # make into list
+                    where_clause_int = item[:2]+"_cat_INT IN ({0})".format(", ".join(str(p3_int) for p3_int in int_list)) #where clause for arc
+                    arcpy.MakeFeatureLayer_management(out_fds+"\\"+item,"item_lyr") # turn fc into layer
+                    arcpy.SelectLayerByAttribute_management('item_lyr','NEW_SELECTION',where_clause) # select from layer
+                    arcpy.FeatureClassToFeatureClass_conversion('item_lyr',out_fds,'apply_'+item) # copy into fc
+                    arcpy.Delete_management(out_fgdb+"\\item_lyr") # delete layer
+                    arcpy.PairwiseIntersect_analysis ([out_fds+"\\MultBuffer", out_fds+"\\apply_"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
+                    arcpy.AddMessage(('\nIntersect completed:'+str(item)))
+
+                elif sorted(temp_p4)!=sorted(p4) and sorted(temp_p3)==sorted(cat_list): # only some buffers are used, but all categories
+                    arcpy.AddMessage('Only {0} buffers are used, all categories are used.'.format(str(temp_p4)))
+                    where_clause = "distance IN ({0})".format(", ".join(str(dist) for dist in temp_p4)) # create where clause for arc
+                    arcpy.MakeFeatureLayer_management(out_fds+"\\MultBuffer","buf_lyr") # turn buffer fc into layer
+                    arcpy.SelectLayerByAttribute_management('buf_lyr','NEW_SELECTION',where_clause) # select from layer
+                    arcpy.FeatureClassToFeatureClass_conversion('buf_lyr',out_fds,'Buf_'+item) # copy selection into fc
+                    arcpy.Delete_management(out_fgdb+"\\buf_lyr") # delete fc
+                    arcpy.PairwiseIntersect_analysis ([out_fds+"\\Buf_"+item, out_fds+"\\"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
+                    arcpy.AddMessage(('\nIntersect completed:'+str(item)))
+
+                elif sorted(temp_p4)!=sorted(p4) and sorted(temp_p3)!=sorted(cat_list): # only some buffers are used, only some categories are used
+                    arcpy.AddMessage('Only {0} buffers are used, only {1} categories are used.'.format(str(temp_p4),str(temp_p3)))
+                    where_clause = "distance IN ({0})".format(", ".join(str(dist) for dist in temp_p4)) # create where clause for arc
+                    arcpy.MakeFeatureLayer_management(out_fds+"\\MultBuffer","buf_lyr") # turn buffer fc into layer
+                    arcpy.SelectLayerByAttribute_management('buf_lyr','NEW_SELECTION',where_clause) # select from layer
+                    arcpy.FeatureClassToFeatureClass_conversion('buf_lyr',out_fds,'Buf_'+item) # copy selection into fc
+                    arcpy.Delete_management(out_fgdb+"\\buf_lyr") # delete fc
+                    where_clause = item[:2]+"_cat IN ('{0}')".format("', '".join(str(p3) for p3 in temp_p3)) # make where clause for sqlite
+                    int_list = conn.execute("SELECT DISTINCT("+item[:2]+"_cat_INT) FROM "+item+" WHERE "+where_clause).fetchall() # get integer IDs from database
+                    db.commit()
+                    arcpy.AddMessage(('\n int_list size: '+str(sys.getsizeof(int_list))))
+                    int_list = [i[0] for i in int_list] # make into list
+                    where_clause_int = item[:2]+"_cat_INT IN ({0})".format(", ".join(str(p3_int) for p3_int in int_list)) #where clause for arc
+                    arcpy.MakeFeatureLayer_management(out_fds+"\\"+item,"item_lyr") # turn fc into layer
+                    arcpy.SelectLayerByAttribute_management('item_lyr','NEW_SELECTION',where_clause) # select from layer
+                    arcpy.FeatureClassToFeatureClass_conversion('item_lyr',out_fds,'apply_'+item) # copy into fc
+                    arcpy.Delete_management(out_fgdb+"\\item_lyr") # delete layer
+                    arcpy.PairwiseIntersect_analysis ([out_fds+"\\Buf_"+item, out_fds+"\\apply_"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
+                    arcpy.AddMessage(('\nIntersect completed:'+str(item)))
+
+                conn.execute("DROP TABLE IF EXISTS "+item+"_Intersect;")
+                db.commit()
+                fc_to_sql(conn,out_fds+"\\"+item+"_Intersect") # move to sql
+                db.commit()
+                arcpy.Delete_management(out_fgdb+"\\"+item+"_Intersect")
+                if arcpy.Exists(out_fgdb+"\\apply_"+item):
+                    arcpy.Delete_management(out_fgdb+"\\apply_"+item)
+                arcpy.Delete_management(out_fgdb+"\\Buf_"+item)
+
+                # populate field for weighted/aggregated value
+                temp_p1 = item[0:2]
+                temp_p5 = temp_preds_ABC[0]
+                temp_p5 = temp_p5[len(temp_p5)-3:]
+                conn.execute("ALTER TABLE "+item+"_Intersect ADD wtval float64;") # add field for weighted value
+                #conn.execute("BEGIN TRANSACTION;")
+                if temp_p1=='pA' and temp_p5=='sum':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Area;")
+                    db.commit()
+                elif temp_p1=='pA' and temp_p5=='wtv':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=(Shape_Area/origArea)*pA_val;")
+                    db.commit()
+                elif temp_p1=='pA' and temp_p5=='mtv':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Area*pA_val;")
+                    db.commit()
+                elif temp_p1=='pB' and temp_p5=='sum':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Length;")
+                    db.commit()
+                elif temp_p1=='pB' and temp_p5=='wtv':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=(Shape_Length/origLength)*pB_val;")
+                    db.commit()
+                elif temp_p1=='pB' and temp_p5=='mtv':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Length*pB_val;")
+                    db.commit()
+                elif temp_p1=='pC' and temp_p5=='num':
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=1;")
+                    db.commit()
+                else:
+                    conn.execute("UPDATE "+item+"_Intersect SET wtval=pC_val;")
+                    db.commit()
+
+                conn.execute("CREATE INDEX "+item+"_Intersect_idx on "+item+"_Intersect (RecpID, "+temp_p1+"_cat_INT, distance);")
+                db.commit()
+                arcpy.AddMessage(('\nupdate wtval field '+str(item)))
+
+                # aggregate values
+                conn.execute("DROP TABLE IF EXISTS temp;")
+                if temp_p1=='pA' or temp_p1=='pB' or (temp_p1=='pC' and temp_p5=='num') or (temp_p1=='pC' and temp_p5=='sum'):
+                    conn.execute("CREATE TABLE "+item+"_intermediate AS \
+                                SELECT RecpID \
+                                     ,"+temp_p1+"_cat_INT \
+                                     ,distance \
+                                     ,SUM(wtval) AS value \
+        	                         ,('"+item+"_'||"+temp_p1+"_cat||'_'||cast(distance as int)||'_"+temp_p5+"') AS varName \
+                                FROM "+item+"_Intersect \
+                                GROUP BY RecpID, "+temp_p1+"_cat_INT, distance")
+
+                    vars_sql_temp=list(conn.execute("SELECT DISTINCT varName FROM "+item+"_intermediate")) # make a list of variable names
+                    # add values to each column
+                    for var in vars_sql_temp:
+                        if var[0] in preds:
+                            arcpy.AddMessage(("writing value to: "+str(var[0])))
+                            qry="UPDATE "+out_recp+" \
+                                SET "+var[0]+" = ( \
+                                SELECT value \
+                                FROM "+item+"_intermediate \
+                                WHERE RecpID = "+out_recp+".RecpID and varName='"+var[0]+"')"
+                            conn.execute(qry)
+                            db.commit()
+                            log.write(time.strftime("\nPredictor created: "+str(var[0])+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
+                            log.flush()
+                            arcpy.AddMessage(('Predictor created '+str(var[0])))
+                        else:
+                            arcpy.AddMessage((str(var[0])+' not required'))
+                elif temp_p5=='avg':
+                    conn.execute("CREATE TABLE "+item+"_intermediate AS \
+                                SELECT RecpID \
+                                     ,pC_cat_INT \
+                                     ,distance \
+                                     ,AVG(wtval) AS value \
+        	                         ,('"+item+"_'||pC_cat||'_'||cast(distance as int)||'_avg') AS varName \
+                                FROM "+item+"_Intersect \
+                                GROUP BY RecpID, pC_cat_INT, distance")
+                    vars_sql_temp=list(conn.execute("SELECT DISTINCT varName FROM "+item+"_intermediate")) # make a list of variable names
+                    # add values to each column
+                    for var in vars_sql_temp:
+                        if var[0] in preds:
+                            arcpy.AddMessage(("writing value to: "+str(var[0])))
+                            qry="UPDATE "+out_recp+" \
+                                SET "+var[0]+" = (\
+                                SELECT value \
+                                FROM "+item+"_intermediate \
+                                WHERE RecpID = "+out_recp+".RecpID and varName='"+var[0]+"')"
+                            conn.execute(qry)
+                            log.write(time.strftime("\nPredictor created: "+str(var[0])+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
+                            log.flush()
+                            arcpy.AddMessage(('Predictor created '+str(var[0])))
+                            db.commit()
+                        else:
+                            arcpy.AddMessage((str(var[0])+' not required'))
+                elif temp_p5=='med':
+                    conn.executescript("CREATE TABLE pC_median_temp1 AS \
+                        SELECT RecpID \
+                            ,pC_cat_INT \
+                            ,distance \
+                            ,wtval \
+                            ,('"+item+"_'||pC_cat||'_'||cast(distance as int)||'_med') AS varName \
+                        FROM "+item+"_Intersect \
+                        ORDER BY RecpID, pC_cat_INT, distance, wtval; \
+                        ALTER TABLE pC_median_temp1 ADD row_num int; \
+                        UPDATE pC_median_temp1 SET row_num=rowid; \
+                        CREATE TABLE pC_median_temp2 AS \
+                        SELECT  RecpID \
+                           ,pC_cat_INT \
+                           ,distance \
+                           ,(MIN(row_num*1.0)+MAX(row_num*1.0))/2 AS midrow \
+                           ,CASE WHEN COUNT(wtval)%2=0 THEN 'even' ELSE 'odd' END AS type \
+                        FROM pC_median_temp1 \
+                        GROUP BY RecpID, pC_cat_INT, distance; \
+                        CREATE TABLE pC_median_temp3 AS \
+                        SELECT RecpID \
+                            ,pC_cat_INT \
+                            ,distance \
+                            ,midrow \
+                        FROM pC_median_temp2 \
+                        WHERE type='even' \
+                        UNION ALL \
+                        SELECT RecpID \
+                            ,pC_cat_INT \
+                            ,distance \
+                            ,midrow \
+                        FROM pC_median_temp2 \
+                        WHERE type='even'; \
+                        CREATE TABLE pC_median_temp4 AS \
+                        SELECT * \
+                        FROM pC_median_temp3 \
+                        ORDER BY midrow; \
+                        ALTER TABLE pC_median_temp4 ADD row_num int; \
+                        UPDATE pC_median_temp4 SET row_num=rowid; \
+                        ALTER TABLE pC_median_temp4 ADD midrow_new float; \
+                        UPDATE pC_median_temp4 SET midrow_new= CASE WHEN (row_num)%2=1 THEN midrow-0.5 WHEN (row_num)%2=0 THEN midrow+0.5 END; \
+                        CREATE TABLE pC_median_temp5 AS \
+                        SELECT RecpID \
+                            ,pC_cat_INT \
+                            ,distance \
+                            ,midrow \
+                        FROM pC_median_temp2 \
+                        WHERE type = 'odd' \
+                        UNION ALL \
+                        SELECT RecpID \
+                        	,pC_cat_INT \
+                            ,distance \
+                            ,midrow_new as midrow \
+                        FROM pC_median_temp4; \
+                        CREATE TABLE pC_median_temp6 AS \
+                        SELECT a.RecpID \
+                            ,a.pC_cat_INT \
+                            ,a.distance \
+                            ,a.midrow \
+                            ,b.row_num \
+                            ,b.wtval \
+                            ,b.varName \
+                        FROM pC_median_temp5 as a \
+                        JOIN pC_median_temp1 as b \
+                        ON a.midrow = b.row_num; \
+                        CREATE TABLE "+item+"_intermediate AS \
+                        SELECT RecpID \
+                            ,pC_cat_INT \
+                            ,distance \
+                            ,AVG(wtval) AS value \
+                            ,MIN(varName) AS varName \
+                        FROM pC_median_temp6 \
+                        GROUP BY RecpID	,pC_cat_INT ,distance; \
+                        DROP TABLE pC_median_temp1; \
+                        DROP TABLE pC_median_temp2; \
+                        DROP TABLE pC_median_temp3; \
+                        DROP TABLE pC_median_temp4; \
+                        DROP TABLE pC_median_temp5; \
+                        DROP TABLE pC_median_temp6;")
+
+                    vars_sql_temp=list(conn.execute("SELECT DISTINCT varName FROM  "+item+"_intermediate")) # make a list of variable names
+                    # add values to each column
+                    for var in vars_sql_temp:
+                        if var[0] in preds:
+                            arcpy.AddMessage(("writing value to: "+str(var[0])))
+                            qry="UPDATE "+out_recp+" \
+                                SET "+var[0]+" = ( \
+                                SELECT value \
+                                FROM "+item+"_intermediate \
+                                WHERE RecpID = "+out_recp+".RecpID and varName='"+var[0]+"')"
+                            conn.execute(qry)
+                            log.write(time.strftime("\nPredictor created: "+str(var[0])+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
+                            log.flush()
+                            arcpy.AddMessage(('Predictor created '+str(var[0])))
+                            db.commit()
+                        else:
+                            arcpy.AddMessage((str(var[0])+' not required'))
+
+                conn.execute("DROP TABLE "+item+"_Intersect;")
+                conn.execute("DROP TABLE "+item+"_intermediate;")
+
+            # replace missing values with zeros if p5 not sum
+            for var in preds:
+                if var[0:2] in ['pA','pB','pC']:
+                    qry="UPDATE "+out_recp+" \
+                            SET "+var+" = 0 \
+                            WHERE "+var+" IS NULL"
+                    arcpy.AddMessage(qry)
+                    conn.execute(qry)
+                    db.commit()
+
+            conn.execute('''INSERT INTO timings VALUES('apply_panel3_ABC','stop',datetime(),NULL)''')
+            conn.execute('''INSERT INTO timings VALUES('apply_panel3_DEF','start',datetime(),NULL)''')
             db.commit()
-            arcpy.AddMessage(('\ncat_list size: '+str(sys.getsizeof(cat_list))))
-            cat_list = [str(i[0]) for i in cat_list] # make into list
-
-
-            if sorted(temp_p4)==sorted(p4) and sorted(temp_p3)==sorted(cat_list): #all buffers are used and all categories are used
-                arcpy.AddMessage('All buffers are used, all categories are used.')
-                arcpy.PairwiseIntersect_analysis ([out_fds+"\\MultBuffer",out_fds+"\\"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
-                arcpy.AddMessage(('\nIntersect completed:'+str(item)))
-
-            elif sorted(temp_p4)==sorted(p4) and sorted(temp_p3)!=sorted(cat_list): #all buffers are used, some categories are used
-                arcpy.AddMessage('All buffers are used, only {0} categories are used.'.format(str(temp_p3)))
-                where_clause = item[:2]+"_cat IN ('{0}')".format("', '".join(str(p3) for p3 in temp_p3)) # make where clause for sqlite
-                int_list = conn.execute("SELECT DISTINCT("+item[:2]+"_cat_INT) FROM "+item+" WHERE "+where_clause).fetchall() # get integer IDs from database
-                db.commit()
-                arcpy.AddMessage(('\n int_list size: '+str(sys.getsizeof(int_list))))
-                int_list = [i[0] for i in int_list] # make into list
-                where_clause_int = item[:2]+"_cat_INT IN ({0})".format(", ".join(str(p3_int) for p3_int in int_list)) #where clause for arc
-                arcpy.MakeFeatureLayer_management(out_fds+"\\"+item,"item_lyr") # turn fc into layer
-                arcpy.SelectLayerByAttribute_management('item_lyr','NEW_SELECTION',where_clause) # select from layer
-                arcpy.FeatureClassToFeatureClass_conversion('item_lyr',out_fds,'apply_'+item) # copy into fc
-                arcpy.Delete_management(out_fgdb+"\\item_lyr") # delete layer
-                arcpy.PairwiseIntersect_analysis ([out_fds+"\\MultBuffer", out_fds+"\\apply_"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
-                arcpy.AddMessage(('\nIntersect completed:'+str(item)))
-
-            elif sorted(temp_p4)!=sorted(p4) and sorted(temp_p3)==sorted(cat_list): # only some buffers are used, but all categories
-                arcpy.AddMessage('Only {0} buffers are used, all categories are used.'.format(str(temp_p4)))
-                where_clause = "distance IN ({0})".format(", ".join(str(dist) for dist in temp_p4)) # create where clause for arc
-                arcpy.MakeFeatureLayer_management(out_fds+"\\MultBuffer","buf_lyr") # turn buffer fc into layer
-                arcpy.SelectLayerByAttribute_management('buf_lyr','NEW_SELECTION',where_clause) # select from layer
-                arcpy.FeatureClassToFeatureClass_conversion('buf_lyr',out_fds,'Buf_'+item) # copy selection into fc
-                arcpy.Delete_management(out_fgdb+"\\buf_lyr") # delete fc
-                arcpy.PairwiseIntersect_analysis ([out_fds+"\\Buf_"+item, out_fds+"\\"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
-                arcpy.AddMessage(('\nIntersect completed:'+str(item)))
-
-            elif sorted(temp_p4)!=sorted(p4) and sorted(temp_p3)!=sorted(cat_list): # only some buffers are used, only some categories are used
-                arcpy.AddMessage('Only {0} buffers are used, only {1} categories are used.'.format(str(temp_p4),str(temp_p3)))
-                where_clause = "distance IN ({0})".format(", ".join(str(dist) for dist in temp_p4)) # create where clause for arc
-                arcpy.MakeFeatureLayer_management(out_fds+"\\MultBuffer","buf_lyr") # turn buffer fc into layer
-                arcpy.SelectLayerByAttribute_management('buf_lyr','NEW_SELECTION',where_clause) # select from layer
-                arcpy.FeatureClassToFeatureClass_conversion('buf_lyr',out_fds,'Buf_'+item) # copy selection into fc
-                arcpy.Delete_management(out_fgdb+"\\buf_lyr") # delete fc
-                where_clause = item[:2]+"_cat IN ('{0}')".format("', '".join(str(p3) for p3 in temp_p3)) # make where clause for sqlite
-                int_list = conn.execute("SELECT DISTINCT("+item[:2]+"_cat_INT) FROM "+item+" WHERE "+where_clause).fetchall() # get integer IDs from database
-                db.commit()
-                arcpy.AddMessage(('\n int_list size: '+str(sys.getsizeof(int_list))))
-                int_list = [i[0] for i in int_list] # make into list
-                where_clause_int = item[:2]+"_cat_INT IN ({0})".format(", ".join(str(p3_int) for p3_int in int_list)) #where clause for arc
-                arcpy.MakeFeatureLayer_management(out_fds+"\\"+item,"item_lyr") # turn fc into layer
-                arcpy.SelectLayerByAttribute_management('item_lyr','NEW_SELECTION',where_clause) # select from layer
-                arcpy.FeatureClassToFeatureClass_conversion('item_lyr',out_fds,'apply_'+item) # copy into fc
-                arcpy.Delete_management(out_fgdb+"\\item_lyr") # delete layer
-                arcpy.PairwiseIntersect_analysis ([out_fds+"\\Buf_"+item, out_fds+"\\apply_"+item], out_fds+"\\"+item+"_Intersect", "ALL", "", "") # intersect
-                arcpy.AddMessage(('\nIntersect completed:'+str(item)))
-
-            conn.execute("DROP TABLE IF EXISTS "+item+"_Intersect;")
-            db.commit()
-            fc_to_sql(conn,out_fds+"\\"+item+"_Intersect") # move to sql
-            db.commit()
-            arcpy.Delete_management(out_fgdb+"\\"+item+"_Intersect")
-            if arcpy.Exists(out_fgdb+"\\apply_"+item):
-                arcpy.Delete_management(out_fgdb+"\\apply_"+item)
-            arcpy.Delete_management(out_fgdb+"\\Buf_"+item)
-
-            # populate field for weighted/aggregated value
-            temp_p1 = item[0:2]
-            temp_p5 = temp_preds_ABC[0]
-            temp_p5 = temp_p5[len(temp_p5)-3:]
-            conn.execute("ALTER TABLE "+item+"_Intersect ADD wtval float64;") # add field for weighted value
-            #conn.execute("BEGIN TRANSACTION;")
-            if temp_p1=='pA' and temp_p5=='sum':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Area;")
-                db.commit()
-            elif temp_p1=='pA' and temp_p5=='wtv':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=(Shape_Area/origArea)*pA_val;")
-                db.commit()
-            elif temp_p1=='pA' and temp_p5=='mtv':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Area*pA_val;")
-                db.commit()
-            elif temp_p1=='pB' and temp_p5=='sum':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Length;")
-                db.commit()
-            elif temp_p1=='pB' and temp_p5=='wtv':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=(Shape_Length/origLength)*pB_val;")
-                db.commit()
-            elif temp_p1=='pB' and temp_p5=='mtv':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=Shape_Length*pB_val;")
-                db.commit()
-            elif temp_p1=='pC' and temp_p5=='num':
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=1;")
-                db.commit()
-            else:
-                conn.execute("UPDATE "+item+"_Intersect SET wtval=pC_val;")
-                db.commit()
-
-            conn.execute("CREATE INDEX "+item+"_Intersect_idx on "+item+"_Intersect (RecpID, "+temp_p1+"_cat_INT, distance);")
-            db.commit()
-            arcpy.AddMessage(('\nupdate wtval field '+str(item)))
-
-            # aggregate values
-            conn.execute("DROP TABLE IF EXISTS temp;")
-            if temp_p1=='pA' or temp_p1=='pB' or (temp_p1=='pC' and temp_p5=='num') or (temp_p1=='pC' and temp_p5=='sum'):
-                conn.execute("CREATE TABLE "+item+"_intermediate AS \
-                            SELECT RecpID \
-                                 ,"+temp_p1+"_cat_INT \
-                                 ,distance \
-                                 ,SUM(wtval) AS value \
-    	                         ,('"+item+"_'||"+temp_p1+"_cat||'_'||cast(distance as int)||'_"+temp_p5+"') AS varName \
-                            FROM "+item+"_Intersect \
-                            GROUP BY RecpID, "+temp_p1+"_cat_INT, distance")
-
-                vars_sql_temp=list(conn.execute("SELECT DISTINCT varName FROM "+item+"_intermediate")) # make a list of variable names
-                # add values to each column
-                for var in vars_sql_temp:
-                    if var[0] in preds:
-                        arcpy.AddMessage(("writing value to: "+str(var[0])))
-                        qry="UPDATE "+out_recp+" \
-                            SET "+var[0]+" = ( \
-                            SELECT value \
-                            FROM "+item+"_intermediate \
-                            WHERE RecpID = "+out_recp+".RecpID and varName='"+var[0]+"')"
-                        conn.execute(qry)
-                        db.commit()
-                        log.write(time.strftime("\nPredictor created: "+str(var[0])+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
-                        log.flush()
-                        arcpy.AddMessage(('Predictor created '+str(var[0])))
-                    else:
-                        arcpy.AddMessage((str(var[0])+' not required'))
-            elif temp_p5=='avg':
-                conn.execute("CREATE TABLE "+item+"_intermediate AS \
-                            SELECT RecpID \
-                                 ,pC_cat_INT \
-                                 ,distance \
-                                 ,AVG(wtval) AS value \
-    	                         ,('"+item+"_'||pC_cat||'_'||cast(distance as int)||'_avg') AS varName \
-                            FROM "+item+"_Intersect \
-                            GROUP BY RecpID, pC_cat_INT, distance")
-                vars_sql_temp=list(conn.execute("SELECT DISTINCT varName FROM "+item+"_intermediate")) # make a list of variable names
-                # add values to each column
-                for var in vars_sql_temp:
-                    if var[0] in preds:
-                        arcpy.AddMessage(("writing value to: "+str(var[0])))
-                        qry="UPDATE "+out_recp+" \
-                            SET "+var[0]+" = (\
-                            SELECT value \
-                            FROM "+item+"_intermediate \
-                            WHERE RecpID = "+out_recp+".RecpID and varName='"+var[0]+"')"
-                        conn.execute(qry)
-                        log.write(time.strftime("\nPredictor created: "+str(var[0])+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
-                        log.flush()
-                        arcpy.AddMessage(('Predictor created '+str(var[0])))
-                        db.commit()
-                    else:
-                        arcpy.AddMessage((str(var[0])+' not required'))
-            elif temp_p5=='med':
-                conn.executescript("CREATE TABLE pC_median_temp1 AS \
-                    SELECT RecpID \
-                        ,pC_cat_INT \
-                        ,distance \
-                        ,wtval \
-                        ,('"+item+"_'||pC_cat||'_'||cast(distance as int)||'_med') AS varName \
-                    FROM "+item+"_Intersect \
-                    ORDER BY RecpID, pC_cat_INT, distance, wtval; \
-                    ALTER TABLE pC_median_temp1 ADD row_num int; \
-                    UPDATE pC_median_temp1 SET row_num=rowid; \
-                    CREATE TABLE pC_median_temp2 AS \
-                    SELECT  RecpID \
-                       ,pC_cat_INT \
-                       ,distance \
-                       ,(MIN(row_num*1.0)+MAX(row_num*1.0))/2 AS midrow \
-                       ,CASE WHEN COUNT(wtval)%2=0 THEN 'even' ELSE 'odd' END AS type \
-                    FROM pC_median_temp1 \
-                    GROUP BY RecpID, pC_cat_INT, distance; \
-                    CREATE TABLE pC_median_temp3 AS \
-                    SELECT RecpID \
-                        ,pC_cat_INT \
-                        ,distance \
-                        ,midrow \
-                    FROM pC_median_temp2 \
-                    WHERE type='even' \
-                    UNION ALL \
-                    SELECT RecpID \
-                        ,pC_cat_INT \
-                        ,distance \
-                        ,midrow \
-                    FROM pC_median_temp2 \
-                    WHERE type='even'; \
-                    CREATE TABLE pC_median_temp4 AS \
-                    SELECT * \
-                    FROM pC_median_temp3 \
-                    ORDER BY midrow; \
-                    ALTER TABLE pC_median_temp4 ADD row_num int; \
-                    UPDATE pC_median_temp4 SET row_num=rowid; \
-                    ALTER TABLE pC_median_temp4 ADD midrow_new float; \
-                    UPDATE pC_median_temp4 SET midrow_new= CASE WHEN (row_num)%2=1 THEN midrow-0.5 WHEN (row_num)%2=0 THEN midrow+0.5 END; \
-                    CREATE TABLE pC_median_temp5 AS \
-                    SELECT RecpID \
-                        ,pC_cat_INT \
-                        ,distance \
-                        ,midrow \
-                    FROM pC_median_temp2 \
-                    WHERE type = 'odd' \
-                    UNION ALL \
-                    SELECT RecpID \
-                    	,pC_cat_INT \
-                        ,distance \
-                        ,midrow_new as midrow \
-                    FROM pC_median_temp4; \
-                    CREATE TABLE pC_median_temp6 AS \
-                    SELECT a.RecpID \
-                        ,a.pC_cat_INT \
-                        ,a.distance \
-                        ,a.midrow \
-                        ,b.row_num \
-                        ,b.wtval \
-                        ,b.varName \
-                    FROM pC_median_temp5 as a \
-                    JOIN pC_median_temp1 as b \
-                    ON a.midrow = b.row_num; \
-                    CREATE TABLE "+item+"_intermediate AS \
-                    SELECT RecpID \
-                        ,pC_cat_INT \
-                        ,distance \
-                        ,AVG(wtval) AS value \
-                        ,MIN(varName) AS varName \
-                    FROM pC_median_temp6 \
-                    GROUP BY RecpID	,pC_cat_INT ,distance; \
-                    DROP TABLE pC_median_temp1; \
-                    DROP TABLE pC_median_temp2; \
-                    DROP TABLE pC_median_temp3; \
-                    DROP TABLE pC_median_temp4; \
-                    DROP TABLE pC_median_temp5; \
-                    DROP TABLE pC_median_temp6;")
-
-                vars_sql_temp=list(conn.execute("SELECT DISTINCT varName FROM  "+item+"_intermediate")) # make a list of variable names
-                # add values to each column
-                for var in vars_sql_temp:
-                    if var[0] in preds:
-                        arcpy.AddMessage(("writing value to: "+str(var[0])))
-                        qry="UPDATE "+out_recp+" \
-                            SET "+var[0]+" = ( \
-                            SELECT value \
-                            FROM "+item+"_intermediate \
-                            WHERE RecpID = "+out_recp+".RecpID and varName='"+var[0]+"')"
-                        conn.execute(qry)
-                        log.write(time.strftime("\nPredictor created: "+str(var[0])+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
-                        log.flush()
-                        arcpy.AddMessage(('Predictor created '+str(var[0])))
-                        db.commit()
-                    else:
-                        arcpy.AddMessage((str(var[0])+' not required'))
-
-            conn.execute("DROP TABLE "+item+"_Intersect;")
-            conn.execute("DROP TABLE "+item+"_intermediate;")
-
-        # replace missing values with zeros if p5 not sum
-        for var in preds:
-            if var[0:2] in ['pA','pB','pC']:
-                qry="UPDATE "+out_recp+" \
-                        SET "+var+" = 0 \
-                        WHERE "+var+" IS NULL"
-                arcpy.AddMessage(qry)
-                conn.execute(qry)
-                db.commit()
-
-        conn.execute('''INSERT INTO timings VALUES('apply_panel3_ABC','stop',datetime(),NULL)''')
-        conn.execute('''INSERT INTO timings VALUES('apply_panel3_DEF','start',datetime(),NULL)''')
-        db.commit()
         #Distance predictors
         preds_DEF = [i for i in preds if i[:2] in ['pD','pE','pF']]
-        # extract first two parts and filter unique
-        preds_DEF_1to2 = [i[:i.find('_',3)] for i in preds_DEF]
-        preds_DEF_1to2 = list(set(preds_DEF_1to2)) #these are the fc that need to be analysed
-        #iterate through them
-        for item in preds_DEF_1to2:
-            arcpy.AddMessage(("\nStarting: "+item))
-            temp_preds_DEF = [i for i in preds_DEF if i.startswith(item+'_')] # get relevant predictor variables
-            temp_p4 = [i[i.rfind('_')+1:] for i in temp_preds_DEF] # get method
-            temp_p4 = list(set(temp_p4)) # only unique values
-            temp_p3 = [i[i.find('_',3)+1:i.rfind('_')] for i in temp_preds_DEF] # get field name
-            temp_p3 = list(set(temp_p3)) # only unique values
-            temp_p3 = list([x for x in temp_p3 if x!='none']) # remove 'none'
-            arcpy.SpatialJoin_analysis(out_recp, out_fds+"\\"+item, out_fds+"\\"+item+"_join", "JOIN_ONE_TO_ONE", "KEEP_ALL","","CLOSEST","","distance") #spatial join of fc to monitoring sites
-            arcpy.AddMessage(('\nSpatial join completed:'+str(item)))
+        if len(preds_DEF)>0:
+            # extract first two parts and filter unique
+            preds_DEF_1to2 = [i[:i.find('_',3)] for i in preds_DEF]
+            preds_DEF_1to2 = list(set(preds_DEF_1to2)) #these are the fc that need to be analysed
+            #iterate through them
+            for item in preds_DEF_1to2:
+                arcpy.AddMessage(("\nStarting: "+item))
+                temp_preds_DEF = [i for i in preds_DEF if i.startswith(item+'_')] # get relevant predictor variables
+                temp_p4 = [i[i.rfind('_')+1:] for i in temp_preds_DEF] # get method
+                temp_p4 = list(set(temp_p4)) # only unique values
+                temp_p3 = [i[i.find('_',3)+1:i.rfind('_')] for i in temp_preds_DEF] # get field name
+                temp_p3 = list(set(temp_p3)) # only unique values
+                temp_p3 = list([x for x in temp_p3 if x!='none']) # remove 'none'
+                arcpy.SpatialJoin_analysis(out_recp, out_fds+"\\"+item, out_fds+"\\"+item+"_join", "JOIN_ONE_TO_ONE", "KEEP_ALL","","CLOSEST","","distance") #spatial join of fc to monitoring sites
+                arcpy.AddMessage(('\nSpatial join completed:'+str(item)))
 
-            if 'invsq' in temp_p4 or 'valinvsq' in temp_p4:
-                arcpy.AddField_management(out_fds+"\\"+item+"_join","distsqu","DOUBLE")
-                with arcpy.da.UpdateCursor(out_fds+"\\"+item+"_join", ["distance","distsqu"]) as cursor:
-                    for row in cursor:
-                        row[1]=row[0]**2
-                        cursor.updateRow(row)
-            # move data to sql database
-            conn.execute("DROP TABLE IF EXISTS "+item+"_join;")
-            db.commit()
-            fc_to_sql(conn,out_fds+"\\"+item+"_join")
-            db.commit()
-            arcpy.Delete_management(out_fgdb+"\\"+item+"_join")
-            # calcaulate Variables
-            vars_sql_temp=list()
-            #conn.execute("BEGIN TRANSACTION;")
-            if 'dist' in temp_p4:
-                conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_none_dist float64;")
-                conn.execute("UPDATE "+item+"_join SET "+item+"_none_dist=distance;")
+                if 'invsq' in temp_p4 or 'valinvsq' in temp_p4:
+                    arcpy.AddField_management(out_fds+"\\"+item+"_join","distsqu","DOUBLE")
+                    with arcpy.da.UpdateCursor(out_fds+"\\"+item+"_join", ["distance","distsqu"]) as cursor:
+                        for row in cursor:
+                            row[1]=row[0]**2
+                            cursor.updateRow(row)
+                # move data to sql database
+                conn.execute("DROP TABLE IF EXISTS "+item+"_join;")
                 db.commit()
-                vars_sql_temp.append(item+"_none_dist")
-
-            if 'invd' in temp_p4:
-                conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_none_invd float64;")
-                conn.execute("UPDATE "+item+"_join SET "+item+"_none_invd=1/distance;")
+                fc_to_sql(conn,out_fds+"\\"+item+"_join")
                 db.commit()
-                vars_sql_temp.append(item+"_none_invd")
+                arcpy.Delete_management(out_fgdb+"\\"+item+"_join")
+                # calcaulate Variables
+                vars_sql_temp=list()
+                #conn.execute("BEGIN TRANSACTION;")
+                if 'dist' in temp_p4:
+                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_none_dist float64;")
+                    conn.execute("UPDATE "+item+"_join SET "+item+"_none_dist=distance;")
+                    db.commit()
+                    vars_sql_temp.append(item+"_none_dist")
 
-            if 'invsq' in temp_p4:
-                conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_none_invsq float64;")
-                conn.execute("UPDATE "+item+"_join SET "+item+"_none_invsq=1/distsqu;")
+                if 'invd' in temp_p4:
+                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_none_invd float64;")
+                    conn.execute("UPDATE "+item+"_join SET "+item+"_none_invd=1/distance;")
+                    db.commit()
+                    vars_sql_temp.append(item+"_none_invd")
+
+                if 'invsq' in temp_p4:
+                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_none_invsq float64;")
+                    conn.execute("UPDATE "+item+"_join SET "+item+"_none_invsq=1/distsqu;")
+                    db.commit()
+                    vars_sql_temp.append(item+"_none_invsq")
+
+                if 'val' in temp_p4:
+                    for i in temp_p3:
+                        conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_val float64;")
+                        conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_val="+i+";")
+                        db.commit()
+                        vars_sql_temp.append(item+"_"+i+"_val")
+
+                if 'valdist' in temp_p4:
+                    for i in temp_p3:
+                        conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_valdist float64;")
+                        conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_valdist="+i+"*distance;")
+                        db.commit()
+                        vars_sql_temp.append(item+"_"+i+"_valdist")
+
+                if 'valinvd' in temp_p4:
+                    for i in temp_p3:
+                        conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_valinvd float64;")
+                        conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_valinvd="+i+"*1/distance;")
+                        db.commit()
+                        vars_sql_temp.append(item+"_"+i+"_valinvd")
+
+                if 'valinvsq' in temp_p4:
+                    for i in temp_p3:
+                        conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_valinvsq float64;")
+                        conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_valinvsq="+i+"*1/distsqu;")
+                        db.commit()
+                        vars_sql_temp.append(item+"_"+i+"_valinvsq")
+
+                conn.execute("CREATE UNIQUE INDEX "+item+"_idx on "+item+"_join (RecpID);")
                 db.commit()
-                vars_sql_temp.append(item+"_none_invsq")
+                for var in vars_sql_temp:
+                    qry="UPDATE "+out_recp+" \
+                         SET "+var+" = ( \
+                         SELECT "+var+" \
+                         FROM  "+item+"_join \
+                         WHERE RecpID = "+out_recp+".RecpID)"
+                    try:
+                        conn.execute(qry)
+                        log.write(time.strftime("\nPredictor created: "+str(var)+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
+                        log.flush()
+                        arcpy.AddMessage(('\nPredictor created: '+str(var)))
+                        db.commit()
+                    except:
+                        pass
+                conn.execute("DROP TABLE "+item+"_join")
+                db.commit()
 
-            if 'val' in temp_p4:
-                for i in temp_p3:
-                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_val float64;")
-                    conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_val="+i+";")
-                    db.commit()
-                    vars_sql_temp.append(item+"_"+i+"_val")
-
-            if 'valdist' in temp_p4:
-                for i in temp_p3:
-                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_valdist float64;")
-                    conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_valdist="+i+"*distance;")
-                    db.commit()
-                    vars_sql_temp.append(item+"_"+i+"_valdist")
-
-            if 'valinvd' in temp_p4:
-                for i in temp_p3:
-                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_valinvd float64;")
-                    conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_valinvd="+i+"*1/distance;")
-                    db.commit()
-                    vars_sql_temp.append(item+"_"+i+"_valinvd")
-
-            if 'valinvsq' in temp_p4:
-                for i in temp_p3:
-                    conn.execute("ALTER TABLE "+item+"_join ADD "+item+"_"+i+"_valinvsq float64;")
-                    conn.execute("UPDATE "+item+"_join SET "+item+"_"+i+"_valinvsq="+i+"*1/distsqu;")
-                    db.commit()
-                    vars_sql_temp.append(item+"_"+i+"_valinvsq")
-
-            conn.execute("CREATE UNIQUE INDEX "+item+"_idx on "+item+"_join (RecpID);")
-            db.commit()
-            for var in vars_sql_temp:
-                qry="UPDATE "+out_recp+" \
-                     SET "+var+" = ( \
-                     SELECT "+var+" \
-                     FROM  "+item+"_join \
-                     WHERE RecpID = "+out_recp+".RecpID)"
-                try:
-                    conn.execute(qry)
-                    log.write(time.strftime("\nPredictor created: "+str(var)+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
-                    log.flush()
-                    arcpy.AddMessage(('\nPredictor created: '+str(var)))
-                    db.commit()
-                except:
-                    pass
-            conn.execute("DROP TABLE "+item+"_join")
-            db.commit()
-
-        conn.execute('''INSERT INTO timings VALUES('apply_panel3_DEF','stop',datetime(),NULL)''')
-        conn.execute('''INSERT INTO timings VALUES('apply_panel3_G','start',datetime(),NULL)''')
+            conn.execute('''INSERT INTO timings VALUES('apply_panel3_DEF','stop',datetime(),NULL)''')
+            conn.execute('''INSERT INTO timings VALUES('apply_panel3_G','start',datetime(),NULL)''')
 
         #Raster predictors
         preds_G = [i for i in preds if i[:2]=='pG']
-        # extract first two parts and filter unique
-        preds_G_1to2 = [i[:i.find('_',3)] for i in preds_G]
-        preds_G_1to2 = list(set(preds_G_1to2)) #these are the fc that need to be analysed
-        #iterate through them
-        for item in preds_G_1to2:
-            arcpy.AddMessage(("\nStarting: "+item))
-            arcpy.sa.ExtractValuesToPoints(out_recp,out_fgdb+"\\"+item,out_fgdb+"\\"+item+"_sites","","VALUE_ONLY") #join cell values to points
-            arcpy.AddMessage(('\nRaster value extracted: '+str(item)))
+        if len(preds_G)>0:
+            # extract first two parts and filter unique
+            preds_G_1to2 = [i[:i.find('_',3)] for i in preds_G]
+            preds_G_1to2 = list(set(preds_G_1to2)) #these are the fc that need to be analysed
+            #iterate through them
+            for item in preds_G_1to2:
+                arcpy.AddMessage(("\nStarting: "+item))
+                arcpy.sa.ExtractValuesToPoints(out_recp,out_fgdb+"\\"+item,out_fgdb+"\\"+item+"_sites","","VALUE_ONLY") #join cell values to points
+                arcpy.AddMessage(('\nRaster value extracted: '+str(item)))
 
-            fc_to_sql(conn,out_fgdb+"\\"+item+"_sites") # copy to sqlite
-            conn.execute("CREATE UNIQUE INDEX "+item+"_idx on "+item+"_sites (RecpID);")
-            db.commit()
-            arcpy.Delete_management(out_fgdb+"\\"+item+"_sites")
+                fc_to_sql(conn,out_fgdb+"\\"+item+"_sites") # copy to sqlite
+                conn.execute("CREATE UNIQUE INDEX "+item+"_idx on "+item+"_sites (RecpID);")
+                db.commit()
+                arcpy.Delete_management(out_fgdb+"\\"+item+"_sites")
 
-            # add to combined table
-            var = item+"_raster_val"
-            qry="UPDATE "+out_recp+" \
-                     SET "+var+" = ( \
-                     SELECT RASTERVALU \
-                     FROM "+item+"_sites \
-                     WHERE RecpID = "+out_recp+".RecpID);"
-            conn.execute(qry)
-            db.commit()
-            log.write(time.strftime("\nPredictor created: "+str(var)+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
-            log.flush()
-            arcpy.AddMessage(('\nPredictor created '+str(var)))
+                # add to combined table
+                var = item+"_raster_val"
+                qry="UPDATE "+out_recp+" \
+                         SET "+var+" = ( \
+                         SELECT RASTERVALU \
+                         FROM "+item+"_sites \
+                         WHERE RecpID = "+out_recp+".RecpID);"
+                conn.execute(qry)
+                db.commit()
+                log.write(time.strftime("\nPredictor created: "+str(var)+"  Time: %A %d %b %Y %H:%M:%S\n", time.localtime()))
+                log.flush()
+                arcpy.AddMessage(('\nPredictor created '+str(var)))
 
-        conn.execute('''INSERT INTO timings VALUES('apply_panel3_G','stop',datetime(),NULL)''')
-        conn.execute('''INSERT INTO timings VALUES('apply_panel3_calc','start',datetime(),NULL)''')
+            conn.execute('''INSERT INTO timings VALUES('apply_panel3_G','stop',datetime(),NULL)''')
+            conn.execute('''INSERT INTO timings VALUES('apply_panel3_calc','start',datetime(),NULL)''')
+
         fldsNamesDict={}
         new_entry={"RecpID":"RecpID"}
         fldsNamesDict.update(new_entry)

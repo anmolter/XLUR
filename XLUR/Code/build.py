@@ -6,7 +6,6 @@ from wx.lib.wordwrap import wordwrap
 from wx.lib.agw import ultimatelistctrl as ULC
 import wx.lib.inspection
 import arcpy
-arcpy.CheckOutExtension("Spatial")
 import sys
 import os
 import logging
@@ -5690,6 +5689,12 @@ class WizardPanel3G(wx.Panel):
         self.Layout()
         self.Fit()
 
+        #check out extension, warning if no license
+        try:
+            arcpy.CheckOutExtension("Spatial")
+        except:
+            wx.MessageBox('The Spatial Analyst extension could not be activated. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+
     def onHlp0(self,event):
         """Help window for variable name"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3G_SetVariableName.html")
@@ -5908,6 +5913,8 @@ class WizardPanel3G(wx.Panel):
         self.Parent.PostSizeEventToParent()
         self.Parent.panel3.Show()
         self.Parent.statusbar.SetStatusText('Ready')
+        #reset environment?
+        arcpy.env.workspace = in_fgdb
         del wait
 
     def onCanc1(self, event):

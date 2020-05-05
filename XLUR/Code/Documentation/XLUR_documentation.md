@@ -1,11 +1,11 @@
 XLUR Wizard
 ================
-v.2020-04-26
+v.2020-05-05
 
 Installation
 ============
 
-System requirements: Windows 10, ArcGIS Pro v2.2.4 or higher
+System requirements: Windows 10, ArcGIS Pro v2.2.4 or higher, License for Spatial Analyst extension if analysis of raster data is required
 
 The XLUR tools require a small number of additional Python packages to be installed. In ArcGIS Pro this can be done using the Python Package Manager. Follow these steps to install additional Python packages:
 

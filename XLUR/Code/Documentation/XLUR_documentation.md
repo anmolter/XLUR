@@ -1,6 +1,6 @@
 XLUR Wizard
 ================
-v.2020-05-05
+v.2020-05-13
 
 Installation
 ============
@@ -2254,7 +2254,7 @@ Apply model
 Click this button to apply the LUR model(s) to the receptor points. Applying the LUR model(s) may take a while depending on the number of models, complexity of the models and data, and number of receptor points. If the apply stage seems excessively long, look at the messages at the bottom of the Geoprocessing pane (hover over ApplyLUR or toggle the Show or Hide Messages button to see messages). If you see the following message "+++ERROR+++ Uncaught exception -&gt; See GOTCHA" an error has occured. Open the GOTCHA file for more information.
 </p>
 <p>
-Once the model has been applied a green tick mark will appear. Modelled values will be stored in the <em>\[Name\]*receptors*\[Date\]\_\[Time\]</em> feature class in the File Geodatabase. Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Finish</span> button to close the wizard tool.
+Once the model has been applied a green tick mark will appear. Modelled values will be stored in the <em>pred\_lyr</em> feature class in the File Geodatabase. Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Finish</span> button to close the wizard tool.
 </p>
 </body>
 </html>
@@ -2634,7 +2634,7 @@ To view the predicted values calculated by the Apply LUR wizard:
 
 1.  In ArcGIS Pro insert a new map.
 2.  Click on Add Data and navigate to the LURApply\_\[Date\_Time\] folder.
-3.  Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select LURApply\_receptors.
+3.  Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select pred\_lyr.
 4.  In the Appearance menu click on Symbology and select the Graduated Colors option.
 5.  In the Symbology pane on the right select predNO2 in the dropdown list next to Field.
 6.  Select Quantile in the dropdown list next to Method.

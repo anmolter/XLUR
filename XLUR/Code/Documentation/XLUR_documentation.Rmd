@@ -1299,7 +1299,7 @@ To view the predicted values calculated by the Apply LUR wizard:
 
 1. In ArcGIS Pro insert a new map.
 2. Click on Add Data and navigate to the LURApply_[Date_Time] folder.
-3. Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select LURApply_receptors. 
+3. Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select pred_lyr. 
 4. In the Appearance menu click on Symbology and select the Graduated Colors option.
 5. In the Symbology pane on the right select predNO2 in the dropdown list next to Field.
 6. Select Quantile in the dropdown list next to Method.

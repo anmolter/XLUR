@@ -52,7 +52,7 @@ $(document).ready(function () {
             <div class="col-xs-3">
         <div id="header">
     <h1 class="title">XLUR Wizard</h1>
-                <h4 class="date"><em>v.2020-05-05</em></h4>
+                <h4 class="date"><em>v.2020-05-13</em></h4>
         </div>
     </div>
 </div>
@@ -1772,7 +1772,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
     number of models, complexity of the models and data, and number of receptor points. If the apply stage seems excessively long,
     look at the messages at the bottom of the Geoprocessing pane (hover over ApplyLUR or toggle the Show or Hide Messages button to see messages).
     If you see the following message "+++ERROR+++ Uncaught exception -> See GOTCHA" an error has occured. Open the GOTCHA file for more information.</p>
-  <p>Once the model has been applied a green tick mark will appear. Modelled values will be stored in the <em>[Name]_receptors_[Date]_[Time]</em>
+  <p>Once the model has been applied a green tick mark will appear. Modelled values will be stored in the <em>pred_lyr</em>
     feature class in the File Geodatabase. Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Finish</span> button
     to close the wizard tool.
   </p>
@@ -2188,7 +2188,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <ol style="list-style-type: decimal">
 <li>In ArcGIS Pro insert a new map.</li>
 <li>Click on Add Data and navigate to the LURApply_[Date_Time] folder.</li>
-<li>Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select LURApply_receptors.</li>
+<li>Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select pred_lyr.</li>
 <li>In the Appearance menu click on Symbology and select the Graduated Colors option.</li>
 <li>In the Symbology pane on the right select predNO2 in the dropdown list next to Field.</li>
 <li>Select Quantile in the dropdown list next to Method.</li>

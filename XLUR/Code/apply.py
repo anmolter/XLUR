@@ -2038,12 +2038,7 @@ class WizardPanel3(wx.Panel):
             db.commit()
             arcpy.AddMessage(('\nvalues predicted for '+str(i)))
 
-        # arcpy.MakeXYEventLayer_management(out_folder+"\\OutputSqlDB.sqlite\\"+out_recp, "p_XCOORD", "p_YCOORD", out_fds+"\\pred_lyr",arcpy.Describe(out_fds).SpatialReference, "")
-        #
-        # fieldmappings=customFieldMap(out_fds+"\\pred_lyr",fldsNamesDict) # create fieldmap
-        # arcpy.FeatureClassToFeatureClass_conversion(out_fds+"\\pred_lyr",out_fds,out_recp,"",fieldmappings)
-        # arcpy.Delete_management(out_fds+"\\pred_lyr")
-
+        
         qry="SELECT * FROM "+out_recp+";"
         conn.execute(qry) # get data from results table
         with open(out_folder+"\\out_pred.csv", "w", newline='') as csv_file: # write table to csv file

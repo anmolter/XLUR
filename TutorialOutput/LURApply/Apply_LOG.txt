@@ -1,0 +1,41 @@
+Start Time: Wednesday 20 May 2020 14:11:54
+
+Settings - Start Time: Wednesday 20 May 2020 14:11:54
+
+LUR Source Data File Geodatabase: C:\Work\XLUROutput\MyFirstLUR_20200520_135152\MyFirstLUR_20200520_135152.gdb
+SQLite Database: C:\Work\XLUROutput\MyFirstLUR_20200520_135152\LurSqlDB.sqlite
+
+LUR Model(s) selected: ['MODEL_depNO2']
+
+Settings - End Time: Wednesday 20 May 2020 14:12:59
+
+Receptors - Start Time: Wednesday 20 May 2020 14:12:59
+
+Receptors from Regular Points - Start Time: Wednesday 20 May 2020 14:13:05
+
+Receptor points feature class created:C:\Work\XLUROutput\MyFirstLUR_20200520_135152\LURApply_20200520_141154\LURApply.gdb\LURdata\LURApply_receptors
+Initial number of receptor points: 1282
+Final number of receptor points: 1282
+
+Receptors from Regular Points - End Time: Wednesday 20 May 2020 14:13:26
+
+Receptors  - End Time: Wednesday 20 May 2020 14:13:26
+
+Apply model - Start Time: Wednesday 20 May 2020 14:13:26
+
+Predictor created: pA_EmissionAreaWt_All_1000_wtv  Time: Wednesday 20 May 2020 14:13:50
+
+Predictor created: pB_rdLength_major_25_sum  Time: Wednesday 20 May 2020 14:13:56
+
+Predictor created: pE_majorRdDist_none_dist  Time: Wednesday 20 May 2020 14:13:59
+
+Model applied: (23.480330553036087)+(0.09322163743515155)*pB_rdLength_major_25_sum+(0.013319662569022702)*pA_EmissionAreaWt_All_1000_wtv+(-0.008643827701717337)*pE_majorRdDist_none_dist
+
+Predicted values calculated - Time: Wednesday 20 May 2020 14:14:01
+
+
+Apply - End Time: Wednesday 20 May 2020 14:14:07
+
+Finished by user: Wednesday 20 May 2020 14:14:07
+
+Total time: 0:02:12

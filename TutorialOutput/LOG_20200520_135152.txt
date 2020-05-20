@@ -1,0 +1,1058 @@
+Start Time: Wednesday 20 May 2020 13:51:52
+
+Settings - Start Time: Wednesday 20 May 2020 13:51:52
+
+Input File Geodatabase: D:\HDD\UDARA\LUR\Dev\ArcPro\Clone\XLUR\ExampleData\ExampleData.gdb
+Output Folder: C:\Work\XLUROutput\MyFirstLUR_20200520_135152
+The coordinate system is set to: British_National_Grid
+Unit of measurement: Meter
+Study Area Feature Class: GMarea
+
+Settings - End Time: Wednesday 20 May 2020 13:53:01
+
+Outcomes - Start Time: Wednesday 20 May 2020 13:53:01
+
+Monitoring Sites Feature Class: GMDiffusionTubes
+Site ID variable: SiteID
+Dependent variables: ('NO2',)
+
+Outcomes - End Time: Wednesday 20 May 2020 13:53:27
+
+Predictors - Start Time: Wednesday 20 May 2020 13:53:27
+
+Polygon in Buffer - Start Time: Wednesday 20 May 2020 13:53:37
+
+Variable name: landuseArea
+Buffer distances: [100, 300, 500, 1000, 5000]
+Polygon Feature Class: CorineLanduse
+Category field: LanduseCat
+Aggregation method: Total area
+Variable definitions: 
+pA_landuseArea_HDres_1000_sum : Positive
+pA_landuseArea_HDres_100_sum  : Positive
+pA_landuseArea_HDres_300_sum  : Positive
+pA_landuseArea_HDres_5000_sum : Positive
+pA_landuseArea_HDres_500_sum  : Positive
+pA_landuseArea_Industry_1000_sum: Positive
+pA_landuseArea_Industry_100_sum: Positive
+pA_landuseArea_Industry_300_sum: Positive
+pA_landuseArea_Industry_5000_sum: Positive
+pA_landuseArea_Industry_500_sum: Positive
+pA_landuseArea_LDres_1000_sum : Positive
+pA_landuseArea_LDres_100_sum  : Positive
+pA_landuseArea_LDres_300_sum  : Positive
+pA_landuseArea_LDres_5000_sum : Positive
+pA_landuseArea_LDres_500_sum  : Positive
+pA_landuseArea_Natural_1000_sum: Negative
+pA_landuseArea_Natural_100_sum: Negative
+pA_landuseArea_Natural_300_sum: Negative
+pA_landuseArea_Natural_5000_sum: Negative
+pA_landuseArea_Natural_500_sum: Negative
+pA_landuseArea_Port_1000_sum  : Positive
+pA_landuseArea_Port_100_sum   : Positive
+pA_landuseArea_Port_300_sum   : Positive
+pA_landuseArea_Port_5000_sum  : Positive
+pA_landuseArea_Port_500_sum   : Positive
+pA_landuseArea_UrbGreen_1000_sum: Negative
+pA_landuseArea_UrbGreen_100_sum: Negative
+pA_landuseArea_UrbGreen_300_sum: Negative
+pA_landuseArea_UrbGreen_5000_sum: Negative
+pA_landuseArea_UrbGreen_500_sum: Negative
+Polygon in Buffer - End Time: Wednesday 20 May 2020 13:56:07
+
+Polygon in Buffer - Start Time: Wednesday 20 May 2020 13:56:16
+
+Variable name: EmissionAreaWt
+Buffer distances: [100, 300, 500, 1000, 5000]
+Polygon Feature Class: TotalNOxEmissionsAsNO2_Tiles
+Category field: DummyCat
+Aggregation method: Area weighted value
+Value field: NOxEmission
+Variable definitions: 
+pA_EmissionAreaWt_All_1000_wtv: Positive
+pA_EmissionAreaWt_All_100_wtv : Positive
+pA_EmissionAreaWt_All_300_wtv : Positive
+pA_EmissionAreaWt_All_5000_wtv: Positive
+pA_EmissionAreaWt_All_500_wtv : Positive
++++ WARNING+++ The spatial extent of the polygon feature class is too small or completely outside of the study area. This may result in empty intersects. If all intersects are empty, no predictor variable will be created.
+
+Polygon in Buffer - End Time: Wednesday 20 May 2020 13:58:30
+
+Line in Buffer - Start Time: Wednesday 20 May 2020 13:59:26
+
+Variable name: rdLength
+Buffer distances: [25, 50, 100, 300, 500, 1000]
+Line Feature Class: OSM_AllRoads
+Category field: RoadCat
+Aggregation method: Total length
+Variable definitions: 
+pB_rdLength_major_1000_sum    : Positive
+pB_rdLength_major_100_sum     : Positive
+pB_rdLength_major_25_sum      : Positive
+pB_rdLength_major_300_sum     : Positive
+pB_rdLength_major_500_sum     : Positive
+pB_rdLength_major_50_sum      : Positive
+pB_rdLength_minor_1000_sum    : Positive
+pB_rdLength_minor_100_sum     : Positive
+pB_rdLength_minor_25_sum      : Positive
+pB_rdLength_minor_300_sum     : Positive
+pB_rdLength_minor_500_sum     : Positive
+pB_rdLength_minor_50_sum      : Positive
+Line in Buffer - End Time: Wednesday 20 May 2020 14:01:20
+
+Point in Buffer - Start Time: Wednesday 20 May 2020 14:01:27
+
+Variable name: EmissionPoint
+Buffer distances: [100, 300, 500, 1000, 5000]
+Point Feature Class: NOxEmissionPointSources
+Category field: SectorCat
+Aggregation method: Sum of values
+Value field: Emission
+Variable definitions: 
+pC_EmissionPoint_Chemical_1000_sum: Positive
+pC_EmissionPoint_Chemical_100_sum: Positive
+pC_EmissionPoint_Chemical_300_sum: Positive
+pC_EmissionPoint_Chemical_5000_sum: Positive
+pC_EmissionPoint_Chemical_500_sum: Positive
+pC_EmissionPoint_Fuel_1000_sum: Positive
+pC_EmissionPoint_Fuel_100_sum : Positive
+pC_EmissionPoint_Fuel_300_sum : Positive
+pC_EmissionPoint_Fuel_5000_sum: Positive
+pC_EmissionPoint_Fuel_500_sum : Positive
+pC_EmissionPoint_Metal_1000_sum: Positive
+pC_EmissionPoint_Metal_100_sum: Positive
+pC_EmissionPoint_Metal_300_sum: Positive
+pC_EmissionPoint_Metal_5000_sum: Positive
+pC_EmissionPoint_Metal_500_sum: Positive
+pC_EmissionPoint_Misc_1000_sum: Positive
+pC_EmissionPoint_Misc_100_sum : Positive
+pC_EmissionPoint_Misc_300_sum : Positive
+pC_EmissionPoint_Misc_5000_sum: Positive
+pC_EmissionPoint_Misc_500_sum : Positive
+pC_EmissionPoint_Power_1000_sum: Positive
+pC_EmissionPoint_Power_100_sum: Positive
+pC_EmissionPoint_Power_300_sum: Positive
+pC_EmissionPoint_Power_5000_sum: Positive
+pC_EmissionPoint_Power_500_sum: Positive
+pC_EmissionPoint_Waste_1000_sum: Positive
+pC_EmissionPoint_Waste_100_sum: Positive
+pC_EmissionPoint_Waste_300_sum: Positive
+pC_EmissionPoint_Waste_5000_sum: Positive
+pC_EmissionPoint_Waste_500_sum: Positive
+Point in Buffer - End Time: Wednesday 20 May 2020 14:02:54
+
+Polygon Distance - Start Time: Wednesday 20 May 2020 14:03:17
+
+Variable name: EmissionAreaVal
+Method(s) selected: ('Value',)
+Polygon Feature Class: TotalNOxEmissionsAsNO2_Tiles
+Value field(s): ['NOxEmission']
+Variable definitions: 
+pD_EmissionAreaVal_NOxEmission_val: Positive
+Polygon Distance - End Time: Wednesday 20 May 2020 14:04:22
+
+Line Distance - Start Time: Wednesday 20 May 2020 14:04:45
+
+Variable name: majorRdDist
+Method(s) selected: ('Distance', 'Inverse distance', 'Inverse distance squared')
+Variable definitions: 
+pE_majorRdDist_none_dist      : Negative
+pE_majorRdDist_none_invd      : Positive
+pE_majorRdDist_none_invsq     : Positive
+Line Distance - End Time: Wednesday 20 May 2020 14:05:53
+
+Point Distance - Start Time: Wednesday 20 May 2020 14:06:15
+
+Variable name: EmPoint
+Method(s) selected: ('Value * Inverse distance', 'Value * Inverse distance squared')
+Point Feature Class: NOxEmissionPointSources
+Value field(s): ['Emission']
+Variable definitions: 
+pF_EmPoint_Emission_valinvd   : Positive
+pF_EmPoint_Emission_valinvsq  : Positive
+Point Distance - End Time: Wednesday 20 May 2020 14:06:56
+
+Raster Value - Start Time: Wednesday 20 May 2020 14:07:04
+
+Variable name: EmAreaRaster
+Raster File: TotalNOxEmissionsAsNO2_Raster
+Variable definitions: 
+pG_EmAreaRaster_raster_val    : Positive
+Raster Value - End Time: Wednesday 20 May 2020 14:07:31
+
+Predictor variables created: ['p_XCOORD', 'p_YCOORD', 'pA_landuseArea_HDres_100_sum', 'pA_landuseArea_HDres_300_sum', 'pA_landuseArea_HDres_500_sum', 'pA_landuseArea_HDres_1000_sum', 'pA_landuseArea_HDres_5000_sum', 'pA_landuseArea_Industry_1000_sum', 'pA_landuseArea_Industry_5000_sum', 'pA_landuseArea_LDres_300_sum', 'pA_landuseArea_LDres_500_sum', 'pA_landuseArea_LDres_1000_sum', 'pA_landuseArea_LDres_5000_sum', 'pA_landuseArea_Natural_5000_sum', 'pA_landuseArea_UrbGreen_1000_sum', 'pA_landuseArea_UrbGreen_5000_sum', 'pA_landuseArea_Industry_500_sum', 'pA_landuseArea_LDres_100_sum', 'pA_landuseArea_Natural_500_sum', 'pA_landuseArea_Natural_1000_sum', 'pA_landuseArea_UrbGreen_500_sum', 'pA_landuseArea_UrbGreen_300_sum', 'pA_landuseArea_Industry_100_sum', 'pA_landuseArea_Industry_300_sum', 'pA_landuseArea_UrbGreen_100_sum', 'pA_landuseArea_Natural_300_sum', 'pA_landuseArea_Port_5000_sum', 'pA_landuseArea_Natural_100_sum', 'pA_landuseArea_Port_300_sum', 'pA_landuseArea_Port_500_sum', 'pA_landuseArea_Port_1000_sum', 'pA_EmissionAreaWt_All_100_wtv', 'pA_EmissionAreaWt_All_300_wtv', 'pA_EmissionAreaWt_All_500_wtv', 'pA_EmissionAreaWt_All_1000_wtv', 'pA_EmissionAreaWt_All_5000_wtv', 'pB_rdLength_major_25_sum', 'pB_rdLength_major_50_sum', 'pB_rdLength_major_100_sum', 'pB_rdLength_major_300_sum', 'pB_rdLength_major_500_sum', 'pB_rdLength_major_1000_sum', 'pB_rdLength_minor_25_sum', 'pB_rdLength_minor_50_sum', 'pB_rdLength_minor_100_sum', 'pB_rdLength_minor_300_sum', 'pB_rdLength_minor_500_sum', 'pB_rdLength_minor_1000_sum', 'pC_EmissionPoint_Misc_5000_sum', 'pC_EmissionPoint_Waste_5000_sum', 'pC_EmissionPoint_Misc_500_sum', 'pC_EmissionPoint_Misc_1000_sum', 'pC_EmissionPoint_Misc_300_sum', 'pC_EmissionPoint_Misc_100_sum', 'pC_EmissionPoint_Power_5000_sum', 'pC_EmissionPoint_Waste_1000_sum', 'pC_EmissionPoint_Waste_500_sum', 'pC_EmissionPoint_Chemical_5000_sum', 'pC_EmissionPoint_Waste_300_sum', 'pD_EmissionAreaVal_NOxEmission_val', 'pE_majorRdDist_none_dist', 'pE_majorRdDist_none_invd', 'pE_majorRdDist_none_invsq', 'pF_EmPoint_Emission_valinvd', 'pF_EmPoint_Emission_valinvsq', 'pG_EmAreaRaster_raster_val']
+
+Predictors - End Time: Wednesday 20 May 2020 14:07:43
+
+Model - Start Time: Wednesday 20 May 2020 14:07:43
+
+Data file exported to: C:\Work\XLUROutput\MyFirstLUR_20200520_135152\lur_var_data_20May2020_140745.csv
+Type of model: Classic LUR
+Starting statistical analysis: Wednesday 20 May 2020 14:07:52
+
+File of descriptive statistics created: C:\Work\XLUROutput\MyFirstLUR_20200520_135152\Descriptive_analyses_20200520_140752.pdf
+Descriptive statistics completed: Wednesday 20 May 2020 14:08:08
+
+Correlation matrix of all variables: C:\Work\XLUROutput\MyFirstLUR_20200520_135152\CorrelationMatrix_Vars_20200520_140752.csv
+Correlation matrix completed: Wednesday 20 May 2020 14:08:08
+
+-------------------------------------------------------
+
+depNO2
+
+Starting linear regression: Wednesday 20 May 2020 14:08:08
+
+Start model for depNO2:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                 depNO2   R-squared:                       0.184
+Model:                            OLS   Adj. R-squared:                  0.182
+Method:                 Least Squares   F-statistic:                     71.42
+Date:                Wed, 20 May 2020   Prob (F-statistic):           1.07e-15
+Time:                        14:08:08   Log-Likelihood:                -1093.8
+No. Observations:                 318   AIC:                             2192.
+Df Residuals:                     316   BIC:                             2199.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+============================================================================================
+                               coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------
+Intercept                   26.6803      0.629     42.422      0.000      25.443      27.918
+pB_rdLength_major_25_sum     0.1001      0.012      8.451      0.000       0.077       0.123
+==============================================================================
+Omnibus:                       19.962   Durbin-Watson:                   1.876
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               28.495
+Skew:                           0.457   Prob(JB):                     6.49e-07
+Kurtosis:                       4.147   Cond. No.                         78.7
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+Intermediate model 1: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv
+Adj. R-squared:0.28
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                         22.3221      0.877     25.440      0.000      20.596      24.049
+pB_rdLength_major_25_sum           0.1053      0.011      9.461      0.000       0.083       0.127
+pA_EmissionAreaWt_All_1000_wtv     0.0141      0.002      6.704      0.000       0.010       0.018
+==================================================================================================
+>>> Change in adjusted R-squared>1% and direction of effect of predictors as assumed, model accepted.
+
+Intermediate model 2: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pC_EmissionPoint_Chemical_5000_sum
+Adj. R-squared:0.3
+======================================================================================================
+                                         coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------------------
+Intercept                             22.1942      0.866     25.622      0.000      20.490      23.898
+pB_rdLength_major_25_sum               0.1033      0.011      9.401      0.000       0.082       0.125
+pA_EmissionAreaWt_All_1000_wtv         0.0163      0.002      7.451      0.000       0.012       0.021
+pC_EmissionPoint_Chemical_5000_sum  -151.9149     48.168     -3.154      0.002    -246.687     -57.143
+======================================================================================================
+>>> Change in adjusted R-squared>1%, but direction of effect of predictors not as assumed. The next best predictor will be used instead.
+
+Intermediate model 3: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pC_EmissionPoint_Power_5000_sum
+Adj. R-squared:0.3
+===================================================================================================
+                                      coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------------------
+Intercept                          22.1845      0.870     25.491      0.000      20.472      23.897
+pB_rdLength_major_25_sum            0.1037      0.011      9.397      0.000       0.082       0.125
+pA_EmissionAreaWt_All_1000_wtv      0.0154      0.002      7.207      0.000       0.011       0.020
+pC_EmissionPoint_Power_5000_sum    -3.8187      1.413     -2.702      0.007      -6.600      -1.038
+===================================================================================================
+>>> Change in adjusted R-squared>1%, but direction of effect of predictors not as assumed. The next best predictor will be used instead.
+
+Intermediate model 4: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pE_majorRdDist_none_dist
+Adj. R-squared:0.29
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                         23.4803      0.983     23.894      0.000      21.547      25.414
+pB_rdLength_major_25_sum           0.0932      0.012      7.756      0.000       0.070       0.117
+pA_EmissionAreaWt_All_1000_wtv     0.0133      0.002      6.320      0.000       0.009       0.017
+pE_majorRdDist_none_dist          -0.0086      0.003     -2.535      0.012      -0.015      -0.002
+==================================================================================================
+>>> Change in adjusted R-squared>1% and direction of effect of predictors as assumed, model accepted.
+
+Intermediate model 5: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pE_majorRdDist_none_dist+pC_EmissionPoint_Chemical_5000_sum
+Adj. R-squared:0.31
+======================================================================================================
+                                         coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------------------
+Intercept                             23.3291      0.970     24.042      0.000      21.420      25.238
+pB_rdLength_major_25_sum               0.0916      0.012      7.716      0.000       0.068       0.115
+pA_EmissionAreaWt_All_1000_wtv         0.0155      0.002      7.075      0.000       0.011       0.020
+pE_majorRdDist_none_dist              -0.0085      0.003     -2.514      0.012      -0.015      -0.002
+pC_EmissionPoint_Chemical_5000_sum  -149.7821     47.772     -3.135      0.002    -243.777     -55.787
+======================================================================================================
+>>> Change in adjusted R-squared>1%, but direction of effect of predictors not as assumed. The next best predictor will be used instead.
+
+Intermediate model 6: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pE_majorRdDist_none_dist+pC_EmissionPoint_Power_5000_sum
+Adj. R-squared:0.31
+===================================================================================================
+                                      coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------------------
+Intercept                          23.3725      0.973     24.022      0.000      21.458      25.287
+pB_rdLength_major_25_sum            0.0912      0.012      7.660      0.000       0.068       0.115
+pA_EmissionAreaWt_All_1000_wtv      0.0146      0.002      6.849      0.000       0.010       0.019
+pE_majorRdDist_none_dist           -0.0089      0.003     -2.635      0.009      -0.016      -0.002
+pC_EmissionPoint_Power_5000_sum    -3.9159      1.401     -2.795      0.006      -6.672      -1.160
+===================================================================================================
+>>> Change in adjusted R-squared>1%, but direction of effect of predictors not as assumed. The next best predictor will be used instead.
+
+Intermediate model 7: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pE_majorRdDist_none_dist+pC_EmissionPoint_Misc_5000_sum
+Adj. R-squared:0.3
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                         23.6747      0.979     24.186      0.000      21.749      25.601
+pB_rdLength_major_25_sum           0.0907      0.012      7.568      0.000       0.067       0.114
+pA_EmissionAreaWt_All_1000_wtv     0.0135      0.002      6.459      0.000       0.009       0.018
+pE_majorRdDist_none_dist          -0.0089      0.003     -2.633      0.009      -0.016      -0.002
+pC_EmissionPoint_Misc_5000_sum    -0.4265      0.179     -2.383      0.018      -0.779      -0.074
+==================================================================================================
+>>> Change in adjusted R-squared>1%, but direction of effect of predictors not as assumed. The next best predictor will be used instead.
+
+Intermediate model 8: depNO2~pB_rdLength_major_25_sum+pA_EmissionAreaWt_All_1000_wtv+pE_majorRdDist_none_dist+pA_landuseArea_HDres_300_sum
+Adj. R-squared:0.3
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                         23.6698      0.984     24.060      0.000      21.734      25.605
+pB_rdLength_major_25_sum           0.0927      0.012      7.739      0.000       0.069       0.116
+pA_EmissionAreaWt_All_1000_wtv     0.0117      0.002      5.190      0.000       0.007       0.016
+pE_majorRdDist_none_dist          -0.0086      0.003     -2.520      0.012      -0.015      -0.002
+pA_landuseArea_HDres_300_sum    1.041e-05    5.5e-06      1.894      0.059   -4.02e-07    2.12e-05
+==================================================================================================
+>>> Change in adjusted R-squared<1%, stopping iterations.
+
+
+Intermediate model for depNO2:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                 depNO2   R-squared:                       0.300
+Model:                            OLS   Adj. R-squared:                  0.294
+Method:                 Least Squares   F-statistic:                     44.96
+Date:                Wed, 20 May 2020   Prob (F-statistic):           3.36e-24
+Time:                        14:08:09   Log-Likelihood:                -1069.4
+No. Observations:                 318   AIC:                             2147.
+Df Residuals:                     314   BIC:                             2162.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                         23.4803      0.983     23.894      0.000      21.547      25.414
+pB_rdLength_major_25_sum           0.0932      0.012      7.756      0.000       0.070       0.117
+pA_EmissionAreaWt_All_1000_wtv     0.0133      0.002      6.320      0.000       0.009       0.017
+pE_majorRdDist_none_dist          -0.0086      0.003     -2.535      0.012      -0.015      -0.002
+==============================================================================
+Omnibus:                       37.634   Durbin-Watson:                   2.078
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               75.848
+Skew:                           0.637   Prob(JB):                     3.39e-17
+Kurtosis:                       5.025   Cond. No.                         883.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+Final model for depNO2:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                 depNO2   R-squared:                       0.300
+Model:                            OLS   Adj. R-squared:                  0.294
+Method:                 Least Squares   F-statistic:                     44.96
+Date:                Wed, 20 May 2020   Prob (F-statistic):           3.36e-24
+Time:                        14:08:09   Log-Likelihood:                -1069.4
+No. Observations:                 318   AIC:                             2147.
+Df Residuals:                     314   BIC:                             2162.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                         23.4803      0.983     23.894      0.000      21.547      25.414
+pB_rdLength_major_25_sum           0.0932      0.012      7.756      0.000       0.070       0.117
+pA_EmissionAreaWt_All_1000_wtv     0.0133      0.002      6.320      0.000       0.009       0.017
+pE_majorRdDist_none_dist          -0.0086      0.003     -2.535      0.012      -0.015      -0.002
+==============================================================================
+Omnibus:                       37.634   Durbin-Watson:                   2.078
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               75.848
+Skew:                           0.637   Prob(JB):                     3.39e-17
+Kurtosis:                       5.025   Cond. No.                         883.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+Variance Inflation of model
+               Predictor variable   VIF
+0                       Intercept  6.21
+1        pB_rdLength_major_25_sum  1.19
+2  pA_EmissionAreaWt_All_1000_wtv  1.03
+3        pE_majorRdDist_none_dist  1.20
+
+Case summaries
+==================================================================================================
+       obs      endog     fitted     Cook's   student.   hat diag    dffits   ext.stud.     dffits
+                           value          d   residual              internal   residual           
+--------------------------------------------------------------------------------------------------
+         0     40.300     31.642      0.001      1.234      0.004      0.074      1.235      0.074
+         1     27.900     30.423      0.000     -0.361      0.012     -0.040     -0.361     -0.040
+         2     13.600     23.927      0.006     -1.477      0.011     -0.159     -1.480     -0.159
+         3     25.900     25.936      0.000     -0.005      0.009     -0.000     -0.005     -0.000
+         4     23.400     27.525      0.001     -0.589      0.008     -0.054     -0.589     -0.054
+         5     37.800     39.185      0.000     -0.200      0.029     -0.035     -0.200     -0.035
+         6     21.200     25.593      0.001     -0.628      0.009     -0.058     -0.627     -0.058
+         7     34.700     30.559      0.000      0.590      0.004      0.038      0.590      0.038
+         8     36.100     33.441      0.000      0.379      0.005      0.028      0.379      0.028
+         9     22.500     28.126      0.001     -0.803      0.006     -0.061     -0.802     -0.061
+        10     26.500     29.967      0.000     -0.495      0.007     -0.041     -0.494     -0.041
+        11     20.200     26.450      0.002     -0.893      0.009     -0.084     -0.893     -0.084
+        12     13.400     22.850      0.007     -1.354      0.015     -0.165     -1.356     -0.165
+        13     36.900     32.604      0.000      0.612      0.004      0.038      0.612      0.038
+        14     38.300     35.642      0.000      0.380      0.008      0.035      0.379      0.035
+        15     24.000     26.424      0.000     -0.346      0.008     -0.030     -0.346     -0.030
+        16     27.800     34.214      0.002     -0.916      0.009     -0.087     -0.916     -0.087
+        17     27.900     30.432      0.000     -0.362      0.012     -0.041     -0.362     -0.041
+        18     38.600     32.822      0.001      0.824      0.006      0.062      0.824      0.062
+        19     21.200     26.613      0.001     -0.773      0.009     -0.072     -0.773     -0.072
+        20     30.300     25.759      0.001      0.648      0.007      0.055      0.648      0.055
+        21     32.300     30.186      0.000      0.301      0.004      0.018      0.301      0.018
+        22     35.700     32.152      0.000      0.506      0.004      0.031      0.505      0.031
+        23     26.400     31.618      0.001     -0.744      0.006     -0.056     -0.744     -0.056
+        24     31.200     29.196      0.000      0.286      0.010      0.028      0.286      0.028
+        25     28.000     30.843      0.000     -0.405      0.004     -0.027     -0.405     -0.027
+        26     36.700     31.633      0.000      0.722      0.004      0.044      0.721      0.044
+        27     25.100     27.703      0.000     -0.372      0.007     -0.032     -0.371     -0.032
+        28     28.200     28.828      0.000     -0.090      0.005     -0.007     -0.089     -0.006
+        29     18.600     25.604      0.002     -1.000      0.008     -0.088     -1.000     -0.088
+        30     40.300     42.767      0.002     -0.361      0.054     -0.086     -0.360     -0.086
+        31     33.400     33.657      0.000     -0.037      0.029     -0.006     -0.037     -0.006
+        32     37.100     32.459      0.000      0.661      0.004      0.041      0.661      0.041
+        33     58.800     40.779      0.080      2.623      0.045      0.567      2.648      0.573
+        34     33.100     32.009      0.000      0.155      0.004      0.009      0.155      0.009
+        35     39.300     32.628      0.001      0.952      0.005      0.070      0.951      0.070
+        36     32.200     35.692      0.003     -0.508      0.044     -0.109     -0.507     -0.109
+        37     46.100     41.391      0.003      0.680      0.029      0.118      0.679      0.118
+        38     33.400     36.164      0.002     -0.403      0.047     -0.090     -0.402     -0.090
+        39     38.700     34.910      0.001      0.542      0.010      0.055      0.541      0.054
+        40     35.700     35.589      0.000      0.016      0.007      0.001      0.016      0.001
+        41     47.600     31.693      0.005      2.267      0.004      0.136      2.282      0.137
+        42     41.000     36.610      0.003      0.633      0.026      0.103      0.632      0.103
+        43     33.200     27.895      0.001      0.758      0.008      0.067      0.757      0.067
+        44     29.900     26.427      0.000      0.496      0.008      0.043      0.495      0.043
+        45     32.200     27.859      0.001      0.620      0.007      0.054      0.619      0.054
+        46     21.800     27.073      0.001     -0.753      0.008     -0.067     -0.753     -0.067
+        47     51.900     40.623      0.030      1.640      0.043      0.347      1.644      0.348
+        48     32.100     35.471      0.001     -0.482      0.009     -0.045     -0.481     -0.045
+        49     33.200     42.068      0.018     -1.289      0.042     -0.271     -1.290     -0.272
+        50     46.800     37.393      0.008      1.350      0.018      0.183      1.352      0.183
+        51     44.300     32.181      0.003      1.727      0.004      0.105      1.733      0.105
+        52     30.300     26.264      0.001      0.576      0.007      0.050      0.576      0.050
+        53     20.400     28.954      0.003     -1.222      0.009     -0.117     -1.223     -0.117
+        54     23.700     28.515      0.001     -0.688      0.008     -0.063     -0.687     -0.063
+        55     29.000     31.512      0.000     -0.358      0.003     -0.021     -0.357     -0.021
+        56     25.600     29.874      0.000     -0.609      0.004     -0.039     -0.609     -0.039
+        57     31.800     29.780      0.000      0.288      0.006      0.023      0.288      0.023
+        58     24.500     26.964      0.000     -0.352      0.009     -0.033     -0.352     -0.033
+        59     38.400     32.919      0.001      0.781      0.004      0.052      0.781      0.052
+        60     33.500     31.559      0.000      0.277      0.004      0.017      0.276      0.017
+        61     26.800     29.818      0.000     -0.431      0.006     -0.032     -0.430     -0.032
+        62     30.500     30.100      0.000      0.057      0.004      0.003      0.057      0.003
+        63     38.500     32.436      0.001      0.864      0.004      0.053      0.864      0.053
+        64     29.100     30.222      0.000     -0.160      0.005     -0.011     -0.160     -0.011
+        65     29.400     31.118      0.000     -0.245      0.004     -0.015     -0.244     -0.015
+        66     28.200     24.980      0.001      0.460      0.011      0.048      0.460      0.048
+        67     31.100     28.305      0.000      0.399      0.008      0.037      0.399      0.037
+        68     27.200     36.995      0.005     -1.400      0.010     -0.143     -1.403     -0.143
+        69     27.200     26.580      0.000      0.088      0.008      0.008      0.088      0.008
+        70     28.600     30.965      0.000     -0.337      0.004     -0.022     -0.337     -0.022
+        71     28.600     31.417      0.000     -0.401      0.004     -0.024     -0.401     -0.024
+        72     28.900     27.615      0.000      0.184      0.008      0.017      0.183      0.017
+        73     20.600     27.484      0.002     -0.983      0.007     -0.085     -0.983     -0.085
+        74     26.700     30.194      0.000     -0.498      0.004     -0.032     -0.498     -0.032
+        75     31.500     26.929      0.001      0.653      0.008      0.058      0.652      0.057
+        76     41.900     35.523      0.002      0.912      0.011      0.098      0.912      0.098
+        77     32.300     43.431      0.041     -1.631      0.058     -0.403     -1.635     -0.404
+        78     45.000     33.677      0.004      1.616      0.006      0.130      1.620      0.131
+        79     40.500     34.388      0.001      0.873      0.007      0.076      0.872      0.076
+        80     18.700     26.807      0.002     -1.157      0.007     -0.099     -1.158     -0.099
+        81     41.400     40.075      0.000      0.191      0.022      0.028      0.190      0.028
+        82     31.400     29.738      0.000      0.237      0.006      0.019      0.237      0.019
+        83     13.700     29.694      0.008     -2.282      0.006     -0.181     -2.298     -0.182
+        84     29.200     17.947      0.083      1.691      0.104      0.575      1.696      0.577
+        85     24.200     26.675      0.000     -0.353      0.008     -0.032     -0.353     -0.032
+        86     22.600     26.473      0.001     -0.553      0.009     -0.052     -0.553     -0.052
+        87     36.100     50.074      0.166     -2.128      0.128     -0.814     -2.140     -0.819
+        88     38.900     33.657      0.001      0.748      0.006      0.057      0.747      0.057
+        89     31.400     29.976      0.000      0.203      0.005      0.014      0.203      0.014
+        90     40.500     28.404      0.006      1.728      0.009      0.161      1.733      0.162
+        91     25.900     31.822      0.001     -0.844      0.004     -0.050     -0.843     -0.050
+        92     41.800     38.286      0.002      0.506      0.026      0.082      0.506      0.082
+        93     32.900     31.590      0.000      0.187      0.005      0.013      0.186      0.013
+        94     28.000     28.577      0.000     -0.082      0.008     -0.008     -0.082     -0.008
+        95     44.400     33.855      0.005      1.507      0.009      0.144      1.510      0.145
+        96     46.700     31.122      0.005      2.220      0.004      0.137      2.234      0.138
+        97     28.400     32.240      0.000     -0.547      0.004     -0.036     -0.547     -0.036
+        98     36.800     36.008      0.000      0.113      0.008      0.010      0.113      0.010
+        99     47.400     35.241      0.006      1.737      0.009      0.161      1.742      0.162
+       100     19.700     29.376      0.005     -1.383      0.010     -0.137     -1.385     -0.137
+       101     21.400     25.700      0.001     -0.614      0.008     -0.056     -0.613     -0.056
+       102     25.600     27.200      0.000     -0.228      0.008     -0.021     -0.228     -0.021
+       103     23.400     27.063      0.001     -0.523      0.007     -0.045     -0.522     -0.045
+       104     22.000     26.931      0.001     -0.704      0.008     -0.064     -0.704     -0.064
+       105     31.600     30.647      0.000      0.136      0.004      0.009      0.136      0.009
+       106     21.100     24.849      0.001     -0.536      0.009     -0.052     -0.535     -0.052
+       107     35.100     19.149      0.234      2.441      0.136      0.967      2.460      0.975
+       108     38.800     28.096      0.005      1.529      0.009      0.142      1.532      0.142
+       109     25.600     34.306      0.015     -1.262      0.037     -0.247     -1.263     -0.247
+       110     29.200     28.340      0.000      0.123      0.008      0.011      0.123      0.011
+       111     33.900     35.589      0.000     -0.241      0.008     -0.021     -0.241     -0.021
+       112     25.800     34.303      0.015     -1.233      0.037     -0.241     -1.234     -0.242
+       113     29.000     30.206      0.000     -0.172      0.005     -0.012     -0.172     -0.012
+       114     30.200     29.175      0.000      0.146      0.006      0.011      0.146      0.011
+       115     39.300     36.056      0.001      0.464      0.010      0.046      0.463      0.046
+       116     25.800     28.287      0.000     -0.355      0.008     -0.033     -0.355     -0.033
+       117     39.100     42.160      0.001     -0.442      0.030     -0.077     -0.441     -0.077
+       118     35.300     36.046      0.000     -0.107      0.016     -0.014     -0.107     -0.014
+       119     36.400     31.398      0.001      0.715      0.010      0.073      0.715      0.073
+       120     33.200     36.318      0.001     -0.446      0.013     -0.051     -0.446     -0.051
+       121     29.400     36.230      0.004     -0.979      0.015     -0.122     -0.979     -0.122
+       122     29.700     27.930      0.000      0.253      0.008      0.022      0.252      0.022
+       123     27.000     27.211      0.000     -0.030      0.010     -0.003     -0.030     -0.003
+       124     33.000     36.520      0.002     -0.507      0.023     -0.078     -0.506     -0.078
+       125     13.600     11.779      0.016      0.328      0.378      0.256      0.328      0.255
+       126     33.300     31.312      0.000      0.283      0.004      0.019      0.283      0.019
+       127     40.200     37.104      0.001      0.443      0.011      0.046      0.442      0.046
+       128     25.200     32.422      0.001     -1.029      0.004     -0.063     -1.029     -0.063
+       129     24.800     29.087      0.001     -0.613      0.009     -0.059     -0.612     -0.059
+       130     20.000     24.842      0.001     -0.693      0.011     -0.073     -0.692     -0.073
+       131     37.300     27.983      0.003      1.330      0.008      0.117      1.332      0.117
+       132     26.000     26.589      0.000     -0.084      0.009     -0.008     -0.084     -0.008
+       133     14.900     26.852      0.007     -1.708      0.010     -0.169     -1.714     -0.169
+       134     16.700     27.491      0.006     -1.543      0.011     -0.159     -1.547     -0.159
+       135     48.100     31.467      0.005      2.370      0.004      0.143      2.388      0.144
+       136     23.800     26.903      0.000     -0.443      0.008     -0.040     -0.443     -0.040
+       137     12.700     23.769      0.007     -1.583      0.010     -0.163     -1.587     -0.163
+       138     14.500     22.787      0.007     -1.190      0.019     -0.163     -1.191     -0.164
+       139     38.100     31.254      0.001      0.976      0.004      0.059      0.976      0.059
+       140     38.000     35.610      0.000      0.341      0.008      0.030      0.341      0.030
+       141     18.300     20.824      0.001     -0.365      0.032     -0.067     -0.364     -0.066
+       142     37.700     25.373      0.008      1.762      0.010      0.179      1.768      0.180
+       143     25.400     31.853      0.001     -0.920      0.004     -0.055     -0.919     -0.055
+       144     28.200     29.479      0.000     -0.183      0.010     -0.018     -0.183     -0.018
+       145     37.000     30.761      0.003      0.893      0.013      0.104      0.893      0.104
+       146     37.800     30.244      0.002      1.078      0.005      0.078      1.078      0.078
+       147     41.900     28.339      0.008      1.937      0.009      0.180      1.946      0.180
+       148     22.100     27.547      0.001     -0.778      0.007     -0.066     -0.777     -0.066
+       149     27.200     31.377      0.000     -0.595      0.004     -0.036     -0.595     -0.036
+       150     27.400     31.430      0.001     -0.575      0.007     -0.047     -0.574     -0.047
+       151     15.300     22.930      0.005     -1.095      0.017     -0.145     -1.095     -0.145
+       152     16.800     21.906      0.005     -0.739      0.034     -0.139     -0.739     -0.139
+       153     41.300     39.088      0.000      0.317      0.017      0.042      0.317      0.042
+       154     18.500     26.073      0.002     -1.081      0.007     -0.092     -1.081     -0.092
+       155     45.000     34.625      0.004      1.481      0.008      0.129      1.484      0.129
+       156     35.400     37.322      0.000     -0.275      0.011     -0.029     -0.274     -0.029
+       157     39.100     40.673      0.000     -0.226      0.024     -0.035     -0.226     -0.035
+       158     40.400     36.963      0.001      0.491      0.010      0.050      0.491      0.050
+       159     42.800     39.179      0.001      0.520      0.017      0.069      0.519      0.069
+       160     38.300     34.473      0.001      0.546      0.007      0.046      0.546      0.046
+       161     52.100     35.231      0.011      2.409      0.008      0.211      2.427      0.212
+       162     42.800     37.731      0.002      0.726      0.012      0.081      0.725      0.080
+       163     44.600     35.348      0.003      1.321      0.008      0.117      1.323      0.117
+       164     34.500     34.101      0.000      0.057      0.007      0.005      0.057      0.005
+       165     19.600     27.127      0.002     -1.075      0.008     -0.097     -1.075     -0.097
+       166     24.000     21.338      0.002      0.387      0.042      0.081      0.386      0.080
+       167     23.800     31.613      0.001     -1.113      0.004     -0.067     -1.114     -0.067
+       168     21.800     24.237      0.000     -0.348      0.010     -0.036     -0.348     -0.036
+       169     25.800     32.100      0.001     -0.898      0.004     -0.054     -0.897     -0.054
+       170     23.700     26.498      0.000     -0.400      0.008     -0.037     -0.399     -0.037
+       171     28.000     28.035      0.000     -0.005      0.008     -0.000     -0.005     -0.000
+       172     13.900     21.895      0.006     -1.148      0.018     -0.157     -1.148     -0.157
+       173     14.600     19.885      0.010     -0.777      0.064     -0.204     -0.777     -0.204
+       174     35.100     38.774      0.001     -0.528      0.019     -0.074     -0.527     -0.074
+       175     56.700     29.202      0.029      3.926      0.007      0.339      4.020      0.347
+       176     14.300     38.004      0.037     -3.393      0.013     -0.385     -3.452     -0.392
+       177     41.800     37.917      0.001      0.556      0.013      0.063      0.555      0.062
+       178     35.600     40.916      0.004     -0.766      0.025     -0.123     -0.765     -0.123
+       179     24.600     31.221      0.001     -0.944      0.004     -0.060     -0.943     -0.060
+       180     40.500     36.018      0.001      0.640      0.009      0.060      0.640      0.060
+       181     31.100     30.637      0.000      0.066      0.004      0.004      0.066      0.004
+       182     41.600     33.192      0.002      1.199      0.004      0.080      1.200      0.080
+       183     36.000     32.430      0.000      0.509      0.004      0.031      0.508      0.031
+       184     40.100     31.571      0.001      1.216      0.004      0.075      1.216      0.075
+       185     50.900     29.424      0.018      3.066      0.007      0.266      3.108      0.269
+       186     20.100     27.420      0.002     -1.045      0.008     -0.094     -1.046     -0.094
+       187     22.900     29.033      0.002     -0.876      0.009     -0.084     -0.876     -0.084
+       188     32.100     34.964      0.000     -0.409      0.008     -0.037     -0.408     -0.037
+       189     25.400     29.133      0.000     -0.533      0.007     -0.043     -0.532     -0.043
+       190     21.200     28.557      0.003     -1.052      0.010     -0.103     -1.052     -0.103
+       191     26.800     31.040      0.000     -0.604      0.004     -0.038     -0.604     -0.038
+       192     34.500     28.986      0.001      0.787      0.008      0.069      0.787      0.069
+       193     24.300     26.712      0.000     -0.344      0.007     -0.029     -0.344     -0.029
+       194     33.500     30.951      0.000      0.363      0.004      0.023      0.363      0.023
+       195     17.700     24.219      0.002     -0.933      0.011     -0.100     -0.932     -0.100
+       196     22.500     29.475      0.002     -0.995      0.007     -0.083     -0.995     -0.083
+       197     24.000     29.418      0.001     -0.773      0.007     -0.064     -0.773     -0.064
+       198     24.300     29.084      0.001     -0.683      0.007     -0.056     -0.682     -0.056
+       199     33.700     29.559      0.001      0.591      0.007      0.049      0.590      0.049
+       200     20.000     24.765      0.001     -0.682      0.012     -0.075     -0.681     -0.075
+       201     35.800     28.973      0.002      0.975      0.008      0.085      0.975      0.085
+       202     28.600     27.564      0.000      0.148      0.008      0.013      0.148      0.013
+       203     32.700     27.746      0.001      0.707      0.008      0.064      0.707      0.064
+       204     29.200     27.940      0.000      0.180      0.008      0.016      0.180      0.016
+       205     31.700     27.694      0.001      0.572      0.007      0.049      0.571      0.049
+       206     29.800     29.893      0.000     -0.013      0.006     -0.001     -0.013     -0.001
+       207     39.600     36.363      0.000      0.463      0.009      0.044      0.462      0.044
+       208     15.100     29.224      0.008     -2.017      0.008     -0.178     -2.027     -0.179
+       209     56.000     28.623      0.028      3.909      0.007      0.337      4.001      0.344
+       210     30.300     32.199      0.000     -0.271      0.004     -0.017     -0.270     -0.017
+       211     35.800     44.654      0.042     -1.319      0.088     -0.410     -1.320     -0.410
+       212     24.000     26.454      0.000     -0.351      0.009     -0.034     -0.350     -0.033
+       213     24.800     28.251      0.001     -0.493      0.009     -0.047     -0.493     -0.047
+       214     35.900     40.372      0.003     -0.644      0.025     -0.103     -0.644     -0.103
+       215     29.200     31.351      0.000     -0.307      0.003     -0.018     -0.306     -0.018
+       216     30.200     28.560      0.000      0.234      0.008      0.021      0.234      0.021
+       217     23.800     29.755      0.001     -0.849      0.005     -0.060     -0.849     -0.060
+       218     17.300     28.561      0.003     -1.606      0.005     -0.117     -1.610     -0.117
+       219     20.400     27.087      0.002     -0.955      0.007     -0.081     -0.954     -0.081
+       220     18.500     38.168      0.037     -2.824      0.018     -0.387     -2.856     -0.391
+       221     30.200     38.083      0.006     -1.132      0.018     -0.153     -1.132     -0.154
+       222     29.500     29.002      0.000      0.071      0.010      0.007      0.071      0.007
+       223     23.400     28.996      0.002     -0.800      0.010     -0.081     -0.800     -0.081
+       224     33.700     30.408      0.000      0.469      0.005      0.032      0.469      0.032
+       225     36.500     42.486      0.017     -0.887      0.079     -0.260     -0.887     -0.260
+       226     24.100     29.744      0.001     -0.805      0.006     -0.061     -0.805     -0.061
+       227     16.000     29.869      0.004     -1.977      0.004     -0.129     -1.986     -0.129
+       228     15.500     31.490      0.005     -2.278      0.003     -0.134     -2.294     -0.135
+       229     40.100     29.797      0.003      1.469      0.005      0.104      1.472      0.105
+       230     25.300     28.833      0.000     -0.504      0.007     -0.042     -0.504     -0.041
+       231     36.500     29.779      0.001      0.959      0.006      0.076      0.959      0.076
+       232     18.200     20.318      0.002     -0.312      0.068     -0.085     -0.312     -0.085
+       233     33.500     22.934      0.008      1.513      0.013      0.175      1.516      0.176
+       234     29.700     33.270      0.001     -0.511      0.011     -0.054     -0.510     -0.054
+       235     27.400     30.223      0.000     -0.403      0.005     -0.029     -0.402     -0.029
+       236     29.100     29.984      0.000     -0.126      0.005     -0.009     -0.126     -0.009
+       237     27.000     30.528      0.000     -0.503      0.005     -0.034     -0.502     -0.034
+       238     30.100     30.567      0.000     -0.067      0.005     -0.005     -0.066     -0.005
+       239     24.900     30.446      0.001     -0.791      0.005     -0.054     -0.790     -0.054
+       240     35.200     30.277      0.001      0.702      0.005      0.050      0.702      0.050
+       241     32.700     27.657      0.001      0.720      0.007      0.060      0.719      0.060
+       242     35.500     32.079      0.000      0.488      0.004      0.030      0.487      0.030
+       243     22.900     23.586      0.000     -0.098      0.011     -0.010     -0.098     -0.010
+       244     23.300     30.213      0.001     -0.986      0.005     -0.071     -0.986     -0.071
+       245     32.800     29.615      0.000      0.454      0.005      0.031      0.454      0.031
+       246     33.900     29.283      0.001      0.659      0.007      0.054      0.658      0.054
+       247     19.700     29.512      0.003     -1.400      0.006     -0.113     -1.402     -0.113
+       248     34.200     29.322      0.001      0.696      0.007      0.057      0.696      0.057
+       249     28.200     29.528      0.000     -0.190      0.007     -0.016     -0.189     -0.016
+       250     21.800     28.727      0.002     -0.989      0.007     -0.080     -0.989     -0.080
+       251     33.100     29.478      0.000      0.516      0.005      0.036      0.516      0.036
+       252     27.800     29.851      0.000     -0.293      0.006     -0.022     -0.292     -0.022
+       253     32.900     30.218      0.000      0.382      0.005      0.026      0.382      0.026
+       254     41.100     33.937      0.003      1.025      0.013      0.117      1.026      0.117
+       255     22.700     29.637      0.002     -0.990      0.007     -0.081     -0.990     -0.081
+       256     20.700     25.526      0.001     -0.689      0.008     -0.061     -0.689     -0.061
+       257     22.000     28.930      0.002     -0.990      0.008     -0.088     -0.990     -0.088
+       258     18.600     28.948      0.004     -1.478      0.008     -0.134     -1.481     -0.134
+       259     31.400     29.214      0.000      0.312      0.007      0.026      0.312      0.026
+       260     27.500     29.460      0.000     -0.280      0.007     -0.024     -0.279     -0.023
+       261     23.900     29.138      0.001     -0.748      0.007     -0.062     -0.747     -0.062
+       262     24.700     29.567      0.001     -0.695      0.006     -0.056     -0.694     -0.055
+       263     31.100     27.874      0.000      0.461      0.008      0.040      0.460      0.040
+       264     26.400     29.104      0.000     -0.386      0.008     -0.034     -0.386     -0.034
+       265     29.700     29.023      0.000      0.097      0.007      0.008      0.097      0.008
+       266     31.200     29.410      0.000      0.255      0.007      0.021      0.255      0.021
+       267     25.900     29.755      0.000     -0.550      0.004     -0.037     -0.549     -0.037
+       268     26.800     30.684      0.000     -0.554      0.004     -0.036     -0.553     -0.036
+       269     17.800     28.886      0.005     -1.583      0.008     -0.141     -1.587     -0.142
+       270     24.200     29.416      0.001     -0.744      0.007     -0.061     -0.744     -0.061
+       271     32.300     29.832      0.000      0.352      0.006      0.027      0.352      0.027
+       272     33.100     31.937      0.000      0.166      0.007      0.014      0.166      0.014
+       273     28.700     28.936      0.000     -0.034      0.006     -0.003     -0.034     -0.003
+       274     31.500     33.055      0.000     -0.222      0.006     -0.017     -0.221     -0.017
+       275     32.700     30.129      0.000      0.367      0.005      0.025      0.366      0.025
+       276     31.300     33.795      0.000     -0.356      0.005     -0.025     -0.355     -0.025
+       277     33.000     35.473      0.000     -0.353      0.008     -0.033     -0.353     -0.033
+       278     28.300     31.454      0.000     -0.449      0.004     -0.028     -0.449     -0.028
+       279     30.500     29.188      0.000      0.187      0.007      0.016      0.187      0.016
+       280     42.100     29.314      0.006      1.826      0.008      0.160      1.832      0.161
+       281     24.600     30.983      0.001     -0.910      0.004     -0.059     -0.910     -0.059
+       282     57.700     29.739      0.026      3.990      0.007      0.323      4.089      0.331
+       283     32.500     32.400      0.000      0.014      0.004      0.001      0.014      0.001
+       284     33.500     31.610      0.000      0.269      0.004      0.016      0.269      0.016
+       285     32.000     32.060      0.000     -0.008      0.004     -0.001     -0.008     -0.001
+       286     36.400     25.850      0.008      1.511      0.014      0.180      1.514      0.180
+       287     32.700     26.210      0.002      0.928      0.011      0.098      0.928      0.098
+       288     32.700     26.405      0.002      0.900      0.010      0.089      0.899      0.089
+       289     34.200     31.912      0.000      0.327      0.009      0.031      0.326      0.031
+       290     36.400     31.492      0.001      0.701      0.008      0.062      0.700      0.061
+       291     34.300     31.707      0.000      0.370      0.008      0.033      0.370      0.033
+       292     36.400     33.648      0.000      0.392      0.005      0.027      0.392      0.027
+       293     37.900     31.103      0.001      0.969      0.004      0.062      0.969      0.062
+       294     26.800     27.196      0.000     -0.057      0.008     -0.005     -0.056     -0.005
+       295     19.000     24.612      0.002     -0.802      0.010     -0.079     -0.802     -0.079
+       296     32.000     30.892      0.000      0.158      0.004      0.010      0.158      0.010
+       297     38.000     31.201      0.001      0.969      0.004      0.062      0.969      0.062
+       298     42.800     32.101      0.003      1.525      0.005      0.105      1.529      0.106
+       299     29.800     33.914      0.001     -0.588      0.008     -0.053     -0.587     -0.052
+       300     37.600     25.133      0.006      1.780      0.008      0.158      1.786      0.159
+       301     34.100     32.128      0.000      0.282      0.008      0.026      0.281      0.026
+       302     32.600     32.256      0.000      0.049      0.009      0.005      0.049      0.005
+       303     35.900     29.596      0.001      0.900      0.007      0.074      0.899      0.073
+       304     34.000     30.582      0.000      0.487      0.004      0.032      0.487      0.032
+       305     26.500     30.544      0.000     -0.576      0.004     -0.036     -0.576     -0.036
+       306     38.900     30.722      0.001      1.166      0.004      0.077      1.166      0.077
+       307     34.900     26.890      0.003      1.144      0.008      0.104      1.145      0.104
+       308     35.000     36.422      0.000     -0.205      0.022     -0.031     -0.204     -0.031
+       309     21.900     26.068      0.001     -0.595      0.008     -0.055     -0.595     -0.055
+       310     29.700     26.437      0.000      0.466      0.007      0.040      0.465      0.040
+       311     37.300     34.572      0.001      0.391      0.014      0.047      0.390      0.047
+       312     25.400     28.937      0.000     -0.504      0.005     -0.035     -0.504     -0.035
+       313     28.900     29.016      0.000     -0.017      0.005     -0.001     -0.017     -0.001
+       314     33.000     31.395      0.000      0.229      0.004      0.014      0.228      0.014
+       315     27.500     28.751      0.000     -0.179      0.007     -0.015     -0.178     -0.015
+       316     32.700     28.797      0.001      0.557      0.007      0.046      0.557      0.046
+       317     26.400     28.789      0.000     -0.341      0.007     -0.030     -0.341     -0.030
+==================================================================================================
+
+DF Betas
+     dfb_Intercept  dfb_pB_rdLength_major_25_sum  dfb_pA_EmissionAreaWt_All_1000_wtv  dfb_pE_majorRdDist_none_dist
+0         0.024538                     -0.005531                            0.015066                     -0.019585
+1        -0.006770                      0.023050                           -0.022753                      0.010660
+2        -0.149188                      0.100374                            0.099155                      0.026817
+3        -0.000449                      0.000379                            0.000182                      0.000197
+4        -0.037664                      0.041609                            0.000759                      0.021591
+5         0.011433                     -0.032059                            0.001442                     -0.008432
+6        -0.051682                      0.042856                            0.022333                      0.015643
+7         0.024742                      0.000311                           -0.014966                     -0.011658
+8         0.001806                      0.016040                           -0.001395                     -0.000357
+9        -0.050289                      0.039097                            0.013807                      0.025828
+10       -0.026797                     -0.006215                            0.027048                      0.008277
+11       -0.081644                      0.045060                            0.053322                      0.033687
+12       -0.073593                      0.044666                            0.060874                     -0.092978
+13        0.007498                      0.005950                            0.008016                     -0.008903
+14       -0.008044                      0.026204                            0.005559                      0.002955
+15       -0.023689                      0.022751                            0.005717                      0.007482
+16        0.021027                     -0.000266                           -0.067766                      0.006796
+17       -0.005060                      0.022137                           -0.024139                      0.008326
+18        0.012687                      0.032429                           -0.014199                     -0.003610
+19       -0.059985                      0.056027                            0.016285                      0.029414
+20        0.036620                     -0.035095                           -0.009731                      0.005305
+21        0.012556                     -0.002967                           -0.005171                     -0.005916
+22        0.009039                      0.003326                            0.003430                     -0.007753
+23       -0.009088                      0.016826                           -0.028713                      0.013129
+24        0.010677                     -0.018995                            0.010359                     -0.009078
+25       -0.016596                     -0.002036                            0.010943                      0.008335
+26        0.013463                     -0.004909                            0.011436                     -0.011367
+27       -0.016419                      0.022350                           -0.005551                      0.004599
+28       -0.005555                      0.001686                            0.003658                      0.002273
+29       -0.047639                      0.047877                            0.010221                     -0.023744
+30        0.055098                     -0.020097                           -0.082364                     -0.009401
+31        0.001820                      0.001724                           -0.005495                     -0.000085
+32        0.007864                      0.004375                            0.010424                     -0.009053
+33       -0.331212                      0.079208                            0.549512                      0.036818
+34        0.002981                      0.000840                            0.000863                     -0.002360
+35        0.016404                      0.035024                           -0.017218                     -0.004569
+36        0.041994                      0.021100                           -0.099610                     -0.004347
+37       -0.079088                      0.057422                            0.100734                      0.018532
+38        0.034484                      0.017394                           -0.081999                     -0.001297
+39       -0.003800                      0.041713                           -0.007579                      0.004621
+40       -0.000422                      0.000906                            0.000508                      0.000125
+41        0.056990                      0.012353                           -0.007284                     -0.037541
+42       -0.043163                     -0.004249                            0.094425                     -0.000554
+43        0.037255                     -0.048816                            0.010174                     -0.017493
+44        0.034342                     -0.032850                           -0.008459                     -0.011304
+45        0.025590                     -0.036888                            0.011623                     -0.007014
+46       -0.049656                      0.051752                            0.005751                      0.023098
+47       -0.200668                      0.049166                            0.333593                      0.021774
+48        0.009016                     -0.034779                           -0.003752                     -0.004637
+49        0.122306                     -0.259654                           -0.021540                     -0.076205
+50       -0.087590                      0.031516                            0.162976                      0.000728
+51        0.031876                      0.013873                            0.008620                     -0.026890
+52        0.022752                     -0.027395                            0.001616                      0.012824
+53       -0.045702                      0.079225                           -0.041062                      0.033115
+54       -0.026780                      0.043080                           -0.018977                      0.014282
+55       -0.008436                      0.000555                           -0.001493                      0.005775
+56       -0.028848                      0.006533                            0.015210                      0.013007
+57        0.016487                      0.000535                           -0.014271                     -0.006695
+58       -0.025914                      0.025521                            0.005073                      0.013859
+59        0.002110                      0.004432                            0.023762                     -0.009021
+60        0.007436                      0.001324                           -0.001575                     -0.004644
+61       -0.023697                     -0.000006                            0.019328                      0.009712
+62        0.002380                     -0.000549                           -0.001019                     -0.001043
+63        0.013176                      0.007733                            0.007996                     -0.013462
+64       -0.007887                     -0.000329                            0.006025                      0.003445
+65       -0.006218                      0.003183                           -0.002604                      0.004531
+66        0.045305                     -0.033884                           -0.024796                     -0.016344
+67        0.007933                     -0.019929                            0.015628                      0.004040
+68        0.062541                     -0.101854                           -0.066358                     -0.019132
+69        0.005956                     -0.005851                           -0.001240                     -0.002043
+70       -0.012780                     -0.001568                            0.007501                      0.006549
+71       -0.011486                     -0.001989                            0.003485                      0.006556
+72        0.011362                     -0.012853                            0.000207                     -0.006529
+73       -0.052290                      0.062925                           -0.005979                      0.020377
+74       -0.022680                      0.002046                            0.013607                      0.010265
+75        0.043081                     -0.044231                           -0.006040                     -0.018257
+76       -0.013114                      0.078862                           -0.009589                      0.011098
+77        0.176302                     -0.389221                           -0.010232                     -0.116061
+78        0.005914                      0.084582                           -0.016646                      0.003565
+79       -0.004306                      0.054009                           -0.004433                      0.005090
+80       -0.040924                      0.056545                           -0.013573                     -0.020371
+81       -0.014798                      0.024964                            0.009465                      0.006442
+82        0.013834                      0.000416                           -0.012105                     -0.005650
+83       -0.134706                     -0.002933                            0.117496                      0.054411
+84       -0.081559                      0.106511                           -0.045204                      0.542849
+85       -0.025845                      0.024821                            0.006075                      0.011683
+86       -0.043816                      0.040086                            0.013144                      0.020816
+87        0.416681                     -0.806014                           -0.052034                     -0.268589
+88        0.002803                      0.034950                           -0.004090                     -0.000522
+89        0.007298                     -0.006660                            0.002108                     -0.004739
+90        0.086864                     -0.118777                            0.031777                     -0.059437
+91       -0.016789                     -0.001320                           -0.006232                      0.012851
+92       -0.042417                      0.011064                            0.076080                      0.002921
+93        0.002555                     -0.003742                            0.006384                     -0.003236
+94       -0.003045                      0.005095                           -0.002441                      0.001583
+95        0.010160                      0.100110                           -0.039766                      0.006256
+96        0.076034                      0.008179                           -0.034988                     -0.040790
+97       -0.004844                      0.002877                           -0.016206                      0.007561
+98       -0.003278                      0.007567                            0.003188                      0.001040
+99       -0.027652                      0.123338                            0.007865                      0.016156
+100      -0.037586                      0.085356                           -0.063136                      0.028950
+101      -0.047733                      0.040706                            0.019082                      0.012601
+102      -0.015656                      0.016244                            0.001867                      0.008409
+103      -0.017110                      0.025623                           -0.008550                     -0.008481
+104      -0.016600                      0.030084                           -0.015214                     -0.022329
+105       0.005544                      0.000182                           -0.003304                     -0.002648
+106      -0.046724                      0.035401                            0.025266                      0.009243
+107      -0.267992                      0.222817                            0.074675                      0.947783
+108       0.086279                     -0.107367                            0.016071                     -0.056692
+109       0.097270                      0.044194                           -0.222747                     -0.035774
+110       0.005802                     -0.008145                            0.002411                     -0.003569
+111       0.005646                     -0.015346                           -0.005352                     -0.001911
+112       0.095409                      0.042901                           -0.217815                     -0.035576
+113      -0.008434                     -0.000326                            0.006408                      0.003629
+114       0.008860                     -0.001331                           -0.006791                     -0.003465
+115      -0.019891                      0.017235                            0.034108                      0.002932
+116      -0.017495                      0.023851                           -0.006249                      0.010957
+117       0.053358                     -0.055918                           -0.052328                     -0.019435
+118       0.005569                     -0.000728                           -0.012129                      0.000138
+119       0.005638                     -0.032484                            0.045934                     -0.016158
+120       0.022093                     -0.009600                           -0.043606                     -0.000101
+121       0.051490                     -0.012078                           -0.107507                      0.000443
+122       0.008187                     -0.013832                            0.006561                     -0.000055
+123      -0.000325                      0.001119                           -0.001024                     -0.001335
+124       0.010914                     -0.066401                            0.019148                     -0.014899
+125      -0.072000                      0.073552                            0.000415                      0.250374
+126       0.005391                     -0.005289                            0.007044                     -0.005085
+127      -0.022624                      0.028274                            0.028381                      0.006187
+128      -0.015571                     -0.009217                           -0.009621                      0.015678
+129      -0.018620                      0.037683                           -0.024505                      0.012177
+130      -0.021913                      0.023004                            0.004739                     -0.042362
+131       0.039860                     -0.071520                            0.037841                      0.003056
+132      -0.006530                      0.006082                            0.001799                      0.003173
+133      -0.157344                      0.052075                            0.131808                      0.056326
+134      -0.005803                      0.053989                           -0.065201                     -0.075426
+135       0.067174                      0.010212                           -0.017127                     -0.040526
+136      -0.031901                      0.031519                            0.006151                      0.015900
+137      -0.102330                      0.071837                            0.067183                     -0.057062
+138      -0.040376                      0.024381                            0.036671                     -0.117569
+139       0.029537                      0.002272                           -0.008844                     -0.016638
+140      -0.009122                      0.020357                            0.010292                      0.003034
+141      -0.010651                      0.001497                            0.017844                     -0.052883
+142       0.169301                     -0.132150                           -0.084256                     -0.069484
+143      -0.020462                     -0.005240                           -0.000661                      0.014593
+144      -0.004767                      0.011268                           -0.008660                      0.003920
+145       0.008823                     -0.054504                            0.065457                     -0.021139
+146       0.054026                      0.003308                           -0.042589                     -0.023863
+147       0.098000                     -0.132741                            0.033920                     -0.064932
+148      -0.033358                      0.045366                           -0.011054                      0.005832
+149      -0.016027                     -0.005392                            0.006244                      0.006883
+150      -0.020589                     -0.017804                            0.023989                      0.005375
+151      -0.040218                      0.025321                            0.034261                     -0.100631
+152      -0.000808                     -0.003708                            0.012319                     -0.120758
+153      -0.022378                      0.034363                            0.018072                      0.009162
+154      -0.049204                      0.053872                            0.003888                     -0.019021
+155      -0.033281                      0.019933                            0.093481                     -0.010169
+156       0.013679                     -0.021876                           -0.013437                     -0.004983
+157       0.020274                     -0.030980                           -0.014097                     -0.009111
+158      -0.023526                      0.031559                            0.029009                      0.006360
+159      -0.037222                      0.056878                            0.029995                      0.015210
+160      -0.010626                      0.007383                            0.031891                     -0.004129
+161      -0.075437                      0.075614                            0.146537                      0.007487
+162      -0.041042                      0.055591                            0.045117                      0.012509
+163      -0.042587                      0.042847                            0.080922                      0.004177
+164      -0.000919                      0.000513                            0.003227                     -0.000449
+165      -0.073501                      0.075850                            0.009441                      0.037698
+166      -0.002117                      0.004975                           -0.007037                      0.071307
+167      -0.028825                     -0.005058                            0.004337                      0.018583
+168      -0.017081                      0.013704                            0.009073                     -0.016875
+169      -0.017511                     -0.006875                           -0.003155                      0.014050
+170      -0.030897                      0.028574                            0.008845                      0.014181
+171      -0.000210                      0.000303                           -0.000098                      0.000081
+172      -0.067960                      0.033612                            0.067600                     -0.092625
+173       0.018077                     -0.026217                            0.016907                     -0.187154
+174       0.029953                     -0.066861                           -0.011160                     -0.015515
+175       0.266422                     -0.000650                           -0.248218                     -0.100448
+176       0.200625                     -0.275390                           -0.215908                     -0.056384
+177      -0.031777                      0.043482                            0.034624                      0.008846
+178       0.068025                     -0.109888                           -0.043186                     -0.030098
+179      -0.020880                      0.014575                           -0.016570                      0.016968
+180      -0.018388                      0.043980                            0.016805                      0.006254
+181       0.002770                      0.000171                           -0.001783                     -0.001312
+182       0.002542                      0.013139                            0.033018                     -0.014580
+183       0.007988                      0.004891                            0.004072                     -0.007934
+184       0.035699                      0.008450                           -0.013032                     -0.022329
+185       0.203258                      0.004203                           -0.189659                     -0.082786
+186      -0.023224                      0.047356                           -0.029201                     -0.025227
+187      -0.026620                      0.053596                           -0.034587                      0.016463
+188       0.003971                     -0.027482                            0.000543                     -0.002054
+189      -0.034252                      0.002289                            0.029701                      0.012908
+190      -0.081237                      0.001849                            0.081093                      0.028951
+191      -0.021374                     -0.002527                            0.011023                      0.010962
+192       0.054094                     -0.001624                           -0.050439                     -0.019942
+193      -0.017686                      0.019836                            0.000344                      0.001110
+194       0.013242                      0.001042                           -0.006834                     -0.006779
+195      -0.095084                      0.065748                            0.060312                      0.023774
+196      -0.062225                     -0.000915                            0.056470                      0.024491
+197      -0.048598                     -0.000409                            0.044127                      0.018814
+198      -0.044421                      0.003073                            0.038747                      0.016653
+199       0.036356                      0.000892                           -0.032892                     -0.014517
+200      -0.073484                      0.052962                            0.042943                      0.030234
+201       0.066669                     -0.002626                           -0.061542                     -0.024496
+202       0.008245                     -0.009766                            0.000746                     -0.003836
+203       0.041411                     -0.048784                            0.003560                     -0.023604
+204       0.010056                     -0.012362                            0.001624                     -0.006014
+205       0.025662                     -0.034601                            0.008213                     -0.007523
+206      -0.000445                      0.000596                           -0.000321                      0.000351
+207      -0.018071                      0.031589                            0.019115                      0.007049
+208      -0.135853                     -0.002296                            0.129300                      0.051458
+209       0.284002                     -0.033977                           -0.250683                     -0.103060
+210      -0.005354                     -0.002448                           -0.000617                      0.004517
+211       0.257499                     -0.056894                           -0.401838                     -0.039638
+212      -0.028925                      0.026040                            0.009244                      0.014691
+213      -0.006916                      0.022738                           -0.021121                     -0.009574
+214       0.052422                     -0.094110                           -0.027064                     -0.026678
+215      -0.007254                      0.001055                           -0.001551                      0.004543
+216       0.007231                     -0.013623                            0.007942                     -0.002415
+217      -0.045370                      0.003436                            0.033426                      0.018808
+218      -0.102829                      0.040917                            0.061634                      0.043338
+219      -0.034391                      0.048826                           -0.013602                     -0.010649
+220       0.139369                     -0.350431                           -0.034247                     -0.080128
+221       0.054221                     -0.137213                           -0.013389                     -0.031228
+222       0.000511                     -0.003364                            0.003987                      0.001030
+223      -0.005676                      0.037738                           -0.044809                     -0.011745
+224       0.021795                      0.001256                           -0.015846                     -0.009858
+225       0.148664                     -0.012132                           -0.253683                     -0.017692
+226      -0.045066                      0.000452                            0.036928                      0.018276
+227      -0.078767                      0.058523                           -0.004222                      0.047085
+228      -0.056743                     -0.000093                           -0.002650                      0.036968
+229       0.078148                     -0.005031                           -0.057871                     -0.032480
+230      -0.033931                      0.004086                            0.028943                      0.012578
+231       0.054592                      0.003155                           -0.048386                     -0.021142
+232       0.011835                     -0.012288                            0.001977                     -0.078991
+233       0.095583                     -0.058667                           -0.076344                      0.082653
+234      -0.009367                     -0.034805                            0.023221                     -0.000977
+235      -0.020273                     -0.001043                            0.015901                      0.009006
+236      -0.006562                      0.000028                            0.005059                      0.002784
+237      -0.022341                     -0.001351                            0.015427                      0.010414
+238      -0.002949                     -0.000245                            0.002083                      0.001374
+239      -0.036311                     -0.002050                            0.025966                      0.016671
+240       0.034826                      0.001836                           -0.026896                     -0.015708
+241       0.056787                     -0.031908                           -0.031673                     -0.028582
+242       0.010169                      0.004003                            0.000564                     -0.008022
+243      -0.005849                      0.004035                            0.004002                     -0.004533
+244      -0.048986                     -0.002846                            0.038384                      0.020996
+245       0.024083                     -0.004173                           -0.015789                     -0.010226
+246       0.041511                     -0.001238                           -0.036672                     -0.015674
+247      -0.085128                      0.000097                            0.074825                      0.033416
+248       0.044375                     -0.001313                           -0.039273                     -0.017531
+249      -0.011662                     -0.000196                            0.010497                      0.004622
+250      -0.067130                      0.010968                            0.055239                      0.025313
+251       0.028578                     -0.004691                           -0.019834                     -0.011767
+252      -0.016358                     -0.000444                            0.013822                      0.006769
+253       0.018125                     -0.000142                           -0.012632                     -0.007967
+254       0.009847                      0.083202                           -0.044327                      0.008421
+255      -0.060107                     -0.001658                            0.053873                      0.024533
+256      -0.032171                      0.032221                            0.007168                     -0.018286
+257      -0.068784                      0.002095                            0.064595                      0.025052
+258      -0.104060                      0.000965                            0.099973                      0.037868
+259       0.019996                     -0.000792                           -0.017707                     -0.007575
+260      -0.017674                     -0.000310                            0.016184                      0.007004
+261      -0.048586                      0.001564                            0.043834                      0.017764
+262      -0.041644                     -0.000205                            0.036476                      0.016473
+263       0.035892                     -0.009937                           -0.028926                     -0.013385
+264      -0.026197                      0.000227                            0.024643                      0.009825
+265       0.006564                     -0.000209                           -0.006072                     -0.002432
+266       0.015797                     -0.000055                           -0.014090                     -0.006028
+267      -0.027998                      0.004884                            0.017455                      0.012251
+268      -0.022615                     -0.001225                            0.013833                      0.010848
+269      -0.112151                      0.005043                            0.104692                      0.042013
+270      -0.046213                      0.000140                            0.041275                      0.017790
+271       0.019694                      0.000455                           -0.016600                     -0.008092
+272       0.005166                      0.006649                           -0.006949                     -0.001167
+273      -0.002178                      0.000341                            0.001741                      0.000838
+274      -0.002831                     -0.008990                            0.003099                      0.000997
+275       0.017863                     -0.000216                           -0.012802                     -0.007696
+276       0.001285                     -0.012801                           -0.005119                      0.000391
+277       0.006930                     -0.024832                           -0.003777                     -0.003349
+278      -0.013459                     -0.002652                            0.004978                      0.007995
+279       0.012323                     -0.000044                           -0.011456                     -0.004569
+280       0.122188                      0.002025                           -0.115292                     -0.048458
+281      -0.034699                     -0.004315                            0.020482                      0.018080
+282       0.244041                      0.008564                           -0.216834                     -0.102394
+283       0.000222                      0.000130                            0.000118                     -0.000218
+284       0.006922                      0.001091                           -0.000884                     -0.004507
+285      -0.000169                     -0.000061                           -0.000028                      0.000133
+286       0.003246                     -0.034442                            0.038726                      0.126007
+287       0.010837                     -0.028596                            0.020893                      0.058132
+288       0.015632                     -0.031934                            0.018407                      0.045654
+289       0.011268                      0.014508                           -0.016415                     -0.002535
+290       0.025897                      0.025728                           -0.033766                     -0.005779
+291       0.013130                      0.014623                           -0.017734                     -0.003117
+292      -0.000063                      0.012762                            0.004912                     -0.001752
+293       0.035073                      0.005221                           -0.019473                     -0.018695
+294      -0.003871                      0.004016                            0.000462                      0.002072
+295      -0.071302                      0.052505                            0.040857                      0.011969
+296       0.005839                      0.000540                           -0.003200                     -0.002843
+297       0.034571                      0.006576                           -0.019648                     -0.018864
+298       0.032821                      0.044363                           -0.028534                     -0.008515
+299      -0.001795                     -0.036366                            0.010226                     -0.002754
+300       0.116334                     -0.098217                           -0.050064                      0.014881
+301       0.008095                      0.013510                           -0.012750                     -0.000830
+302       0.001345                      0.002463                           -0.002210                     -0.000110
+303       0.054769                      0.001322                           -0.049141                     -0.021998
+304       0.020216                      0.000949                           -0.012681                     -0.009180
+305      -0.022828                      0.001970                            0.010864                      0.011131
+306       0.047793                      0.005018                           -0.031346                     -0.022281
+307       0.081468                     -0.080795                           -0.015326                     -0.039396
+308       0.003740                     -0.025821                            0.007766                     -0.005063
+309      -0.017707                      0.024085                           -0.004628                     -0.023712
+310       0.017987                     -0.022455                            0.002470                      0.009363
+311       0.000253                      0.036054                           -0.015338                      0.005565
+312      -0.029066                      0.012363                            0.014890                      0.012942
+313      -0.000948                      0.000368                            0.000510                      0.000417
+314       0.007229                      0.001440                           -0.003163                     -0.004216
+315      -0.012188                      0.001500                            0.010487                      0.004443
+316       0.037809                     -0.004285                           -0.032687                     -0.013786
+317      -0.023812                      0.001854                            0.021579                      0.008672
+
+
+Spatial autocorrelation of residuals
+  Expected Index Moran's Index     VarName           Variance             p-value             z-score
+0      -0.003155     0.122934   RES_depNO2          0.062535            0.614113            0.504211 
+Ending statistical analysis: Wednesday 20 May 2020 14:08:16
+
+
+Elapsed time statistical analysis: 0:00:23
+
+Model - End Time: Wednesday 20 May 2020 14:08:26
+
+Finished by user: Wednesday 20 May 2020 14:08:26
+
+Total time: 0:16:34

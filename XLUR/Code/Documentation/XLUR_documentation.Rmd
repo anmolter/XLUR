@@ -2,12 +2,12 @@
 title: XLUR Wizard
 date: "v.`r Sys.Date()`"
 output:
-#   rmdformats::material:
-#     highlight: kate
-#     self_contained: no
-#     lightbox: TRUE
-#     fig_caption: FALSE
- output: rmarkdown::github_document
+  rmdformats::material:
+    highlight: kate
+    self_contained: no
+    lightbox: TRUE
+    fig_caption: FALSE
+ # output: rmarkdown::github_document
 
 ---
 

@@ -2,11 +2,14 @@
 title: XLUR Wizard
 date: "v.`r Sys.Date()`"
 output:
-  output: rmarkdown::github_document
+#   rmdformats::material:
+#     highlight: kate
+#     self_contained: no
+#     lightbox: TRUE
+#     fig_caption: FALSE
+ output: rmarkdown::github_document
 
 ---
-
-
 
 ```{r knitr_init, echo=FALSE, cache=FALSE}
 library(knitr)
@@ -24,6 +27,7 @@ opts_chunk$set(echo=FALSE,
                fig.path = "documentation_figs/README-")
 opts_knit$set(width=75)
 ```
+
 
 # Installation
 
@@ -82,15 +86,30 @@ After these four packages have been installed, click the back arrow in the menu 
 
 # General Information {.tabset .tabset-pills}
 
-## What is LUR?
+## What is LUR? 
+
+**Classic LUR**
 
 Land use regression (LUR) is a statistical method, which uses geospatial data to develop prediction models in environmental sciences. It is predominantly used in air pollution research to predict pollutant concentrations empirically within a given a study area. However, it has also been used for other environmental phenomena such as noise, air temperature and water microbiology.   
 
 The underlying principle of LUR is that a measured quantity (e.g. pollutant concentration, noise level, temperature etc) at a given location depends on characteristics of the surrounding environment, in particular on the presence and absence of  sources and sinks, which increase and decrease values respectively. 
 
-LUR models are developed by using measured data from a number of monitoring sites as the dependent variable and data on the surrounding environment extracted as predictor variables in a multiple linear regression analysis. For example, in an air pollution study particulate matter concentrations might be measured at fifty monitoring sites. Then for each monitoring site potential predictor variables are extracted such as the area of industrial land use around the monitoring site, the distance to the nearest road, the number of motor vehicles on the nearest road etc. The particulate matter concentrations and the potential predictors are entered into a supervised machine learning process, which will try to construct a parsimonious multiple linear regression model. This model can then be used to predict particulate matter concentrations at any point within the study area.
+LUR models are developed by using measured data from a number of monitoring sites as the dependent variable and data on the surrounding environment extracted as potential predictor variables in a multiple linear regression analysis. For example, in an air pollution study particulate matter concentrations might be measured at fifty monitoring sites. Then for each monitoring site potential predictor variables are extracted such as the area of industrial land use around the monitoring site, the distance to the nearest road, the number of motor vehicles on the nearest road etc. The particulate matter concentrations and the potential predictors are entered into a supervised machine learning process, which will try to construct a parsimonious multiple linear regression model. This model can then be used to predict particulate matter concentrations at any point within the study area.
 
-Hybrid models can also be developed. In the XLUR tool a hybrid model is a model in which one or more mandatory variables are selected by the user. These mandatory variables are forced into the model, regardless of the amount of variance that they explain or their direction of effect. An example of this would be using the output from dispersion models run at a coarse spatial resolution as a mandatory variable, which could add a measure of global variability to the measures of local variability used in LUR.
+The supervised machine learning process is based on the methodology used in the European Study of Cohorts for Air Pollution Effects (ESCAPE), which can be downloaded from [http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf](http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf) (a copy can be found in the Documentation folder). The ESCAPE exposure manual provides a detailed description of the steps required to construct a parsimonious multiple linear regression model; therefore, only a brief summary is presented here:
+
+1. Prior to the statistical analysis a positive or negative direction of effect is assigned to each potential predictor variable by the user based on *a priori* knowledge of the subject area. 
+2. Using the dependent variable univariate linear regression models are created for each potential predictor variable. The linear regression models are ranked by their adjusted R^2^ value. The model with the highest adjusted R^2^ and in which the coefficient of the predictor variable matches the assigned direction of effect (see previous step) is selected as the starting model.  
+3. The remaining potential predictor variables are added to the starting model one by one. The new linear regression models are ranked by by their adjusted R^2^ value. The model with the highest adjusted R^2^ and in which the coefficients of all predictor variables match the assigned direction of effects is selected. If the adjusted R^2^ of this model has increased by more than 1% compared to the previous model, it is used as the new model. If not, the  variable selection process stops and the previous model is used as the intermediate model. Using these selection criteria potential predictor variables are added to the model until the increase in adjusted R^2^ becomes less than 1% or until no potential predictor variables are left. The resulting model is the intermedite model. 
+4. The predictor variables included in the intermediate model are inspected. If all predictor variables are statistically significant (p<0.1), the intermediate model becomes the final model.  If non-significant (p>0.1) predictors are present in the intermediate model, predictor variables are removed from the intermediate model until all predictor variables are statistically significant and their coefficients still match the assigned direction of effect. The resulting model will become the final model.  
+
+XLUR will provide a range of diagnosics for the final model which can be used to further analyse the suitability and robustness of the final model.  
+
+**Hybrid LUR**
+
+Hybrid models can also be developed. Hybrid models in XLUR are based on an extension of the ESCAPE methodology developed by de Hoogh et al. (see [https://doi.org/10.1016/j.envres.2016.07.005](DOI: 10.1016/j.envres.2016.07.005)). In the XLUR tool a hybrid model is a model in which one or more mandatory variables are selected by the user. These mandatory variables are forced into the model prior to the starting model, regardless of the amount of variance that they explain or their direction of effect. Once the mandatory variables have been entered potential predictor variables are added and models are selected in the same way as described for the Classic LUR model. It should be noted that mandatory variables will not be removed during step 4 described above. They will remain in the model regardless of their sigficance level.  
+
+An example of this would be using the output from dispersion models run at a coarse spatial resolution as a mandatory variable, which could add a measure of global variability to the measures of local variability used in LUR.
 
 ## The XLUR Wizard
 
@@ -970,7 +989,7 @@ Please inspect your receptor points carefully on a map and look at the predictor
 
 # Tutorial
 
-This section provides a guided tutorial for building and applying a LUR model using the XLUR wizard. In this tutorial you will build and apply a predictive air pollution model for the Greater Manchester area using openly accessible datasets on monitored Nitrogen Dioxide (NO~2~) concentrations, land use categories, road networks, and emission sources. 
+This section provides a guided tutorial for building and applying a LUR model using the XLUR wizard. In this tutorial you will build and apply a predictive air pollution model for the Greater Manchester area using [openly accessible datasets](https://github.com/anmolter/XLUR/blob/master/ExampleData/ExampleData_Sources.md) on monitored Nitrogen Dioxide (NO~2~) concentrations, land use categories, road networks, and emission sources. 
 
 ## Before you start
 
@@ -983,6 +1002,8 @@ This section provides a guided tutorial for building and applying a LUR model us
 1. Start ArcGIS Pro and open the XLUR project. The XLUR.aprx project file can be found in the XLUR folder in the XLUR repository.
 2. In the Catalog window right-click Folders and click Add Folder Connection. Create a connection to the ExampleData.gdb file geodatabase, which is stored in the ExampleData folder in the XLUR repository.  
 3. Double-click toolboxes, double-click XLUR.tbx, then double-click the BuildLUR script. In the Geoprocessing window on the right click Run. This will open the Build LUR wizard.
+
+If at any time you require more information on a specific section, click on the question mark button next to the section heading. This will open a help window with further information on how to complete each section. 
 
 ## Settings
 
@@ -1209,10 +1230,10 @@ Click Next >.
 This is the final page of the Build LUR wizard. On this page you need to choose the type of model that you would like to build, before you finally build the model. 
 
 1. **Export data (optional)**
-    + Click the Export button. This will save the dependent variable and potential predictor variables in text file. This file is formatted so that it can be read by most statistical software, which allows users with statistical expertise to run their own analyses on the data.
+    + Click the Export button. This will save the dependent variable and potential predictor variables in a text file. This file is formatted so that it can be read by most statistical software packages, which allows users with statistical expertise to run their own analyses on the data.
 2. **Build LUR model**
-  + Under Type of model you can choose between building a classic model or a hybrid model. For the purpose of this tutorial select Classic LUR. For further information on the difference between classic and hybrid models click the help button. 
-  + Click Build model. Depending on the amount of data entered building the model may take several minutes. 
+    + Under Type of model you can choose between building a classic model or a hybrid model. For the purpose of this tutorial select Classic LUR. For further information on the difference between classic and hybrid models click the help button or refer to the General Information section. 
+    + Click Build model. Depending on the amount of data entered building the model may take several minutes. 
 
 The completed page should look like this:
 
@@ -1224,20 +1245,31 @@ Go to the directory of your output folder. Inside this folder you should see a n
 
 ![](Images\\Example_outputfolder.png){style="border:1px; border-style:solid; border-color:#8c8c8c;"}       
 
+[Click here](p1_SetDirectories.html) for an overview of the files created in the Output folder.
+
 Open the lur_var_data_[Date_Time].csv file. This is the text file that you exported on the Model page, which contains the dependent variable and all potential predictor variables. Scroll to the right and find the pD_EmissionAreaVal_NOxEmission_val variable and the pG_EmAreaRaster_raster_val variable. The values of these two variables are identical, which confirms that the value of nearest polygon and value of raster cell methods produced the same result when run on the same data.
 
 Open the LOG_[Date_Time].txt file. This text file records all entries made into the Build LUR wizard, any warning or error messages, and the model development process. Scroll through this file until you find Predictor variables created. This lists all of the variables created through the Predictors pages of the wizard. You may notice that some variables are missing, e.g. pA_landuseArea_Port_100_sum is not there even though a buffer distance of 100 was specified for all land use categories. The missing variable is due to the fact that no Port land use area was found within any of the 100m buffers around the monitoring sites. Similarly, pC_EmissionPoint_Chemical_1000_sum, pC_EmissionPoint_Chemical_500_sum, pC_EmissionPoint_Chemical_300_sum, and pC_EmissionPoint_Chemical_100_sum are missing, because no point emission source from the chemical sector was present in the 1000m, 500m, 300m, or 100m buffers.  
 
-Scrolling down further through the file shows that a file of descriptive statistics was created in the output folder. This file shows the mean, median and variability of all dependent and predictor variables. In addition, a correlation matrix of all variables was created and stored in the output folder. 
+Scrolling down further through the file shows that a file of descriptive statistics was created in the output folder. This file shows the mean, median and variability of all dependent and predictor variables. If more than one dependent variable is selected this file will also show the correlation and pairwise regression plots of the dependent variables. This information can be useful to analyse the relationship between different pollutants. In this tutorial only one dependent variable was used, therefore these plots are empty. In addition, a correlation matrix of all variables was created and stored in the output folder. This can be helpful to identify variables that are highly correlated and therefore may be collinear in the regression model.
 
-The next section shows details of the machine learning process used to develop the LUR model. XLUR uses supervised stepwise forward linear regression based on the methodology used in the [ESCAPE study](http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf) . XLUR records the starting model, all intermediate models including reasons for their acceptance or rejection, and the final model. For the final model XLUR will also record the variance inflation factors, case summaries, DF Betas, and the spatial autocorrelation of the residuals. 
+The next section shows details of the machine learning process used to develop the LUR model. XLUR uses supervised stepwise forward linear regression based on the methodology used in the [ESCAPE study](http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf); see the General Information section for a brief overview of the variable selection process. XLUR records the starting model, all intermediate models (including reasons for their acceptance or rejection), and the final model. For the final model XLUR will also record the following model diagnostics in the log file:
 
-XLUR will also carry out a leave one out cross validation of the final model, the results of which are shown in the LOOCV_[dependent variable name]_[Date_Time].pdf file.
+* Variance inflation factors - indicating the multicollinearity of the variables within the model
+* Case summaries and DF Betas - these can be used to check for bias in the model due to influential cases
+* Spatial autocorrelation of the residuals - based on Moran's I, a large p-value indicates no spatial autocorrelation 
+
+Further model diagnostics are provided in Diagnostic_plots_dep[Outcome variable]_[Date_Time].pdf. This file shows a Q Q plot, which can be used to check the assumption of normality in the final model. It also shows a plot of the residuals vs the predicted values, which can be used to check for non-linear relationships, and a Scale-Location plot, which can be used to check for heteroscedasticity in the model.  
+
+XLUR will also carry out a leave one out cross validation of the final model, the results of which are shown in the LOOCV_[dependent variable name]_[Date_Time].pdf file. In a leave one out cross validation monitoring sites are removed one by one to test the performance of the final model. When a monitoring site is removed from the dataset the predictor variables of the final model are used to fit a new model, i.e. to calculate new coefficients, and this model is used to predict a value for the monitoring site that has been removed. This process is repeated for all monitoring sites and the measured and predicted values are plotted in a scatter plot. Using this scatterplot Pearson's r, the adjusted R^2^ and the Root Mean Squared Error (RMSE) are calculated.
+
+For the purpose of this tutorial we will accept the final model and move on to the next step. However, it is recommended that users carefully check the model diagnostics when building their own models. If the model diagnostics indicate a problem, it may be necessary to manually develop a model using the lur_var_data_[Date_Time].csv file and standard statistical software.
+
 
 The next step is to apply the LUR model created with the Build LUR wizard to unmeasured points within the study area.
 
-1. Go back to ArcGIS Pro. 
-2. In the Catalog window double-click the BuildLUR script. 
+1. Close and then restart ArcGIS Pro. *(There is currently a known issue with ArcGIS Pro crashing, if XLUR is run multiple times, see the Troubleshooting section)*
+2. In the Catalog window double-click the ApplyLUR script. 
 3. In the Geoprocessing window on the right click Run. This will open the Apply LUR wizard.
 
 ## Settings
@@ -1295,16 +1327,21 @@ Go to the directory of your output folder. Inside your MyFirstLUR_[Date_Time] fo
 
 Open the Apply_Log.txt file. Similar to the Build LUR wizard this text file records all entries made into the Apply LUR wizard. In addition, it indicates the time it took to extract values for each predictor variable and to calculate predicted values. 
 
-To view the predicted values calculated by the Apply LUR wizard:
+The out_pred.csv file contains the coordinates of the receptor points, the values of the predictor variables at each receptor point and the predicted values of NO~2~ at each receptor point. This data has also been added as a feature class to the LURApply file geodatabase. This enables the user to use the predicted values in further analyses or to report them as results on a map.  
+
+To quickly view the predicted values calculated by the Apply LUR wizard:
 
 1. In ArcGIS Pro insert a new map.
 2. Click on Add Data and navigate to the LURApply_[Date_Time] folder.
-3. Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select pred_lyr. 
+3. Open the LURApply.gdb file geodatabase, then open the LURdata feature dataset and select pred_lyr. The pred_lyr feature class contains predicted values for all dependent variables. In this case there was only one dependent variable, which was monitored NO~2~.
 4. In the Appearance menu click on Symbology and select the Graduated Colors option.
 5. In the Symbology pane on the right select predNO2 in the dropdown list next to Field.
 6. Select Quantile in the dropdown list next to Method.
-7. Choose a suitable number for Classes (e.g. 5) and a suitable Color scheme (e.g. Blue to Red).
+7. Choose a suitable number for Classes (e.g. 5) and a suitable Color scheme (e.g. Prediction).
 
 You should see something similar to this:
 
 ![](Images\\Example_applymap.png){style="border:1px; border-style:solid; border-color:#8c8c8c;"} 
+
+The [TutorialOutput folder](https://github.com/anmolter/XLUR/tree/master/TutorialOutput) contains examples of the variable data, descriptive analyses, correlation matrix, diagnostic plots, log file, residuals, and leave one out crossvalidation plot  created during the Build LUR step. The [LURApply subfolder](https://github.com/anmolter/XLUR/tree/master/TutorialOutput/LURApply) contains examples of the log file and output value file created during the Apply LUR step.   
+

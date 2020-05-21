@@ -19,12 +19,12 @@ bibliography: paper.bib
 
 ## Introduction
 
-XLUR is a Python toolbox for ArcGIS Pro (v2.2.4 or higher, Environmental Systems Research Institute (ESRI), Redlands, CA) 
+XLUR is a Python toolbox for ArcGIS Pro (v2.2.4 or higher, Environmental Systems Research Institute (ESRI), Redlands, CA)
 that enables the development and application of land use regression models via a wizard style interface. 
 Land use regression (LUR) is a commonly used technique in environmental sciences to analyse factors influencing pollutant levels 
 and to predict pollutant levels at unmeasured locations. LUR is extensively used 
 in studies on air pollution exposure [@Molter:2010a;@Molter:2010b], but it is widely applicable and has been used in 
-fields ranging from water pollution [@Kelsey:2004] to urban climatology [@Heusinkveld:2014). 
+fields ranging from water pollution [@Kelsey:2004] to urban climatology [@Heusinkveld:2014]. 
 
 ## Purpose of the software
 
@@ -61,8 +61,29 @@ models [@deHoogh:2016].
 XLUR has been developed through the NERC Newton-DIPI funded Urban hybriD models for AiR pollution exposure Assessment (UDARA)
 study, which is a collaboration between the University of Manchester and Institut Teknologi
 Bandung. This study aims to develop air pollution prediction models for Indonesian urban areas and to analyse 
-the effects of air pollution on health indicators provided by 
-the Indonesian Family Life Survey.
+the effects of air pollution on health indicators provided by the Indonesian Family Life Survey.
+
+## State of the field
+
+Currently, only a small number of LUR software packages have been developed. RLUR [@Morley:2018] has been developed in the 
+R programming language and is aimed at users with a background in statistical analyses, such as exposure scientists 
+or epidemiologists. PyLUR [@Ma:2020] is written in Python, but not implemented within the ArcGIS software. Instead, 
+it uses GDAL/OGR libraries for spatial analysis. The authors report that PyLUR currently does not have a user-friendly 
+graphic user interface (GUI) and at the time of writing it is not available in an open source repository. OpenLUR 
+[@Lautenschlager:2020] is designed to develop LUR models exclusively based on OpenStreetMap data. Unlike XLUR, RLUR 
+and PyLUR it does not use the ESCAPE methodology, but an unsupervised machine learning process featuring automated 
+hyper-parameter tuning. 
+
+One major difference between these LUR software packages and XLUR is that they are designed specifically for air 
+pollution models, i.e. their spatial analyses only extract potential predictors relevant for air pollution modelling. In 
+contrast, XLUR is more widely applicable and its wizard style interface can be used to extract potential predictor variables
+for a range of environmental phenomena. Another major difference is that XLUR can develop classic LUR models and hybrid LUR
+models, that add a measure of global variability to the measures of local variability modelled in LUR. Furthermore, XLUR is
+the only software that is implemented within ArcGIS Pro.   
+
+## Availability and implementation
+
+XLUR is a Python toolbox for use within ArcGIS Pro [@ArcGISPro]. An ArcGIS Pro Project file (XLUR.aprx) containing the XLUR toolbox is available on the GitHub repository (https://github.com/anmolter/XLUR). The repository also provides the source code of the tools, a user manual, an example dataset for the tutorial in the user manual, and example outputs. The user manual contains instructions for installing additional Python packages (wxpython, statsmodels, seaborn, patsy) required by XLUR via ArcGIS Pro's Python Package Manager. 
 
 # Acknowledgments
 

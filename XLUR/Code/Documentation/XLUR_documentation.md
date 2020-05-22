@@ -1,13 +1,13 @@
 XLUR Wizard
 ================
-v.2020-05-20
+v.2020-05-22
 
 Installation
 ============
 
 System requirements: Windows 10, ArcGIS Pro v2.2.4 or higher, License for Spatial Analyst extension if analysis of raster data is required
 
-The XLUR tools require a small number of additional Python packages to be installed. In ArcGIS Pro this can be done using the Python Package Manager. Follow these steps to install additional Python packages:
+XLUR uses a number of Python modules/packages; however, most of these are Python base modules or are pre-installed with ArcGIS Pro (see the [repository](https://github.com/anmolter/XLUR/blob/master/Packages.md) for a list of the required packages). Only four additional packages need to be installed. In ArcGIS Pro this can be done using the Python Package Manager. Follow these steps to install additional Python packages:
 
 1.  Open ArcGIS Pro. Click the About ArcGIS Pro button in the bottom left corner (denoted by the red arrow in the screenshot below). *In ArcGIS Pro v.2.3 this button is called Settings.*
 
@@ -2310,7 +2310,7 @@ Please inspect your receptor points carefully on a map and look at the predictor
 Tutorial
 ========
 
-This section provides a guided tutorial for building and applying a LUR model using the XLUR wizard. In this tutorial you will build and apply a predictive air pollution model for the Greater Manchester area using [openly accessible datasets](https://github.com/anmolter/XLUR/blob/master/ExampleData/ExampleData_Sources.md) on monitored Nitrogen Dioxide (NO<sub>2</sub>) concentrations, land use categories, road networks, and emission sources.
+This section provides a guided tutorial for building and applying a LUR model using the XLUR wizard. In this tutorial you will build and apply a predictive air pollution model for the Greater Manchester area using [openly accessible datasets](https://github.com/anmolter/XLUR/blob/master/ExampleData/ExampleData_Sources.md) on monitored Nitrogen Dioxide (NO<sub>2</sub>) concentrations, land use categories, road networks, and emission sources. Please note that the purpose of this tutorial is to illustrate the use of the XLUR wizard, not to develop a high performing LUR model; therefore, only a small number of input datasets are used in this tutorial.
 
 Before you start
 ----------------

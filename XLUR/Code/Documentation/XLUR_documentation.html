@@ -52,7 +52,7 @@ $(document).ready(function () {
             <div class="col-xs-3">
         <div id="header">
     <h1 class="title">XLUR Wizard</h1>
-                <h4 class="date"><em>v.2020-05-22</em></h4>
+                <h4 class="date"><em>v.2020-06-04</em></h4>
         </div>
     </div>
 </div>
@@ -121,9 +121,9 @@ $(document).ready(function () {
 <li>wxpython</li>
 </ul>
 <p><img src="Images/manager4e.jpg" /></p>
-<p>After these four packages have been installed, click the back arrow in the menu on the left hand side.</p>
 <ol start="6" style="list-style-type: decimal">
-<li>Click Open another project, browse to the XLUR.aprx ArcGIS Pro Project file and double-click to open it. The XLUR.aprx file can be found in the XLUR folder in the XLUR repository. In the Catalog window double-click Toolboxes, then double-click XLUR.tbx. This will open the XLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.</li>
+<li><p>If you are planning to use raster data in your analysis, click on Licensing in the menu on the left hand side. Under Esri Extensions check that Spatial Analyst is licensed.</p></li>
+<li><p>Click the back arrow in the menu on the left hand side. Click Open another project, browse to the XLUR.aprx ArcGIS Pro Project file and double-click to open it. The XLUR.aprx file can be found in the XLUR folder in the XLUR repository. In the Catalog window double-click Toolboxes, then double-click XLUR.tbx. This will open the XLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.</p></li>
 </ol>
 </div>
 <div id="general-information" class="section level1 tabset tabset-pills">
@@ -1457,7 +1457,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <h3>Raster based Predictors</h3>
 <div id="value-of-raster-cell" class="section level4 tabset tabset-pills">
 <h4>Value of Raster cell</h4>
-<p>For this type of variable a raster grid file should be used, which ideally has a spatial extent that is larger than the study area. The wizard will extract the value of the raster cell that is spatially coincident with the point location representing the monitoring site (dependent variable).</p>
+<p>You must have a <strong>Spatial Analyst license</strong> to create this type of predictor. For this type of variable a raster grid file should be used, which ideally has a spatial extent that is larger than the study area. The wizard will extract the value of the raster cell that is spatially coincident with the point location representing the monitoring site (dependent variable).</p>
 <p>An example of the use of this predictor variable type is elevation. Elevation is commonly sourced from a Digital Elevation Model stored as a raster grid.</p>
 <p><img src="Images/p3G.JPG" /></p>
 <div id="set-variable-name-6" class="section level5">
@@ -1823,6 +1823,10 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <li><strong><em>Some of my receptor points were not modelled by the ApplyLUR tool</em></strong></li>
 </ul>
 <p>Please inspect your receptor points carefully on a map and look at the predictor variables in your LUR models. If the LUR models contain predictors that are derived from the Inverse distance, Inverse distance squared, Value * Inverse Distance, or Value * Inverse distance squared to the nearest feature method, then any receptor points spatially coincident with the nearest feature will be dropped to prevent a division by zero error.</p>
+<ul>
+<li><strong><em>The Build LUR tool freezes when I use the Value of Raster cell page</em></strong></li>
+</ul>
+<p>Please check that you have a license for Spatial Analyst.</p>
 </div>
 </div>
 <div id="tutorial" class="section level1">
@@ -1832,7 +1836,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <h2>Before you start</h2>
 <ol style="list-style-type: decimal">
 <li>Ensure that you have cloned or downloaded the XLUR repository from GitHub, including the ExampleData folder.</li>
-<li>Follow the instructions in the <a href="#installation">Installation</a> section to ensure that the additional Python packages required by XLUR have been installed.</li>
+<li>Follow the instructions in the <a href="#installation">Installation</a> section to ensure that the additional Python packages required by XLUR have been installed and that you have a license for Spatial Analyst.</li>
 <li>Create a directory where you would like to store outputs from the model, for example C:\Work\XLUROutput. Please ensure that you have write access to this directory and that there are no spaces in the file path.</li>
 </ol>
 </div>
@@ -2085,7 +2089,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <p>The completed page should look like this:</p>
 <p><img src="Images/Example_P3F.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again.</p>
-<p>Click the Add button next to G. Value of Raster cell.</p>
+<p>If you have a Spatial Analyst license, click the Add button next to G. Value of Raster cell. If you do not have a Spatial Analyst license, skip this step and click Next &gt;.</p>
 </div>
 <div id="value-of-raster-cell-1" class="section level3">
 <h3>Value of Raster cell</h3>

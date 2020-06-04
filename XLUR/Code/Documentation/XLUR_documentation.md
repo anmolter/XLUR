@@ -1,6 +1,6 @@
 XLUR Wizard
 ================
-v.2020-05-22
+v.2020-06-04
 
 Installation
 ============
@@ -53,9 +53,9 @@ The installation may take a while. Once the installation is finished, the list u
 
 ![](Images\manager4e.jpg)
 
-After these four packages have been installed, click the back arrow in the menu on the left hand side.
+1.  If you are planning to use raster data in your analysis, click on Licensing in the menu on the left hand side. Under Esri Extensions check that Spatial Analyst is licensed.
 
-1.  Click Open another project, browse to the XLUR.aprx ArcGIS Pro Project file and double-click to open it. The XLUR.aprx file can be found in the XLUR folder in the XLUR repository. In the Catalog window double-click Toolboxes, then double-click XLUR.tbx. This will open the XLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.
+2.  Click the back arrow in the menu on the left hand side. Click Open another project, browse to the XLUR.aprx ArcGIS Pro Project file and double-click to open it. The XLUR.aprx file can be found in the XLUR folder in the XLUR repository. In the Catalog window double-click Toolboxes, then double-click XLUR.tbx. This will open the XLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.
 
 General Information
 ===================
@@ -1817,7 +1817,7 @@ After all predictor variables in the list have been defined as either positive o
 
 #### Value of Raster cell
 
-For this type of variable a raster grid file should be used, which ideally has a spatial extent that is larger than the study area. The wizard will extract the value of the raster cell that is spatially coincident with the point location representing the monitoring site (dependent variable).
+You must have a **Spatial Analyst license** to create this type of predictor. For this type of variable a raster grid file should be used, which ideally has a spatial extent that is larger than the study area. The wizard will extract the value of the raster cell that is spatially coincident with the point location representing the monitoring site (dependent variable).
 
 An example of the use of this predictor variable type is elevation. Elevation is commonly sourced from a Digital Elevation Model stored as a raster grid.
 
@@ -2307,6 +2307,10 @@ Enlarge the window by clicking the maximise button in the title bar.
 
 Please inspect your receptor points carefully on a map and look at the predictor variables in your LUR models. If the LUR models contain predictors that are derived from the Inverse distance, Inverse distance squared, Value \* Inverse Distance, or Value \* Inverse distance squared to the nearest feature method, then any receptor points spatially coincident with the nearest feature will be dropped to prevent a division by zero error.
 
+-   ***The Build LUR tool freezes when I use the Value of Raster cell page***
+
+Please check that you have a license for Spatial Analyst.
+
 Tutorial
 ========
 
@@ -2316,7 +2320,7 @@ Before you start
 ----------------
 
 1.  Ensure that you have cloned or downloaded the XLUR repository from GitHub, including the ExampleData folder.
-2.  Follow the instructions in the [Installation](#installation) section to ensure that the additional Python packages required by XLUR have been installed.
+2.  Follow the instructions in the [Installation](#installation) section to ensure that the additional Python packages required by XLUR have been installed and that you have a license for Spatial Analyst.
 3.  Create a directory where you would like to store outputs from the model, for example C:\\Work\\XLUROutput. Please ensure that you have write access to this directory and that there are no spaces in the file path.
 
 Starting the XLUR wizard
@@ -2529,7 +2533,7 @@ The completed page should look like this:
 
 Click Next &gt; to continue. The Predictors page will open again.
 
-Click the Add button next to G. Value of Raster cell.
+If you have a Spatial Analyst license, click the Add button next to G. Value of Raster cell. If you do not have a Spatial Analyst license, skip this step and click Next &gt;.
 
 ### Value of Raster cell
 

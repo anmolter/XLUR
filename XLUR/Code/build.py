@@ -34,6 +34,7 @@ import string
 import random
 import shutil
 
+
 #------------------------------------------------------------------------------
 # User defined global functions
 #------------------------------------------------------------------------------
@@ -5690,14 +5691,10 @@ class WizardPanel3G(wx.Panel):
         self.Fit()
 
         #check for spatial analyst extension, warning if no license
-        try:
-            if arcpy.CheckExtension("Spatial") == "Available":
-                arcpy.CheckOutExtension("Spatial")
-            else:
-                raise LicenseError
-        except LicenseError:
-            wx.MessageBox('The Spatial Analyst license is unavailable. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
-
+        if arcpy.CheckExtension("Spatial") == "Available":
+            arcpy.CheckOutExtension("Spatial")
+        else:
+            wx.MessageBox('The Spatial Analyst license is unavailable. If you are planning to analyse raster data, you must have a valid license for Spatial Analyst.','Error',wx.OK|wx.ICON_ERROR)
 
 
     def onHlp0(self,event):

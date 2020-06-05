@@ -420,13 +420,10 @@ class WizardPanel1(wx.Panel):
         #check if raster data and check out extension, warning if no license
         for item in p1and2:
             if item[0:2]=='pG':
-                try:
-                    if arcpy.CheckExtension("Spatial") == "Available":
-                        arcpy.CheckOutExtension("Spatial")
-                    else:
-                        raise LicenseError
-                except LicenseError:
-                    wx.MessageBox('The Spatial Analyst license is unavailable. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+                if arcpy.CheckExtension("Spatial") == "Available":
+                    arcpy.CheckOutExtension("Spatial")
+                else:
+                    wx.MessageBox('The Spatial Analyst license is unavailable. Please check your licenses.','Error',wx.OK|wx.ICON_ERROR)
 
                     del wait
 

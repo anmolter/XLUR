@@ -421,9 +421,13 @@ class WizardPanel1(wx.Panel):
         for item in p1and2:
             if item[0:2]=='pG':
                 try:
-                    arcpy.CheckOutExtension("Spatial")
-                except:
-                    wx.MessageBox('The Spatial Analyst extension could not be activated. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+                    if arcpy.CheckExtension("Spatial") == "Available":
+                        arcpy.CheckOutExtension("Spatial")
+                    else:
+                        raise LicenseError
+                except LicenseError:
+                    wx.MessageBox('The Spatial Analyst license is unavailable. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+
                     del wait
 
         #check that files exist and for A,B,C that cat field exists
@@ -2038,7 +2042,7 @@ class WizardPanel3(wx.Panel):
             db.commit()
             arcpy.AddMessage(('\nvalues predicted for '+str(i)))
 
-        
+
         qry="SELECT * FROM "+out_recp+";"
         conn.execute(qry) # get data from results table
         with open(out_folder+"\\out_pred.csv", "w", newline='') as csv_file: # write table to csv file

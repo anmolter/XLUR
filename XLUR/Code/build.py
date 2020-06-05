@@ -5689,11 +5689,16 @@ class WizardPanel3G(wx.Panel):
         self.Layout()
         self.Fit()
 
-        #check out extension, warning if no license
+        #check for spatial analyst extension, warning if no license
         try:
-            arcpy.CheckOutExtension("Spatial")
-        except:
-            wx.MessageBox('The Spatial Analyst extension could not be activated. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+            if arcpy.CheckExtension("Spatial") == "Available":
+                arcpy.CheckOutExtension("Spatial")
+            else:
+                raise LicenseError
+        except LicenseError:
+            wx.MessageBox('The Spatial Analyst license is unavailable. Please check your licenses or contact your system administrator.','Error',wx.OK|wx.ICON_ERROR)
+
+
 
     def onHlp0(self,event):
         """Help window for variable name"""
@@ -5729,7 +5734,7 @@ class WizardPanel3G(wx.Panel):
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
 
-    def onHlp2(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp2(self,event):
         """Help window for input data"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3G_SetInputData.html")
         htmlViewerInstance.Show()

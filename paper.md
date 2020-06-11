@@ -70,9 +70,9 @@ R programming language and is aimed at users with a background in statistical an
 or epidemiologists. PyLUR [@Ma:2020] is written in Python, but not implemented within the ArcGIS software. Instead, 
 it uses GDAL/OGR libraries for spatial analysis. The authors report that PyLUR currently does not have a user-friendly 
 graphic user interface (GUI) and at the time of writing it is not available in an open source repository. OpenLUR 
-[@Lautenschlager:2020] is designed to develop LUR models exclusively based on OpenStreetMap data. Unlike XLUR, RLUR 
-and PyLUR it does not use the ESCAPE methodology, but an unsupervised machine learning process featuring automated 
-hyper-parameter tuning. 
+[@Lautenschlager:2020] is designed to develop LUR models exclusively based on OpenStreetMap data. Unlike the XLUR, RLUR, 
+and PyLUR software packages, the OpenLUR software package does not use the ESCAPE methodology, but an unsupervised machine 
+learning process featuring automated hyper-parameter tuning. 
 
 One major difference between these LUR software packages and XLUR is that they are designed specifically for air 
 pollution models, i.e. their spatial analyses only extract potential predictors relevant for air pollution modelling. In 

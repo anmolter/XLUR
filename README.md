@@ -1,5 +1,6 @@
 # XLUR
 [![DOI](https://zenodo.org/badge/209522783.svg)](https://zenodo.org/badge/latestdoi/209522783)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02177/status.svg)](https://doi.org/10.21105/joss.02177)
 ## Usage
 A Python toolbox for ArcGIS Pro that enables the development and application of land use regression models.
 ## Instructions

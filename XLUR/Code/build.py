@@ -312,6 +312,9 @@ mark_done = '\u2713'
 # Predictor variable names entered by User
 var_list=list()
 
+# Dictionary for buffer Distances
+bufDists={}
+
 # Dictionary of extraction methods
 extrmet={'Distance':'dist','Inverse distance':'invd',
         'Inverse distance squared':'invsq','Value':'val',
@@ -543,7 +546,7 @@ class WizardPanel1(wx.Panel):
             self.enter_btn0.Disable()
             self.mark0.SetLabel(mark_done) # change tick mark to done
 
-    def onHlp1(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp1(self,event):
         """Help window for setting directories"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p1_SetDirectories.html")
         htmlViewerInstance.Show()
@@ -878,7 +881,7 @@ class WizardPanel2(wx.Panel):
         self.Fit()
 
 
-    def onHlp1(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp1(self,event):
         """Help window for setting directories"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p2_SetDependentVariable.html")
         htmlViewerInstance.Show()
@@ -1403,7 +1406,8 @@ class WizardPanel3(wx.Panel):
         self.Parent.SetClientSize(newsize[0],newsize[1])
         self.Parent.PostSizeEventToParent()
         self.Parent.panel4.Show()
-        log.write(time.strftime('\nPredictor variables created: '+str(prednames)+'\n'))
+        log.write('\nPredictor variables created: '+str(prednames))
+        log.write('\nNumber of predictor variables created: '+str(len(prednames))+'\n')
         log.write(time.strftime('\nPredictors - End Time: %A %d %b %Y %H:%M:%S\n', time.localtime()))
         log.write(time.strftime('\nModel - Start Time: %A %d %b %Y %H:%M:%S\n', time.localtime()))
         conn.execute('''INSERT INTO timings VALUES('panel3','stop',datetime())''')
@@ -1491,115 +1495,138 @@ class WizardPanel3A(wx.Panel):
         help_btn1.Bind(wx.EVT_BUTTON, self.onHlp1)
         self.sizer.Add(help_btn1, pos=(5,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
-        text2 = wx.StaticText(self,-1,label="Buffer Distance")
-        self.sizer.Add(text2, pos=(6, 0), flag=wx.ALL, border=10)
+        self.radio_bx1 = wx.RadioBox(self,-1,label="Buffers",choices=["Create new buffer","Use previous buffer"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
+        self.sizer.Add(self.radio_bx1, pos=(6,0), span=(1,6), flag=wx.ALL|wx.EXPAND, border=10)
+        self.radio_bx1.Bind(wx.EVT_RADIOBOX,self.onRadBx1)
+        self.radio_bx1.Disable()
+
+        text2 = wx.StaticText(self,-1,label="Create Buffer Distance")
+        self.sizer.Add(text2, pos=(7, 0), flag=wx.ALL, border=10)
 
         self.tc1 = NumCtrl(self, integerWidth=6, fractionWidth=0, allowNegative=False, allowNone = True)
         self.tc1.SetToolTip(wx.ToolTip('Enter one or more buffer distances'))
-        self.sizer.Add(self.tc1, pos=(6, 1), span=(1,2), flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(self.tc1, pos=(7, 1), span=(1,2), flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=5)
         self.tc1.Disable()
 
         self.enter_btn1 = wx.Button(self, label="Add")
         self.enter_btn1.Bind(wx.EVT_BUTTON, self.onEnt1)
-        self.sizer.Add(self.enter_btn1, pos=(6,3), flag=wx.TOP|wx.BOTTOM|wx.LEFT, border=5)
+        self.sizer.Add(self.enter_btn1, pos=(7,3), flag=wx.TOP|wx.BOTTOM|wx.LEFT, border=5)
         self.enter_btn1.Disable()
 
-        global pAdist
-        pAdist = []
         self.list_bx1 = wx.ListBox(self,-1,choices=[])
-        self.sizer.Add(self.list_bx1, pos=(7,1), span=(2,2), flag=wx.EXPAND|wx.BOTTOM, border=5)
+        self.sizer.Add(self.list_bx1, pos=(8,1), span=(2,2), flag=wx.EXPAND|wx.BOTTOM, border=5)
 
         self.del_btn1 = wx.Button(self, label="Remove")
         self.del_btn1.SetToolTip(wx.ToolTip('Remove selected buffer distance'))
         self.del_btn1.Bind(wx.EVT_BUTTON, self.onDel1)
-        self.sizer.Add(self.del_btn1, pos=(7,3), flag=wx.RIGHT|wx.LEFT, border=5)
+        self.sizer.Add(self.del_btn1, pos=(8,3), flag=wx.RIGHT|wx.LEFT, border=5)
         self.del_btn1.Disable()
 
         self.done_btn1 = wx.Button(self, label="Done")
         self.done_btn1.SetToolTip(wx.ToolTip('Create buffers'))
         self.done_btn1.Bind(wx.EVT_BUTTON, self.onDone1)
-        self.sizer.Add(self.done_btn1, pos=(8,3), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(self.done_btn1, pos=(9,3), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
         self.done_btn1.Disable()
 
         self.mark2 = wx.StaticText(self,-1,label=mark_empty)
         self.mark2.SetForegroundColour((0,255,0))
         self.mark2.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark2, pos=(8,4), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark2, pos=(9,4), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(9, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        text2a = wx.StaticText(self,-1,label="Select Buffer Distance")
+        self.sizer.Add(text2a, pos=(10, 0), flag=wx.ALL, border=10)
+
+        self.cb0 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
+        self.cb0.SetToolTip(wx.ToolTip('From the dropdown list select a list of previously used buffer distances'))
+        self.sizer.Add(self.cb0, pos=(10, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.cb0.Bind(wx.EVT_COMBOBOX, self.onCb0)
+        self.cb0.Disable()
+
+        self.done_btn1a = wx.Button(self, label="Done")
+        self.done_btn1a.SetToolTip(wx.ToolTip('Select buffers'))
+        self.done_btn1a.Bind(wx.EVT_BUTTON, self.onDone1a)
+        self.sizer.Add(self.done_btn1a, pos=(10,4), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
+        self.done_btn1a.Disable()
+
+        self.mark2a = wx.StaticText(self,-1,label=mark_empty)
+        self.mark2a.SetForegroundColour((0,255,0))
+        self.mark2a.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
+        self.sizer.Add(self.mark2a, pos=(10,5), flag=wx.ALL, border=5)
+
+        self.sizer.Add(wx.StaticLine(self), pos=(11, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         header2 = wx.StaticText(self,-1,label="Set Input Data")
         header2.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        self.sizer.Add(header2, pos=(10, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(header2, pos=(12, 0), flag=wx.ALL, border=10)
 
         help_btn2 = wx.Button(self,label="?",style=wx.BU_EXACTFIT)
         help_btn2.SetFont(wx.Font(10,wx.SWISS,wx.NORMAL,wx.BOLD))
         help_btn2.SetForegroundColour(wx.Colour(0,0,255))
         help_btn2.Bind(wx.EVT_BUTTON, self.onHlp2)
-        self.sizer.Add(help_btn2, pos=(10,1), flag=wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(help_btn2, pos=(12,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
         text3 = wx.StaticText(self,-1,label="Polygon Feature Class")
-        self.sizer.Add(text3, pos=(11, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text3, pos=(13, 0), flag=wx.ALL, border=10)
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the polygon data'))
-        self.sizer.Add(self.cb1, pos=(11, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(11,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(13,3), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Category Field")
-        self.sizer.Add(text4, pos=(12, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text4, pos=(14, 0), flag=wx.ALL, border=10)
 
         self.cb2 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb2.SetToolTip(wx.ToolTip('From the dropdown list select the field containing the categories'))
-        self.sizer.Add(self.cb2, pos=(12, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb2.Bind(wx.EVT_COMBOBOX, self.onCb2)
         self.cb2.Disable()
 
         self.mark4 = wx.StaticText(self,-1,label=mark_empty)
         self.mark4.SetForegroundColour((0,255,0))
         self.mark4.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark4, pos=(12,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark4, pos=(14,3), flag=wx.ALL, border=5)
 
         self.radio_bx = wx.RadioBox(self,-1,label="Aggregation Method",choices=["Total area","Area weighted value","Area * Value"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
-        self.sizer.Add(self.radio_bx, pos=(13,0), span=(1,6), flag=wx.ALL|wx.EXPAND, border=10)
+        self.sizer.Add(self.radio_bx, pos=(15,0), span=(1,6), flag=wx.ALL|wx.EXPAND, border=10)
         self.radio_bx.Bind(wx.EVT_RADIOBOX,self.onRadBx)
         self.radio_bx.Disable()
 
         self.text6 = wx.StaticText(self,-1,label="Value Field")
-        self.sizer.Add(self.text6, pos=(14, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(self.text6, pos=(16, 0), flag=wx.ALL, border=10)
         self.text6.Disable()
 
         self.cb3 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb3.SetToolTip(wx.ToolTip('From the dropdown list select the field containing values to be area weighted'))
-        self.sizer.Add(self.cb3, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb3.Bind(wx.EVT_COMBOBOX, self.onCb3)
         self.cb3.Disable()
 
         self.mark6 = wx.StaticText(self,-1,label=mark_empty)
         self.mark6.SetForegroundColour((0,255,0))
         self.mark6.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark6, pos=(14,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark6, pos=(16,3), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(15, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        self.sizer.Add(wx.StaticLine(self), pos=(17, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         header3 = wx.StaticText(self,-1,label="Set Direction of Effect")
         header3.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        self.sizer.Add(header3, pos=(16, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(header3, pos=(18, 0), flag=wx.ALL, border=10)
 
         help_btn3 = wx.Button(self,label="?",style=wx.BU_EXACTFIT)
         help_btn3.SetFont(wx.Font(10,wx.SWISS,wx.NORMAL,wx.BOLD))
         help_btn3.SetForegroundColour(wx.Colour(0,0,255))
         help_btn3.Bind(wx.EVT_BUTTON, self.onHlp3)
-        self.sizer.Add(help_btn3, pos=(16,1), flag=wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(help_btn3, pos=(18,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
         text5 = wx.StaticText(self,-1,label="Define Direction of Effect")
-        self.sizer.Add(text5, pos=(17, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text5, pos=(19, 0), flag=wx.ALL, border=10)
 
         self.ulist1 = ULC.UltimateListCtrl(self, wx.ID_ANY, agwStyle=ULC.ULC_HAS_VARIABLE_ROW_HEIGHT | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES)
         self.ulist1.InsertColumn(col=0, heading="Variable Name",format=0)
@@ -1608,37 +1635,37 @@ class WizardPanel3A(wx.Panel):
         self.ulist1.SetColumnWidth(0,ULC.ULC_AUTOSIZE_FILL)
         self.ulist1.SetColumnWidth(1,ULC.ULC_AUTOSIZE_USEHEADER)
         self.ulist1.SetColumnWidth(2,ULC.ULC_AUTOSIZE_USEHEADER)
-        self.sizer.Add(self.ulist1,pos=(17,1),span=(5,4),flag=wx.TOP|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.ulist1,pos=(19,1),span=(5,4),flag=wx.TOP|wx.BOTTOM|wx.EXPAND, border=5)
         self.ulist1.Disable()
 
         self.enter_btn2 = wx.Button(self, label="Done")
         self.enter_btn2.Bind(wx.EVT_BUTTON, self.onEnt2)
-        self.sizer.Add(self.enter_btn2, pos=(17,5), flag=wx.TOP|wx.BOTTOM|wx.RIGHT|wx.LEFT, border=5)
+        self.sizer.Add(self.enter_btn2, pos=(19,5), flag=wx.TOP|wx.BOTTOM|wx.RIGHT|wx.LEFT, border=5)
         self.enter_btn2.Disable()
 
         self.mark5 = wx.StaticText(self,-1,label=mark_empty)
         self.mark5.SetForegroundColour((0,255,0))
         self.mark5.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark5, pos=(17,6), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark5, pos=(19,6), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(22, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        self.sizer.Add(wx.StaticLine(self), pos=(24, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         # add previous Button
         self.backBtn = wx.Button(self, label="< Back")
         self.backBtn.Bind(wx.EVT_BUTTON, self.onBack)
-        self.sizer.Add(self.backBtn, pos=(23,4),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.backBtn, pos=(25,4),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         # add next button
         self.nextBtn = wx.Button(self, label="Next >")
         self.nextBtn.Bind(wx.EVT_BUTTON, self.onNext)
-        self.sizer.Add(self.nextBtn, pos=(23,5),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.nextBtn, pos=(25,5),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
         self.nextBtn.Disable()
 
         # add cancel button
         self.cancBtn1 = wx.Button(self, label="Cancel")
         self.cancBtn1.Bind(wx.EVT_BUTTON, self.onCanc1)
         self.cancBtn1.SetToolTip(wx.ToolTip('Cancel'))
-        self.sizer.Add(self.cancBtn1, pos=(23,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.cancBtn1, pos=(25,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         self.SetSizer(self.sizer)
         self.sizer.AddGrowableRow(7)
@@ -1671,21 +1698,36 @@ class WizardPanel3A(wx.Panel):
             if pA_name in var_list:
                 wx.MessageBox('The variable already exists','Error',wx.OK|wx.ICON_ERROR)
             else:
-                # global var_list
                 var_list.append(pA_name)
                 self.mark1.SetLabel(mark_done) # change tick mark to done
                 log.write('\nVariable name: '+inp_var)
+                self.radio_bx1.Enable()
                 self.tc1.Enable()
                 self.enter_btn1.Enable()
                 self.tc0.Disable()
                 self.enter_btn0.Disable()
+            global pAdist
+            pAdist = []
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
 
-    def onHlp1(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp1(self,event):
         """Help window for buffers"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3ABC_SetBufferSizes.html")
         htmlViewerInstance.Show()
+
+    def onRadBx1(self,event):
+        """New buffer or previous buffer"""
+        if self.radio_bx1.GetStringSelection()=="Create new buffer": #activate section
+            self.tc1.Enable()
+            self.enter_btn1.Enable()
+            self.cb0.Disable()
+            self.done_btn1a.Disable()
+        elif self.radio_bx1.GetStringSelection()=="Use previous buffer": #activate other section
+            self.cb0.Enable()
+            self.done_btn1a.Enable()
+            self.tc1.Disable()
+            self.enter_btn1.Disable()
 
     def onEnt1(self, event):
         self.Parent.statusbar.SetStatusText('Processing...')
@@ -1724,18 +1766,79 @@ class WizardPanel3A(wx.Panel):
         self.Parent.statusbar.SetStatusText('Processing...')
         wait = wx.BusyCursor()
         """Create buffers"""
-        out_features= out_fds+"\\buffer_"+pA_name
-        arcpy.MultipleRingBuffer_analysis(sites, out_features, pAdist, "", "", "NONE")
+        global pA_buffer
+        if sorted(pAdist) not in bufDists.values(): #check if multiple ring buffer already exists, if not create one and add to dictionary
+            k = 'buffer'+time.strftime('%y%m%d_%H%M%S') #create new key
+            bufDists.update({k : sorted(pAdist)}) # add to dictionary
+            pA_buffer= out_fds+"\\"+k
+            arcpy.MultipleRingBuffer_analysis(sites, pA_buffer, pAdist, "", "", "NONE")
+            # append buffer distances to cb0 in panel 3A
+            self.cb0.SetValue('')
+            self.cb0.Clear()
+            self.cb0.Append([str(i) for i in bufDists.values()])
+            # append buffer distances to cb0 in panel 3B
+            self.Parent.panel3B.cb0.SetValue('')
+            self.Parent.panel3B.cb0.Clear()
+            self.Parent.panel3B.cb0.Append([str(i) for i in bufDists.values()])
+            # append buffer distances to cb0 in panel 3C
+            self.Parent.panel3C.cb0.SetValue('')
+            self.Parent.panel3C.cb0.Clear()
+            self.Parent.panel3C.cb0.Append([str(i) for i in bufDists.values()])
+
+            arcpy.AddMessage('bufDists:')
+            arcpy.AddMessage(bufDists)
+
+        else:
+            for key,value in bufDists.items():
+                if value == pAdist:
+                    pA_buffer = out_fds+"\\"+key # use existing buffer
+
         self.mark2.SetLabel(mark_done) # change tick mark to done
-        log.write('\nBuffer distances: '+str(pAdist))
-        self.Parent.statusbar.SetStatusText('Ready')
-        del wait
+        log.write('\nBuffer distances: '+str(sorted(pAdist)))
+        log.write('\nBuffer feature class: '+str(pA_buffer))
+        arcpy.AddMessage('bufDists:')
+        arcpy.AddMessage(bufDists)
         self.cb1.Enable()
         self.ulist1.Enable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
         self.tc1.Disable()
         self.enter_btn1.Disable()
         self.del_btn1.Disable()
         self.done_btn1.Disable()
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
+
+    def onCb0(self,event):
+        self.Parent.statusbar.SetStatusText('Processing...')
+        wait = wx.BusyCursor()
+        """Select list of buffers"""
+        prev_dist_str = self.cb0.GetValue().strip('[]').split(',')
+        prev_dist = [int(i) for i in prev_dist_str]
+        pAdist.extend(prev_dist)
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
+
+    def onDone1a(self,event):
+        self.Parent.statusbar.SetStatusText('Processing...')
+        wait = wx.BusyCursor()
+        """Create buffers"""
+        global pA_buffer
+        for key,value in bufDists.items():
+            if value == pAdist: # look up key associated with value
+                pA_buffer = out_fds+"\\"+key # use existing buffer
+
+        self.mark2a.SetLabel(mark_done) # change tick mark to done
+        log.write('\nBuffer distances: '+str(sorted(pAdist)))
+        log.write('\nBuffer feature class: '+str(pA_buffer))
+        self.cb1.Enable()
+        self.ulist1.Enable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
 
     def onHlp2(self,event):
         """Help window for input data"""
@@ -1962,11 +2065,19 @@ class WizardPanel3A(wx.Panel):
         self.radio_bx.Disable()
         self.mark1.SetLabel(mark_empty)
         self.mark2.SetLabel(mark_empty)
+        self.mark2a.SetLabel(mark_empty)
         self.mark3.SetLabel(mark_empty)
         self.mark4.SetLabel(mark_empty)
         self.mark5.SetLabel(mark_empty)
         self.mark6.SetLabel(mark_empty)
         self.tc1.Disable()
+        self.enter_btn1.Disable()
+        self.del_btn1.Disable()
+        self.done_btn1.Disable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
         self.cb1.Disable()
         self.cb2.Disable()
         self.ulist1.Disable()
@@ -2022,7 +2133,7 @@ class WizardPanel3A(wx.Panel):
             for row in cursor:
                 row[0]=row[1]
                 cursor.updateRow(row)
-        arcpy.PairwiseIntersect_analysis ([out_fds+"\\"+pA_name, out_fds+"\\buffer_"+pA_name], out_fds+"\\"+pA_name+"_Intersect", "ALL", "", "")
+        arcpy.PairwiseIntersect_analysis ([out_fds+"\\"+pA_name, pA_buffer], out_fds+"\\"+pA_name+"_Intersect", "ALL", "", "")
         intersect_var = pA_name+"_Intersect"
         # move data to sql database
         fc_to_sql(conn,out_fds+"\\"+pA_name)
@@ -2031,7 +2142,6 @@ class WizardPanel3A(wx.Panel):
         conn.execute("CREATE INDEX "+intersect_var+"_idx on "+intersect_var+"(siteID_INT, pA_cat_INT, distance);")
         db.commit()
         arcpy.Delete_management(out_fds+"\\"+intersect_var)
-        arcpy.Delete_management(out_fds+"\\buffer_"+pA_name)
         # add weighted value
         conn.execute("ALTER TABLE "+intersect_var+" ADD pA_wtval float64")
         if FieldExist(out_fds+"\\"+pA_name,"pA_val") and self.radio_bx.GetStringSelection()=="Area weighted value":
@@ -2124,11 +2234,19 @@ class WizardPanel3A(wx.Panel):
         self.cb3.Clear()
         self.mark1.SetLabel(mark_empty)
         self.mark2.SetLabel(mark_empty)
+        self.mark2a.SetLabel(mark_empty)
         self.mark3.SetLabel(mark_empty)
         self.mark4.SetLabel(mark_empty)
         self.mark5.SetLabel(mark_empty)
         self.mark6.SetLabel(mark_empty)
         self.tc1.Disable()
+        self.enter_btn1.Disable()
+        self.del_btn1.Disable()
+        self.done_btn1.Disable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
         self.cb1.Disable()
         self.cb2.Disable()
         self.ulist1.Disable()
@@ -2232,115 +2350,138 @@ class WizardPanel3B(wx.Panel):
         help_btn1.Bind(wx.EVT_BUTTON, self.onHlp1)
         self.sizer.Add(help_btn1, pos=(5,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
-        text2 = wx.StaticText(self,-1,label="Buffer Distance")
-        self.sizer.Add(text2, pos=(6, 0), flag=wx.ALL, border=10)
+        self.radio_bx1 = wx.RadioBox(self,-1,label="Buffers",choices=["Create new buffer","Use previous buffer"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
+        self.sizer.Add(self.radio_bx1, pos=(6,0), span=(1,6), flag=wx.ALL|wx.EXPAND, border=10)
+        self.radio_bx1.Bind(wx.EVT_RADIOBOX,self.onRadBx1)
+        self.radio_bx1.Disable()
+
+        text2 = wx.StaticText(self,-1,label="Create Buffer Distance")
+        self.sizer.Add(text2, pos=(7, 0), flag=wx.ALL, border=10)
 
         self.tc1 = NumCtrl(self, integerWidth=6, fractionWidth=0, allowNegative=False, allowNone = True)
         self.tc1.SetToolTip(wx.ToolTip('Enter one or more buffer distances'))
-        self.sizer.Add(self.tc1, pos=(6, 1), span=(1,2), flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(self.tc1, pos=(7, 1), span=(1,2), flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=5)
         self.tc1.Disable()
 
         self.enter_btn1 = wx.Button(self, label="Add")
         self.enter_btn1.Bind(wx.EVT_BUTTON, self.onEnt1)
-        self.sizer.Add(self.enter_btn1, pos=(6,3), flag=wx.TOP|wx.BOTTOM|wx.LEFT, border=5)
+        self.sizer.Add(self.enter_btn1, pos=(7,3), flag=wx.TOP|wx.BOTTOM|wx.LEFT, border=5)
         self.enter_btn1.Disable()
 
-        global pBdist
-        pBdist = []
         self.list_bx1 = wx.ListBox(self,-1,choices=[])
-        self.sizer.Add(self.list_bx1, pos=(7,1), span=(2,2), flag=wx.EXPAND|wx.BOTTOM, border=5)
+        self.sizer.Add(self.list_bx1, pos=(8,1), span=(2,2), flag=wx.EXPAND|wx.BOTTOM, border=5)
 
         self.del_btn1 = wx.Button(self, label="Remove")
         self.del_btn1.SetToolTip(wx.ToolTip('Remove selected buffer distance'))
         self.del_btn1.Bind(wx.EVT_BUTTON, self.onDel1)
-        self.sizer.Add(self.del_btn1, pos=(7,3), flag=wx.RIGHT|wx.LEFT, border=5)
+        self.sizer.Add(self.del_btn1, pos=(8,3), flag=wx.RIGHT|wx.LEFT, border=5)
         self.del_btn1.Disable()
 
         self.done_btn1 = wx.Button(self, label="Done")
         self.done_btn1.SetToolTip(wx.ToolTip('Create buffers'))
         self.done_btn1.Bind(wx.EVT_BUTTON, self.onDone1)
-        self.sizer.Add(self.done_btn1, pos=(8,3), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(self.done_btn1, pos=(9,3), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
         self.done_btn1.Disable()
 
         self.mark2 = wx.StaticText(self,-1,label=mark_empty)
         self.mark2.SetForegroundColour((0,255,0))
         self.mark2.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark2, pos=(8,4), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark2, pos=(9,4), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(9, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        text2a = wx.StaticText(self,-1,label="Select Buffer Distance")
+        self.sizer.Add(text2a, pos=(10, 0), flag=wx.ALL, border=10)
+
+        self.cb0 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
+        self.cb0.SetToolTip(wx.ToolTip('From the dropdown list select a list of previously used buffer distances'))
+        self.sizer.Add(self.cb0, pos=(10, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.cb0.Bind(wx.EVT_COMBOBOX, self.onCb0)
+        self.cb0.Disable()
+
+        self.done_btn1a = wx.Button(self, label="Done")
+        self.done_btn1a.SetToolTip(wx.ToolTip('Select buffers'))
+        self.done_btn1a.Bind(wx.EVT_BUTTON, self.onDone1a)
+        self.sizer.Add(self.done_btn1a, pos=(10,4), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
+        self.done_btn1a.Disable()
+
+        self.mark2a = wx.StaticText(self,-1,label=mark_empty)
+        self.mark2a.SetForegroundColour((0,255,0))
+        self.mark2a.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
+        self.sizer.Add(self.mark2a, pos=(10,5), flag=wx.ALL, border=5)
+
+        self.sizer.Add(wx.StaticLine(self), pos=(11, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         header2 = wx.StaticText(self,-1,label="Set Input Data")
         header2.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        self.sizer.Add(header2, pos=(10, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(header2, pos=(12, 0), flag=wx.ALL, border=10)
 
         help_btn2 = wx.Button(self,label="?",style=wx.BU_EXACTFIT)
         help_btn2.SetFont(wx.Font(10,wx.SWISS,wx.NORMAL,wx.BOLD))
         help_btn2.SetForegroundColour(wx.Colour(0,0,255))
         help_btn2.Bind(wx.EVT_BUTTON, self.onHlp2)
-        self.sizer.Add(help_btn2, pos=(10,1), flag=wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(help_btn2, pos=(12,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
         text3 = wx.StaticText(self,-1,label="Line Feature Class")
-        self.sizer.Add(text3, pos=(11, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text3, pos=(13, 0), flag=wx.ALL, border=10)
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the line data'))
-        self.sizer.Add(self.cb1, pos=(11, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(11,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(13,3), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Category Field")
-        self.sizer.Add(text4, pos=(12, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text4, pos=(14, 0), flag=wx.ALL, border=10)
 
         self.cb2 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb2.SetToolTip(wx.ToolTip('From the dropdown list select the field containing the categories'))
-        self.sizer.Add(self.cb2, pos=(12, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb2.Bind(wx.EVT_COMBOBOX, self.onCb2)
         self.cb2.Disable()
 
         self.mark4 = wx.StaticText(self,-1,label=mark_empty)
         self.mark4.SetForegroundColour((0,255,0))
         self.mark4.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark4, pos=(12,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark4, pos=(14,3), flag=wx.ALL, border=5)
 
         self.radio_bx = wx.RadioBox(self,-1,label="Aggregation Method",choices=["Total length","Length weighted value","Length * Value"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
-        self.sizer.Add(self.radio_bx, pos=(13,0), span=(1,6), flag=wx.TOP|wx.ALL|wx.EXPAND, border=10)
+        self.sizer.Add(self.radio_bx, pos=(15,0), span=(1,6), flag=wx.TOP|wx.ALL|wx.EXPAND, border=10)
         self.radio_bx.Bind(wx.EVT_RADIOBOX,self.onRadBx)
         self.radio_bx.Disable()
 
         self.text6 = wx.StaticText(self,-1,label="Value Field")
-        self.sizer.Add(self.text6, pos=(14, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(self.text6, pos=(16, 0), flag=wx.ALL, border=10)
         self.text6.Disable()
 
         self.cb3 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb3.SetToolTip(wx.ToolTip('From the dropdown list select the field containing values to be length weighted'))
-        self.sizer.Add(self.cb3, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb3.Bind(wx.EVT_COMBOBOX, self.onCb3)
         self.cb3.Disable()
 
         self.mark6 = wx.StaticText(self,-1,label=mark_empty)
         self.mark6.SetForegroundColour((0,255,0))
         self.mark6.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark6, pos=(14,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark6, pos=(16,3), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(15, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        self.sizer.Add(wx.StaticLine(self), pos=(17, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         header3 = wx.StaticText(self,-1,label="Set Direction of Effect")
         header3.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        self.sizer.Add(header3, pos=(16, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(header3, pos=(18, 0), flag=wx.ALL, border=10)
 
         help_btn3 = wx.Button(self,label="?",style=wx.BU_EXACTFIT)
         help_btn3.SetFont(wx.Font(10,wx.SWISS,wx.NORMAL,wx.BOLD))
         help_btn3.SetForegroundColour(wx.Colour(0,0,255))
         help_btn3.Bind(wx.EVT_BUTTON, self.onHlp3)
-        self.sizer.Add(help_btn3, pos=(16,1), flag=wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(help_btn3, pos=(18,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
         text5 = wx.StaticText(self,-1,label="Define Direction of Effect")
-        self.sizer.Add(text5, pos=(17, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text5, pos=(19, 0), flag=wx.ALL, border=10)
 
         self.ulist1 = ULC.UltimateListCtrl(self, wx.ID_ANY, agwStyle=ULC.ULC_HAS_VARIABLE_ROW_HEIGHT | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES)
         self.ulist1.InsertColumn(col=0, heading="Variable Name",format=0)
@@ -2349,37 +2490,37 @@ class WizardPanel3B(wx.Panel):
         self.ulist1.SetColumnWidth(0,ULC.ULC_AUTOSIZE_FILL)
         self.ulist1.SetColumnWidth(1,ULC.ULC_AUTOSIZE_USEHEADER)
         self.ulist1.SetColumnWidth(2,ULC.ULC_AUTOSIZE_USEHEADER)
-        self.sizer.Add(self.ulist1,pos=(17,1),span=(5,4),flag=wx.TOP|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.ulist1,pos=(19,1),span=(5,4),flag=wx.TOP|wx.BOTTOM|wx.EXPAND, border=5)
         self.ulist1.Disable()
 
         self.enter_btn2 = wx.Button(self, label="Done")
         self.enter_btn2.Bind(wx.EVT_BUTTON, self.onEnt2)
-        self.sizer.Add(self.enter_btn2, pos=(17,5), flag=wx.TOP|wx.BOTTOM|wx.RIGHT|wx.LEFT, border=5)
+        self.sizer.Add(self.enter_btn2, pos=(19,5), flag=wx.TOP|wx.BOTTOM|wx.RIGHT|wx.LEFT, border=5)
         self.enter_btn2.Disable()
 
         self.mark5 = wx.StaticText(self,-1,label=mark_empty)
         self.mark5.SetForegroundColour((0,255,0))
         self.mark5.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark5, pos=(17,6), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark5, pos=(19,6), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(22, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        self.sizer.Add(wx.StaticLine(self), pos=(24, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         # add previous Button
         self.backBtn = wx.Button(self, label="< Back")
         self.backBtn.Bind(wx.EVT_BUTTON, self.onBack)
-        self.sizer.Add(self.backBtn, pos=(23,4),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.backBtn, pos=(25,4),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         # add next button
         self.nextBtn = wx.Button(self, label="Next >")
         self.nextBtn.Bind(wx.EVT_BUTTON, self.onNext)
-        self.sizer.Add(self.nextBtn, pos=(23,5),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.nextBtn, pos=(25,5),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
         self.nextBtn.Disable()
 
         # add cancel button
         self.cancBtn1 = wx.Button(self, label="Cancel")
         self.cancBtn1.Bind(wx.EVT_BUTTON, self.onCanc1)
         self.cancBtn1.SetToolTip(wx.ToolTip('Cancel'))
-        self.sizer.Add(self.cancBtn1, pos=(23,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.cancBtn1, pos=(25,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         self.SetSizer(self.sizer)
         self.sizer.AddGrowableRow(7)
@@ -2415,17 +2556,33 @@ class WizardPanel3B(wx.Panel):
                 var_list.append(pB_name)
                 self.mark1.SetLabel(mark_done) # change tick mark to done
                 log.write('\nVariable name: '+inp_var)
+                self.radio_bx1.Enable()
                 self.tc1.Enable()
                 self.enter_btn1.Enable()
                 self.tc0.Disable()
                 self.enter_btn0.Disable()
+            global pBdist
+            pBdist = []
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
 
-    def onHlp1(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp1(self,event):
         """Help window for buffers"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3ABC_SetBufferSizes.html")
         htmlViewerInstance.Show()
+
+    def onRadBx1(self,event):
+        """New buffer or previous buffer"""
+        if self.radio_bx1.GetStringSelection()=="Create new buffer": #activate section
+            self.tc1.Enable()
+            self.enter_btn1.Enable()
+            self.cb0.Disable()
+            self.done_btn1a.Disable()
+        elif self.radio_bx1.GetStringSelection()=="Use previous buffer": #activate other section
+            self.cb0.Enable()
+            self.done_btn1a.Enable()
+            self.tc1.Disable()
+            self.enter_btn1.Disable()
 
     def onEnt1(self, event):
         self.Parent.statusbar.SetStatusText('Processing...')
@@ -2464,20 +2621,78 @@ class WizardPanel3B(wx.Panel):
         self.Parent.statusbar.SetStatusText('Processing...')
         wait = wx.BusyCursor()
         """Create buffers"""
-        out_features= out_fds+"\\buffer_"+pB_name
-        arcpy.MultipleRingBuffer_analysis(sites, out_features, pBdist, "", "", "NONE")
+        global pB_buffer
+        if sorted(pBdist) not in bufDists.values(): #check if multiple ring buffer already exists, if not create one and add to dictionary
+            k = 'buffer'+time.strftime('%y%m%d_%H%M%S') #create new key
+            bufDists.update({k : sorted(pBdist)}) # add to dictionary
+            pB_buffer= out_fds+"\\"+k
+            arcpy.MultipleRingBuffer_analysis(sites, pB_buffer, pBdist, "", "", "NONE")
+            # append buffer distances to cb0 in panel 3B
+            self.cb0.SetValue('')
+            self.cb0.Clear()
+            self.cb0.Append([str(i) for i in bufDists.values()])
+            # append buffer distances to cb0 in panel 3A
+            self.Parent.panel3A.cb0.SetValue('')
+            self.Parent.panel3A.cb0.Clear()
+            self.Parent.panel3A.cb0.Append([str(i) for i in bufDists.values()])
+            # append buffer distances to cb0 in panel 3C
+            self.Parent.panel3C.cb0.SetValue('')
+            self.Parent.panel3C.cb0.Clear()
+            self.Parent.panel3C.cb0.Append([str(i) for i in bufDists.values()])
+
+        else:
+            for key,value in bufDists.items():
+                if value == pBdist:
+                    pB_buffer = out_fds+"\\"+key # use existing buffer
+
         self.mark2.SetLabel(mark_done) # change tick mark to done
-        self.Parent.statusbar.SetStatusText('Ready')
-        del wait
-        log.write('\nBuffer distances: '+str(pBdist))
+        log.write('\nBuffer distances: '+str(sorted(pBdist)))
+        log.write('\nBuffer feature class: '+str(pB_buffer))
+        arcpy.AddMessage('bufDists:')
+        arcpy.AddMessage(bufDists)
         self.cb1.Enable()
         self.ulist1.Enable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
         self.tc1.Disable()
         self.enter_btn1.Disable()
         self.del_btn1.Disable()
         self.done_btn1.Disable()
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
 
-    def onHlp2(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onCb0(self,event):
+        self.Parent.statusbar.SetStatusText('Processing...')
+        wait = wx.BusyCursor()
+        """Select list of buffers"""
+        prev_dist_str = self.cb0.GetValue().strip('[]').split(',')
+        prev_dist = [int(i) for i in prev_dist_str]
+        pBdist.extend(prev_dist)
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
+
+    def onDone1a(self,event):
+        self.Parent.statusbar.SetStatusText('Processing...')
+        wait = wx.BusyCursor()
+        """Create buffers"""
+        global pB_buffer
+        for key,value in bufDists.items():
+            if value == pBdist: # look up key associated with value
+                pB_buffer = out_fds+"\\"+key # use existing buffer
+
+        self.mark2a.SetLabel(mark_done)
+        log.write('\nBuffer distances: '+str(sorted(pBdist)))
+        log.write('\nBuffer feature class: '+str(pB_buffer))
+        self.cb1.Enable()
+        self.ulist1.Enable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
+
+    def onHlp2(self,event):
         """Help window for input data"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3B_SetInputData.html")
         htmlViewerInstance.Show()
@@ -2634,7 +2849,7 @@ class WizardPanel3B(wx.Panel):
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
 
-    def onHlp3(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp3(self,event):
         """Help window for direction of effect"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3ABC_SetSourceSink.html")
         htmlViewerInstance.Show()
@@ -2696,11 +2911,19 @@ class WizardPanel3B(wx.Panel):
         self.cb3.Clear()
         self.mark1.SetLabel(mark_empty)
         self.mark2.SetLabel(mark_empty)
+        self.mark2a.SetLabel(mark_empty)
         self.mark3.SetLabel(mark_empty)
         self.mark4.SetLabel(mark_empty)
         self.mark5.SetLabel(mark_empty)
         self.mark6.SetLabel(mark_empty)
         self.tc1.Disable()
+        self.enter_btn1.Disable()
+        self.del_btn1.Disable()
+        self.done_btn1.Disable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
         self.cb1.Disable()
         self.cb2.Disable()
         self.ulist1.Disable()
@@ -2758,7 +2981,7 @@ class WizardPanel3B(wx.Panel):
             for row in cursor:
                 row[0]=row[1]
                 cursor.updateRow(row)
-        arcpy.PairwiseIntersect_analysis ([out_fds+"\\"+pB_name, out_fds+"\\buffer_"+pB_name], out_fds+"\\"+pB_name+"_Intersect", "ALL", "", "")
+        arcpy.PairwiseIntersect_analysis ([out_fds+"\\"+pB_name, pB_buffer], out_fds+"\\"+pB_name+"_Intersect", "ALL", "", "")
         intersect_var = pB_name+"_Intersect"
         # move data to sql database
         fc_to_sql(conn,out_fds+"\\"+pB_name)
@@ -2767,7 +2990,6 @@ class WizardPanel3B(wx.Panel):
         conn.execute("CREATE INDEX "+intersect_var+"_idx on "+intersect_var+"(siteID_INT, pB_cat_INT, distance);")
         db.commit()
         arcpy.Delete_management(out_fds+"\\"+intersect_var)
-        arcpy.Delete_management(out_fds+"\\buffer_"+pB_name)
         # add weighted value
         conn.execute("ALTER TABLE "+intersect_var+" ADD pB_wtval float64")
         if FieldExist(out_fds+"\\"+pB_name,"pB_val") and self.radio_bx.GetStringSelection()=="Length weighted value":
@@ -2861,11 +3083,19 @@ class WizardPanel3B(wx.Panel):
         self.cb3.Clear()
         self.mark1.SetLabel(mark_empty)
         self.mark2.SetLabel(mark_empty)
+        self.mark2a.SetLabel(mark_empty)
         self.mark3.SetLabel(mark_empty)
         self.mark4.SetLabel(mark_empty)
         self.mark5.SetLabel(mark_empty)
         self.mark6.SetLabel(mark_empty)
         self.tc1.Disable()
+        self.enter_btn1.Disable()
+        self.del_btn1.Disable()
+        self.done_btn1.Disable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
         self.cb1.Disable()
         self.cb2.Disable()
         self.ulist1.Disable()
@@ -2969,115 +3199,138 @@ class WizardPanel3C(wx.Panel):
         help_btn1.Bind(wx.EVT_BUTTON, self.onHlp1)
         self.sizer.Add(help_btn1, pos=(5,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
-        text2 = wx.StaticText(self,-1,label="Buffer Distance")
-        self.sizer.Add(text2, pos=(6, 0), flag=wx.ALL, border=10)
+        self.radio_bx1 = wx.RadioBox(self,-1,label="Buffers",choices=["Create new buffer","Use previous buffer"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
+        self.sizer.Add(self.radio_bx1, pos=(6,0), span=(1,6), flag=wx.ALL|wx.EXPAND, border=10)
+        self.radio_bx1.Bind(wx.EVT_RADIOBOX,self.onRadBx1)
+        self.radio_bx1.Disable()
+
+        text2 = wx.StaticText(self,-1,label="Create Buffer Distance")
+        self.sizer.Add(text2, pos=(7, 0), flag=wx.ALL, border=10)
 
         self.tc1 = NumCtrl(self, integerWidth=6, fractionWidth=0, allowNegative=False, allowNone = True)
         self.tc1.SetToolTip(wx.ToolTip('Enter one or more buffer distances'))
-        self.sizer.Add(self.tc1, pos=(6, 1), span=(1,2), flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(self.tc1, pos=(7, 1), span=(1,2), flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=5)
         self.tc1.Disable()
 
         self.enter_btn1 = wx.Button(self, label="Add")
         self.enter_btn1.Bind(wx.EVT_BUTTON, self.onEnt1)
-        self.sizer.Add(self.enter_btn1, pos=(6,3), flag=wx.TOP|wx.BOTTOM|wx.LEFT, border=5)
+        self.sizer.Add(self.enter_btn1, pos=(7,3), flag=wx.TOP|wx.BOTTOM|wx.LEFT, border=5)
         self.enter_btn1.Disable()
 
-        global pCdist
-        pCdist = []
         self.list_bx1 = wx.ListBox(self,-1,choices=[])
-        self.sizer.Add(self.list_bx1, pos=(7,1), span=(2,2), flag=wx.EXPAND|wx.BOTTOM, border=5)
+        self.sizer.Add(self.list_bx1, pos=(8,1), span=(2,2), flag=wx.EXPAND|wx.BOTTOM, border=5)
 
         self.del_btn1 = wx.Button(self, label="Remove")
         self.del_btn1.SetToolTip(wx.ToolTip('Remove selected buffer distance'))
         self.del_btn1.Bind(wx.EVT_BUTTON, self.onDel1)
-        self.sizer.Add(self.del_btn1, pos=(7,3), flag=wx.RIGHT|wx.LEFT, border=5)
+        self.sizer.Add(self.del_btn1, pos=(8,3), flag=wx.RIGHT|wx.LEFT, border=5)
         self.del_btn1.Disable()
 
         self.done_btn1 = wx.Button(self, label="Done")
         self.done_btn1.SetToolTip(wx.ToolTip('Create buffers'))
         self.done_btn1.Bind(wx.EVT_BUTTON, self.onDone1)
-        self.sizer.Add(self.done_btn1, pos=(8,3), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(self.done_btn1, pos=(9,3), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
         self.done_btn1.Disable()
 
         self.mark2 = wx.StaticText(self,-1,label=mark_empty)
         self.mark2.SetForegroundColour((0,255,0))
         self.mark2.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark2, pos=(8,4), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark2, pos=(9,4), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(9, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        text2a = wx.StaticText(self,-1,label="Select Buffer Distance")
+        self.sizer.Add(text2a, pos=(10, 0), flag=wx.ALL, border=10)
+
+        self.cb0 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
+        self.cb0.SetToolTip(wx.ToolTip('From the dropdown list select a list of previously used buffer distances'))
+        self.sizer.Add(self.cb0, pos=(10, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.cb0.Bind(wx.EVT_COMBOBOX, self.onCb0)
+        self.cb0.Disable()
+
+        self.done_btn1a = wx.Button(self, label="Done")
+        self.done_btn1a.SetToolTip(wx.ToolTip('Select buffers'))
+        self.done_btn1a.Bind(wx.EVT_BUTTON, self.onDone1a)
+        self.sizer.Add(self.done_btn1a, pos=(10,4), flag=wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, border=5)
+        self.done_btn1a.Disable()
+
+        self.mark2a = wx.StaticText(self,-1,label=mark_empty)
+        self.mark2a.SetForegroundColour((0,255,0))
+        self.mark2a.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
+        self.sizer.Add(self.mark2a, pos=(10,5), flag=wx.ALL, border=5)
+
+        self.sizer.Add(wx.StaticLine(self), pos=(11, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         header2 = wx.StaticText(self,-1,label="Set Input Data")
         header2.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        self.sizer.Add(header2, pos=(10, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(header2, pos=(12, 0), flag=wx.ALL, border=10)
 
         help_btn2 = wx.Button(self,label="?",style=wx.BU_EXACTFIT)
         help_btn2.SetFont(wx.Font(10,wx.SWISS,wx.NORMAL,wx.BOLD))
         help_btn2.SetForegroundColour(wx.Colour(0,0,255))
         help_btn2.Bind(wx.EVT_BUTTON, self.onHlp2)
-        self.sizer.Add(help_btn2, pos=(10,1), flag=wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(help_btn2, pos=(12,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
         text3 = wx.StaticText(self,-1,label="Point Feature Class")
-        self.sizer.Add(text3, pos=(11, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text3, pos=(13, 0), flag=wx.ALL, border=10)
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the point data'))
-        self.sizer.Add(self.cb1, pos=(11, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(11,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(13,3), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Category Field")
-        self.sizer.Add(text4, pos=(12, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text4, pos=(14, 0), flag=wx.ALL, border=10)
 
         self.cb2 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb2.SetToolTip(wx.ToolTip('From the dropdown list select the field containing the categories'))
-        self.sizer.Add(self.cb2, pos=(12, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb2.Bind(wx.EVT_COMBOBOX, self.onCb2)
         self.cb2.Disable()
 
         self.mark4 = wx.StaticText(self,-1,label=mark_empty)
         self.mark4.SetForegroundColour((0,255,0))
         self.mark4.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark4, pos=(12,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark4, pos=(14,3), flag=wx.ALL, border=5)
 
         self.radio_bx = wx.RadioBox(self,-1,label="Aggregation Method",choices=["Point count","Sum of values","Mean of values","Median of values"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
-        self.sizer.Add(self.radio_bx, pos=(13,0), span=(1,6), flag=wx.TOP|wx.ALL, border=10)
+        self.sizer.Add(self.radio_bx, pos=(15,0), span=(1,6), flag=wx.TOP|wx.ALL, border=10)
         self.radio_bx.Bind(wx.EVT_RADIOBOX,self.onRadBx)
         self.radio_bx.Disable()
 
         self.text6 = wx.StaticText(self,-1,label="Value Field")
-        self.sizer.Add(self.text6, pos=(14, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(self.text6, pos=(16, 0), flag=wx.ALL, border=10)
         self.text6.Disable()
 
         self.cb3 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb3.SetToolTip(wx.ToolTip('From the dropdown list select the field containing values to be summarised'))
-        self.sizer.Add(self.cb3, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb3.Bind(wx.EVT_COMBOBOX, self.onCb3)
         self.cb3.Disable()
 
         self.mark6 = wx.StaticText(self,-1,label=mark_empty)
         self.mark6.SetForegroundColour((0,255,0))
         self.mark6.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark6, pos=(14,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark6, pos=(16,3), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(15, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        self.sizer.Add(wx.StaticLine(self), pos=(17, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         header3 = wx.StaticText(self,-1,label="Set Direction of Effect")
         header3.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        self.sizer.Add(header3, pos=(16, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(header3, pos=(18, 0), flag=wx.ALL, border=10)
 
         help_btn3 = wx.Button(self,label="?",style=wx.BU_EXACTFIT)
         help_btn3.SetFont(wx.Font(10,wx.SWISS,wx.NORMAL,wx.BOLD))
         help_btn3.SetForegroundColour(wx.Colour(0,0,255))
         help_btn3.Bind(wx.EVT_BUTTON, self.onHlp3)
-        self.sizer.Add(help_btn3, pos=(16,1), flag=wx.TOP|wx.BOTTOM, border=5)
+        self.sizer.Add(help_btn3, pos=(18,1), flag=wx.TOP|wx.BOTTOM, border=5)
 
         text5 = wx.StaticText(self,-1,label="Define Direction of Effect")
-        self.sizer.Add(text5, pos=(17, 0), flag=wx.ALL, border=10)
+        self.sizer.Add(text5, pos=(19, 0), flag=wx.ALL, border=10)
 
         self.ulist1 = ULC.UltimateListCtrl(self, wx.ID_ANY, agwStyle=ULC.ULC_HAS_VARIABLE_ROW_HEIGHT | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES)
         self.ulist1.InsertColumn(col=0, heading="Variable Name",format=0)
@@ -3086,37 +3339,37 @@ class WizardPanel3C(wx.Panel):
         self.ulist1.SetColumnWidth(0,ULC.ULC_AUTOSIZE_FILL)
         self.ulist1.SetColumnWidth(1,ULC.ULC_AUTOSIZE_USEHEADER)
         self.ulist1.SetColumnWidth(2,ULC.ULC_AUTOSIZE_USEHEADER)
-        self.sizer.Add(self.ulist1,pos=(17,1),span=(5,4),flag=wx.TOP|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.ulist1,pos=(19,1),span=(5,4),flag=wx.TOP|wx.BOTTOM|wx.EXPAND, border=5)
         self.ulist1.Disable()
 
         self.enter_btn2 = wx.Button(self, label="Done")
         self.enter_btn2.Bind(wx.EVT_BUTTON, self.onEnt2)
-        self.sizer.Add(self.enter_btn2, pos=(17,5), flag=wx.TOP|wx.BOTTOM|wx.RIGHT|wx.LEFT, border=5)
+        self.sizer.Add(self.enter_btn2, pos=(19,5), flag=wx.TOP|wx.BOTTOM|wx.RIGHT|wx.LEFT, border=5)
         self.enter_btn2.Disable()
 
         self.mark5 = wx.StaticText(self,-1,label=mark_empty)
         self.mark5.SetForegroundColour((0,255,0))
         self.mark5.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark5, pos=(17,6), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark5, pos=(19,6), flag=wx.ALL, border=5)
 
-        self.sizer.Add(wx.StaticLine(self), pos=(22, 0), span=(1, 6),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
+        self.sizer.Add(wx.StaticLine(self), pos=(24, 0), span=(1, 6),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
         # add previous Button
         self.backBtn = wx.Button(self, label="< Back")
         self.backBtn.Bind(wx.EVT_BUTTON, self.onBack)
-        self.sizer.Add(self.backBtn, pos=(23,4),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.backBtn, pos=(25,4),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         # add next button
         self.nextBtn = wx.Button(self, label="Next >")
         self.nextBtn.Bind(wx.EVT_BUTTON, self.onNext)
-        self.sizer.Add(self.nextBtn, pos=(23,5),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.nextBtn, pos=(25,5),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
         self.nextBtn.Disable()
 
         # add cancel button
         self.cancBtn1 = wx.Button(self, label="Cancel")
         self.cancBtn1.Bind(wx.EVT_BUTTON, self.onCanc1)
         self.cancBtn1.SetToolTip(wx.ToolTip('Cancel'))
-        self.sizer.Add(self.cancBtn1, pos=(23,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        self.sizer.Add(self.cancBtn1, pos=(25,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         self.SetSizer(self.sizer)
         self.sizer.AddGrowableRow(7)
@@ -3152,17 +3405,33 @@ class WizardPanel3C(wx.Panel):
                 var_list.append(pC_name)
                 self.mark1.SetLabel(mark_done) # change tick mark to done
                 log.write('\nVariable name: '+inp_var)
+                self.radio_bx1.Enable()
                 self.tc1.Enable()
                 self.enter_btn1.Enable()
                 self.tc0.Disable()
                 self.enter_btn0.Disable()
+            global pCdist
+            pCdist = []
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
 
-    def onHlp1(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp1(self,event):
         """Help window for buffers"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3ABC_SetBufferSizes.html")
         htmlViewerInstance.Show()
+
+    def onRadBx1(self,event):
+        """New buffer or previous buffer"""
+        if self.radio_bx1.GetStringSelection()=="Create new buffer": #activate create section
+            self.tc1.Enable()
+            self.enter_btn1.Enable()
+            self.cb0.Disable()
+            self.done_btn1a.Disable()
+        elif self.radio_bx1.GetStringSelection()=="Use previous buffer": #activate select section
+            self.cb0.Enable()
+            self.done_btn1a.Enable()
+            self.tc1.Disable()
+            self.enter_btn1.Disable()
 
     def onEnt1(self, event):
         self.Parent.statusbar.SetStatusText('Processing...')
@@ -3201,20 +3470,78 @@ class WizardPanel3C(wx.Panel):
         self.Parent.statusbar.SetStatusText('Processing...')
         wait = wx.BusyCursor()
         """Create buffers"""
-        out_features= out_fds+"\\buffer_"+pC_name
-        arcpy.MultipleRingBuffer_analysis(sites, out_features, pCdist, "", "", "NONE")
+        global pC_buffer
+        if sorted(pCdist) not in bufDists.values(): #check if multiple ring buffer already exists, if not create one and add to dictionary
+            k = 'buffer'+time.strftime('%y%m%d_%H%M%S') #create new key
+            bufDists.update({k : sorted(pCdist)}) # add to dictionary
+            pC_buffer= out_fds+"\\"+k
+            arcpy.MultipleRingBuffer_analysis(sites, pC_buffer, pCdist, "", "", "NONE")
+            # append buffer distances to cb0 in panel 3C
+            self.cb0.SetValue('')
+            self.cb0.Clear()
+            self.cb0.Append([str(i) for i in bufDists.values()])
+            # append buffer distances to cb0 in panel 3A
+            self.Parent.panel3A.cb0.SetValue('')
+            self.Parent.panel3A.cb0.Clear()
+            self.Parent.panel3A.cb0.Append([str(i) for i in bufDists.values()])
+            # append buffer distances to cb0 in panel 3B
+            self.Parent.panel3B.cb0.SetValue('')
+            self.Parent.panel3B.cb0.Clear()
+            self.Parent.panel3B.cb0.Append([str(i) for i in bufDists.values()])
+
+        else:
+            for key,value in bufDists.items():
+                if value == pCdist:
+                    pC_buffer = out_fds+"\\"+key # use existing buffer
+
         self.mark2.SetLabel(mark_done) # change tick mark to done
-        self.Parent.statusbar.SetStatusText('Ready')
-        del wait
-        log.write('\nBuffer distances: '+str(pCdist))
+        log.write('\nBuffer distances: '+str(sorted(pCdist)))
+        log.write('\nBuffer feature class: '+str(pC_buffer))
+        arcpy.AddMessage('bufDists:')
+        arcpy.AddMessage(bufDists)
         self.cb1.Enable()
         self.ulist1.Enable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
         self.tc1.Disable()
         self.enter_btn1.Disable()
         self.del_btn1.Disable()
         self.done_btn1.Disable()
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
 
-    def onHlp2(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onCb0(self,event):
+        self.Parent.statusbar.SetStatusText('Processing...')
+        wait = wx.BusyCursor()
+        """Select list of buffers"""
+        prev_dist_str = self.cb0.GetValue().strip('[]').split(',')
+        prev_dist = [int(i) for i in prev_dist_str]
+        pCdist.extend(prev_dist)
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
+
+    def onDone1a(self,event):
+        self.Parent.statusbar.SetStatusText('Processing...')
+        wait = wx.BusyCursor()
+        """Create buffers"""
+        global pC_buffer
+        for key,value in bufDists.items():
+            if value == pCdist: # look up key associated with value
+                pC_buffer = out_fds+"\\"+key # use existing buffer
+
+        self.mark2a.SetLabel(mark_done)
+        log.write('\nBuffer distances: '+str(sorted(pCdist)))
+        log.write('\nBuffer feature class: '+str(pC_buffer))
+        self.cb1.Enable()
+        self.ulist1.Enable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
+        self.Parent.statusbar.SetStatusText('Ready')
+        del wait
+
+    def onHlp2(self,event):
         """Help window for input data"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3C_SetInputData.html")
         htmlViewerInstance.Show()
@@ -3439,11 +3766,19 @@ class WizardPanel3C(wx.Panel):
         self.cb3.Clear()
         self.mark1.SetLabel(mark_empty)
         self.mark2.SetLabel(mark_empty)
+        self.mark2a.SetLabel(mark_empty)
         self.mark3.SetLabel(mark_empty)
         self.mark4.SetLabel(mark_empty)
         self.mark5.SetLabel(mark_empty)
         self.mark6.SetLabel(mark_empty)
         self.tc1.Disable()
+        self.enter_btn1.Disable()
+        self.del_btn1.Disable()
+        self.done_btn1.Disable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
         self.cb1.Disable()
         self.cb2.Disable()
         self.ulist1.Disable()
@@ -3495,7 +3830,7 @@ class WizardPanel3C(wx.Panel):
         for updateRow in updateRows:
             updateRow[1] = valueList.index(updateRow[0]) + 1
             updateRows.updateRow(updateRow)
-        arcpy.PairwiseIntersect_analysis ([out_fds+"\\"+pC_name, out_fds+"\\buffer_"+pC_name], out_fds+"\\"+pC_name+"_Intersect", "ALL", "", "")
+        arcpy.PairwiseIntersect_analysis ([out_fds+"\\"+pC_name, pC_buffer], out_fds+"\\"+pC_name+"_Intersect", "ALL", "", "")
         intersect_var = pC_name+"_Intersect"
         # move data to sql database
         fc_to_sql(conn,out_fds+"\\"+pC_name)
@@ -3504,7 +3839,6 @@ class WizardPanel3C(wx.Panel):
         conn.execute("CREATE INDEX "+intersect_var+"_idx on "+intersect_var+"(siteID_INT, pC_cat_INT, distance);")
         db.commit()
         arcpy.Delete_management(out_fds+"\\"+intersect_var)
-        arcpy.Delete_management(out_fds+"\\buffer_"+pC_name)
         # add aggregate value
         conn.execute("ALTER TABLE "+intersect_var+" ADD pC_aggval float64")
         if FieldExist(out_fds+"\\"+pC_name,"pC_val"):
@@ -3674,11 +4008,19 @@ class WizardPanel3C(wx.Panel):
         self.cb3.Clear()
         self.mark1.SetLabel(mark_empty)
         self.mark2.SetLabel(mark_empty)
+        self.mark2a.SetLabel(mark_empty)
         self.mark3.SetLabel(mark_empty)
         self.mark4.SetLabel(mark_empty)
         self.mark5.SetLabel(mark_empty)
         self.mark6.SetLabel(mark_empty)
         self.tc1.Disable()
+        self.enter_btn1.Disable()
+        self.del_btn1.Disable()
+        self.done_btn1.Disable()
+        self.radio_bx1.Disable()
+        self.radio_bx1.SetSelection(0)
+        self.cb0.Disable()
+        self.done_btn1a.Disable()
         self.cb1.Disable()
         self.cb2.Disable()
         self.ulist1.Disable()
@@ -4551,7 +4893,7 @@ class WizardPanel3E(wx.Panel):
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
 
-    def onHlp1(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp1(self,event):
         """Help window value/distance methods"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3E_SetMethod.html")
         htmlViewerInstance.Show()
@@ -4585,7 +4927,7 @@ class WizardPanel3E(wx.Panel):
         self.sel_btn1.Disable()
         log.write('\nMethod(s) selected: '+str(met))
 
-    def onHlp2(self,event): #probably need to change this to MessageDialog to make it look nicer
+    def onHlp2(self,event):
         """Help window for data input"""
         htmlViewerInstance = HtmlViewer(None, curPath+"\\Documentation\\p3E_SetInputData.html")
         htmlViewerInstance.Show()

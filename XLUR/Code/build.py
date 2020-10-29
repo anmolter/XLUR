@@ -2054,7 +2054,7 @@ class WizardPanel3A(wx.Panel):
             pass
         if arcpy.Exists(out_fds+"\\buffer_"+pA_name):
             arcpy.Delete_management(out_fds+"\\buffer_"+pA_name)
-            del pAdist[:]
+            # del pAdist[:]
         self.tc0.Clear()
         self.tc1.Clear()
         self.list_bx1.Clear()
@@ -2225,7 +2225,7 @@ class WizardPanel3A(wx.Panel):
         conn.execute('''INSERT INTO timings VALUES('panel3','start',datetime())''')
         db.commit()
         # clear p3A
-        del pAdist[:]
+        # del pAdist[:]
         self.tc0.Clear()
         self.tc1.Clear()
         self.list_bx1.Clear()
@@ -2902,7 +2902,7 @@ class WizardPanel3B(wx.Panel):
             pass
         if arcpy.Exists(out_fds+"\\buffer_"+pB_name):
             arcpy.Delete_management(out_fds+"\\buffer_"+pB_name)
-            del pBdist[:]
+            # del pBdist[:]
         self.tc0.Clear()
         self.tc1.Clear()
         self.list_bx1.Clear()
@@ -3074,7 +3074,7 @@ class WizardPanel3B(wx.Panel):
         conn.execute('''INSERT INTO timings VALUES('panel3','start',datetime())''')
         db.commit()
         # clear p3B
-        del pBdist[:]
+        # del pBdist[:]
         self.tc0.Clear()
         self.tc1.Clear()
         self.list_bx1.Clear()
@@ -3757,7 +3757,7 @@ class WizardPanel3C(wx.Panel):
             pass
         if arcpy.Exists(out_fds+"\\buffer_"+pC_name):
             arcpy.Delete_management(out_fds+"\\buffer_"+pC_name)
-            del pCdist[:]
+            # del pCdist[:]
         self.tc0.Clear()
         self.tc1.Clear()
         self.list_bx1.Clear()
@@ -3999,7 +3999,7 @@ class WizardPanel3C(wx.Panel):
         conn.execute('''INSERT INTO timings VALUES('panel3','start',datetime())''')
         db.commit()
         # clear p3C
-        del pCdist[:]
+        # del pCdist[:]
         self.tc0.Clear()
         self.tc1.Clear()
         self.list_bx1.Clear()
@@ -6692,6 +6692,7 @@ class WizardPanel4(wx.Panel):
             log.write('\n')
 
             # Check p values in intermediate model
+            log.write('\nChecking significance of predictors in intermediate model:\n')
             int_p=model_int.pvalues[1:].to_dict() #get p values into dictionary
             if force_vars: # if forced vars, remove them from p value check
                 for var in force_vars:
@@ -6700,18 +6701,17 @@ class WizardPanel4(wx.Panel):
             bad_monkey_ranked={key: rank for rank, key in enumerate(sorted(bad_monkey, key=bad_monkey.get, reverse=True), 1)} #replace p value with rank, highest p = 1 and so on
             # if all p values in intermediate model are <0.1
             if not bad_monkey:
+                log.write('\nAll p-values<0.1. The intermediate model is the final model.\n')
                 final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid) # intermediate model=final model
-                # outer_loop=False # break out of do until loop
+
             # if not all p values are <0.1
             failed=False # indicator if (first) removal didn't work
             if len(sel_preds)==1 and bad_monkey: # if there is only one predictor and it has a p value >0.1
-                log.write('\nCheck significance of predictors in intermediate model:\n')
                 log.write('\n+++ ERROR +++ The p-value of the predictor is greater than 0.1. However, the model contains only one predictor, therefore this is the best attainable model.\n')
                 final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid)
                 # outer_loop=False # break out of do until loop
 
             elif len(sel_preds)>1 and bad_monkey:
-                log.write('\nCheck significance of predictors in intermediate model:\n')
                 # make a list with all possible combinations of the ranks from https://stackoverflow.com/questions/8371887/making-all-possible-combinations-of-a-list-in-python
                 lst = list(bad_monkey_ranked.values()) # get list of ranks
                 lst.sort()
@@ -6817,7 +6817,7 @@ class WizardPanel4(wx.Panel):
                         log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
                         log.write(model_testall.summary().tables[1].as_text())
                         log.write('\n>>> All p-values<0.1, direction of effect of predictors as assumed, model accepted.\n')
-                        final_model_out(dep,model_test,frml_test,df,out_path,db,df_resid)
+                        final_model_out(dep,model_testall,frml_test,df,out_path,db,df_resid)
                         break
                     elif len(trash_panda_all)==0 and direction_effect(testall_params,dict_lkup)==False:
                         log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')

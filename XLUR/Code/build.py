@@ -4374,6 +4374,7 @@ class WizardPanel3D(wx.Panel):
             self.ulist1.Enable()
             self.enter_btn2.Enable()
             self.mark3.SetLabel(mark_done)
+            log.write('\nPolygon Feature Class: '+pD)
 
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
@@ -4935,7 +4936,7 @@ class WizardPanel3E(wx.Panel):
     def onCb1(self, event):
         self.Parent.statusbar.SetStatusText('Processing...')
         wait = wx.BusyCursor()
-        """Select Polygon feature class"""
+        """Select Line feature class"""
         self.chklbx2.Clear()
         global pE
         pE = self.cb1.GetValue()
@@ -4986,6 +4987,7 @@ class WizardPanel3E(wx.Panel):
             self.ulist1.Enable()
             self.enter_btn2.Enable()
             self.mark3.SetLabel(mark_done)
+            log.write('\nLine Feature Class: '+pE)
 
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
@@ -5597,6 +5599,7 @@ class WizardPanel3F(wx.Panel):
             self.ulist1.Enable()
             self.enter_btn2.Enable()
             self.mark3.SetLabel(mark_done)
+            log.write('\nPoint Feature Class: '+pF)
 
         self.Parent.statusbar.SetStatusText('Ready')
         del wait
@@ -6692,172 +6695,191 @@ class WizardPanel4(wx.Panel):
             log.write('\n')
 
             # Check p values in intermediate model
-            log.write('\nChecking significance of predictors in intermediate model:\n')
-            int_p=model_int.pvalues[1:].to_dict() #get p values into dictionary
-            if force_vars: # if forced vars, remove them from p value check
-                for var in force_vars:
-                    del int_p[var]
-            bad_monkey=dict((k, v) for k, v in list(int_p.items()) if v > 0.1) # make dictionary of all variables with p >0.1
-            bad_monkey_ranked={key: rank for rank, key in enumerate(sorted(bad_monkey, key=bad_monkey.get, reverse=True), 1)} #replace p value with rank, highest p = 1 and so on
-            # if all p values in intermediate model are <0.1
-            if not bad_monkey:
-                log.write('\nAll p-values<0.1. The intermediate model is the final model.\n')
-                final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid) # intermediate model=final model
-
-            # if not all p values are <0.1
+            # create another loop to break out of
             failed=False # indicator if (first) removal didn't work
-            if len(sel_preds)==1 and bad_monkey: # if there is only one predictor and it has a p value >0.1
-                log.write('\n+++ ERROR +++ The p-value of the predictor is greater than 0.1. However, the model contains only one predictor, therefore this is the best attainable model.\n')
-                final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid)
-                # outer_loop=False # break out of do until loop
+            p_loop=True
+            while p_loop:
+                log.write('\nChecking significance of predictors in intermediate model:\n')
 
-            elif len(sel_preds)>1 and bad_monkey:
-                # make a list with all possible combinations of the ranks from https://stackoverflow.com/questions/8371887/making-all-possible-combinations-of-a-list-in-python
-                lst = list(bad_monkey_ranked.values()) # get list of ranks
-                lst.sort()
-                combs = list() # empty list for combinations
-                for item in range(1, len(lst)+1): # makes combinations based on the number of predictors
-                    els = [list(x) for x in itertools.combinations(lst, item)]
-                    combs.extend(els)
-                if bad_monkey.keys()==int_p.keys(): # if all predictors have p-values>0.1, then exclude combination that removes all predictors
-                    del combs[-1]
-                rev_bad_monkey_ranked = dict((v,k) for k,v in bad_monkey_ranked.items()) #make ranks keys and variable names values
-                replace_matched_items(combs,rev_bad_monkey_ranked) # replace numbers with var names in combinations list
+                int_p=model_int.pvalues[1:].to_dict() #get p values into dictionary
+                if force_vars: # if forced vars, remove them from p value check
+                    for var in force_vars:
+                        del int_p[var]
+                bad_monkey=dict((k, v) for k, v in list(int_p.items()) if v > 0.1) # make dictionary of all variables with p >0.1
+                bad_monkey_ranked={key: rank for rank, key in enumerate(sorted(bad_monkey, key=bad_monkey.get, reverse=True), 1)} #replace p value with rank, highest p = 1 and so on
+                # if all p values in intermediate model are <0.1
+                if not bad_monkey:
+                    log.write('\nAll p-values<0.1. The intermediate model is the final model.\n')
+                    final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid) # intermediate model=final model
+                    p_loop=False #break out of p_loop
+                    arcpy.AddMessage("Exit1 p_loop")
 
-                j=1 # counter
-                for p in combs: # run model with every combination (p) of poor variable removed, starts by removing highest p
-                    test_preds=list(set(sel_preds)-set(p)) # remove p from list of predictors
-                    frml_snip="+".join(test_preds)
-                    frml_test=dep+'~'+frml_snip
-                    model_test=smf.ols(formula=frml_test,data=df,missing='drop').fit()
-                    test_p=model_test.pvalues[1:].to_dict() #get p values into dictionary
-                    if force_vars: # if forced vars, remove them from p-value check
-                        for var in force_vars:
-                            del test_p[var]
-                    trash_panda=dict((k, v) for k, v in list(test_p.items()) if v > 0.1) # add values >0.1 to dictionary
-                    test_params=model_test.params[1:].to_dict() # save parameter coefficients into a dictionary
-                    recode_coeff(test_params) # recode into positive/negative
-                    if force_vars: # if forced vars, remove them from direction check
-                        for var in force_vars:
-                            del test_params[var]
-                    #check results of models
-                    if len(trash_panda)==0 and direction_effect(test_params,dict_lkup)==True: # if all p values<0.1 and direction of effect still meets assumption use this model
-                        log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_test.summary().tables[1].as_text())
-                        log.write('\n>>> All p-values<0.1, direction of effect of predictors as assumed, model accepted.\n')
-                        final_model_out(dep,model_test,frml_test,df,out_path,db,df_resid)
+                # if not all p values are <0.1
+
+                if len(sel_preds)==1 and bad_monkey: # if there is only one predictor and it has a p value >0.1
+                    log.write('\n+++ ERROR +++ The p-value of the predictor is greater than 0.1. However, the model contains only one predictor, therefore this is the best attainable model.\n')
+                    final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid)
+                    p_loop=False #break out of p_loop
+                    arcpy.AddMessage("Exit2 p_loop")
+
+                elif len(sel_preds)>1 and bad_monkey:
+                    # make a list with all possible combinations of the ranks from https://stackoverflow.com/questions/8371887/making-all-possible-combinations-of-a-list-in-python
+                    lst = list(bad_monkey_ranked.values()) # get list of ranks
+                    lst.sort()
+                    combs = list() # empty list for combinations
+                    for item in range(1, len(lst)+1): # makes combinations based on the number of predictors
+                        els = [list(x) for x in itertools.combinations(lst, item)]
+                        combs.extend(els)
+                    if bad_monkey.keys()==int_p.keys(): # if all predictors have p-values>0.1, then exclude combination that removes all predictors
+                        del combs[-1]
+                    rev_bad_monkey_ranked = dict((v,k) for k,v in bad_monkey_ranked.items()) #make ranks keys and variable names values
+                    replace_matched_items(combs,rev_bad_monkey_ranked) # replace numbers with var names in combinations list
+
+                    j=1 # counter
+                    for p in combs: # run model with every combination (p) of poor variable removed, starts by removing highest p
+                        test_preds=list(set(sel_preds)-set(p)) # remove p from list of predictors
+                        frml_snip="+".join(test_preds)
+                        frml_test=dep+'~'+frml_snip
+                        model_test=smf.ols(formula=frml_test,data=df,missing='drop').fit()
+                        test_p=model_test.pvalues[1:].to_dict() #get new p values into dictionary
+                        if force_vars: # if forced vars, remove them from p-value check
+                            for var in force_vars:
+                                del test_p[var]
+                        trash_panda=dict((k, v) for k, v in list(test_p.items()) if v > 0.1) # add values >0.1 to new dictionary
+                        test_params=model_test.params[1:].to_dict() # save parameter coefficients into a dictionary
+                        recode_coeff(test_params) # recode into positive/negative
+                        if force_vars: # if forced vars, remove them from direction check
+                            for var in force_vars:
+                                del test_params[var]
+                        #check results of models
+                        if len(trash_panda)==0 and direction_effect(test_params,dict_lkup)==True: # if all p values<0.1 and direction of effect still meets assumption use this model
+                            log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
+                            log.write(model_test.summary().tables[1].as_text())
+                            log.write('\n>>> All p-values<0.1, direction of effect of predictors as assumed, model accepted.\n')
+                            final_model_out(dep,model_test,frml_test,df,out_path,db,df_resid)
+                            p_loop=False #break out of p_loop
+                            break
+                            arcpy.AddMessage("Exit3 p_loop")
+                        elif len(trash_panda)==0 and direction_effect(test_params,dict_lkup)==False: # if all p-values<0.1, but direction of effect does not meet assumptions
+                            log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
+                            log.write(model_test.summary().tables[1].as_text())
+                            log.write('\n>>> All p-values<0.1, but direction of effect of predictors not as assumed, model not accepted.\n')
+                            j+=1
+                            if j>len(combs): # this was the last item in combs and all have failed
+                                failed=True # set failed marker to true
+                                p_loop=False #stop
+                                break
+                                arcpy.AddMessage("Exit4 p_loop")
+                            # else:
+                            #     continue
+                        elif len(trash_panda)>0: # if p values are still greater than 0.1, direction of effect doesn't need to be checked
+                            log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
+                            log.write(model_test.summary().tables[1].as_text())
+                            log.write('\n>>> Some p-values>0.1, model not accepted.\n')
+                            j+=1
+                            if j>len(combs): # this was the last item in combs and all have failed
+                                failed=True # set failed marker to true
+                                p_loop=False # stop loop
+                                break
+                                arcpy.AddMessage("Exit5 p_loop")
+                            # else:
+                            #     continue
+                    if p_loop==False:
                         break
-                    elif len(trash_panda)==0 and direction_effect(test_params,dict_lkup)==False: # if all p-values<0.1, but direction of effect does not meet assumptions
-                        log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_test.summary().tables[1].as_text())
-                        log.write('\n>>> All p-values<0.1, but direction of effect of predictors not as assumed, model not accepted.\n')
-                        j+=1
-                        if j>len(combs): # this was the last item in combs and all have failed
-                            failed=True # set failed marker to true
-                            break # stop loop , would stop anyway?
-                        else:
-                            continue
-                    elif len(trash_panda)>0 and direction_effect(test_params,dict_lkup)==True: # if p values are still greater than 0.1, even though direction of effect is still ok
-                        log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_test.summary().tables[1].as_text())
-                        log.write('\n>>> Some p-values>0.1, direction of effect of predictors as assumed, model not accepted.\n')
-                        j+=1
-                        if j>len(combs): # this was the last item in combs and all have failed
-                            failed=True # set failed marker to true
-                            break # stop loop , would stop anyway?
-                        else:
-                            continue
-                    elif len(trash_panda)>0 and direction_effect(test_params,dict_lkup)==False: # both are wrong
-                        log.write('\n('+str(j)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_test.summary().tables[1].as_text())
-                        log.write('\n>>> Some p-values>0.1 and direction of effect of predictors not as assumed, model not accepted.\n')
-                        j+=1
-                        if j>len(combs): # this was the last item in combs and all have failed
-                            failed=True # set failed marker to true
-                            break # stop loop , would stop anyway?
-                        else:
-                            continue
 
-            #if that whole shebang doesn't work and not all predictors have p>0.1, make combination of all predictors
-            failed_again=False # indicator if (second) removal failed
-            if failed==True and bad_monkey.keys()<int_p.keys():
-                log.write('\nNo acceptable model could be found by removing predictors with p-values>0.1. Now all possible combinations of predictors will be tested:\n')
-                bad_monkey_all=dict(int_p) # put all p values from intermediate model into dictionary
-                bad_monkey_allranked={key: rank for rank, key in enumerate(sorted(bad_monkey_all, key=bad_monkey_all.get, reverse=True), 1)} # sort by p value, i.e. highest p is worst
-                lst = list(bad_monkey_allranked.values()) # make a list with all possible combinations of the ranks from https://stackoverflow.com/questions/8371887/making-all-possible-combinations-of-a-list-in-python
-                lst.sort()
-                combsall = list()
-                for item in range(1, len(lst)+1):
-                    els = [list(x) for x in itertools.combinations(lst, item)]
-                    combsall.extend(els)
-                del combsall[-1] # remove combination of all predictors
-                rev_bad_monkey_allranked = dict((v,k) for k,v in bad_monkey_allranked.items())  #make ranks keys and variable names values
-                replace_matched_items(combsall,rev_bad_monkey_allranked) # replace numbers with predictor name in list
-                combsall = [c for c in combsall if c not in combs] # remove combinations already tried
+            #should come out of p_loop here, either with or without a model
+            #if it has tried every predictor in combs and no acceptable model could be found, then make combinations of all predictors
+            failed_again=False # indicator if (second) removal fails
 
-                k=1 # counter
-                for p in combsall: # go through every item in list to remove it from the model
-                    testall_preds=list(set(sel_preds)-set(p)) # remove p from list of predictors
-                    frml_snip="+".join(testall_preds)
-                    frml_testall=dep+'~'+frml_snip
-                    model_testall=smf.ols(formula=frml_testall,data=df,missing='drop').fit()
-                    testall_p=model_testall.pvalues[1:].to_dict() #get p values into dictionary
-                    if force_vars: # if forced vars, remove them from p-value check
-                        for var in force_vars:
-                            del testall_p[var]
-                    trash_panda_all=dict((k, v) for k, v in list(testall_p.items()) if v > 0.1) # add values >0.1 to dictionary
-                    testall_params=model_testall.params[1:].to_dict() # save parameter coefficients into a dictionary
-                    recode_coeff(testall_params) # recode into positive/negative
-                    if force_vars: # if forced vars, remove them from direction check
-                        for var in force_vars:
-                            del testall_params[var]
+            while failed:
+                if bad_monkey.keys()==int_p.keys(): # if all keys in bad_monkey are in int_p then all combinations of predictors have already been tested
 
-                    #check results of models
-                    if len(trash_panda_all)==0 and direction_effect(testall_params,dict_lkup)==True:
-                        log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_testall.summary().tables[1].as_text())
-                        log.write('\n>>> All p-values<0.1, direction of effect of predictors as assumed, model accepted.\n')
-                        final_model_out(dep,model_testall,frml_test,df,out_path,db,df_resid)
-                        break
-                    elif len(trash_panda_all)==0 and direction_effect(testall_params,dict_lkup)==False:
-                        log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_testall.summary().tables[1].as_text())
-                        log.write('\n>>> All p-values<0.1, but direction of effect of predictors not as assumed, model not accepted.\n')
-                        k+=1
-                        if k>len(combs): # this was the last item in combs and all have failed
-                            failed_again=True # set failed marker to true
-                            break # stop loop , would stop anyway?
-                        else:
-                            continue
-                    elif len(trash_panda_all)>0 and direction_effect(testall_params,dict_lkup)==True:
-                        log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_testall.summary().tables[1].as_text())
-                        log.write('\n>>> Some p-values>0.1, direction of effect of all predictors as assumed, model not accepted.\n')
-                        i+=1
-                        if k>len(combs): # this was the last item in combs and all have failed
-                            failed_again=True # set failed marker to true
-                            break # stop loop , would stop anyway?
-                        else:
-                            continue
-                    elif len(trash_panda_all)>0 and direction_effect(testall_params,dict_lkup)==False:
-                        log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
-                        log.write(model_testall.summary().tables[1].as_text())
-                        log.write('\n>>> Some p-values>0.1 and direction of effect of predictors not as assumed, model not accepted.\n')
-                        i+=1
-                        if k>len(combs): # this was the last item in combs and all have failed
-                            failed_again=True # set failed marker to true
-                            break # stop loop , would stop anyway?
-                        else:
-                            continue
+                # if failed==True and bad_monkey.keys()==int_p.keys(): # if all keys in bad_monkey are in int_p then all combinations of predictors have already been tested
+                    log.write('''\n+++ ERROR +++ No model with p-values<0.1 can be found and all combinations of predictors have been tested. The intermediate model will be used as the final model.''')
+                    final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid)
+                    # finaltry_loop=False
+                    failed=False
+                    arcpy.AddMessage("End of failed1")
 
-            elif failed==True and bad_monkey.keys()==int_p.keys(): # if all keys in bad_monkey are in int_p the first p value check has already gone through all possible models
-                log.write('''\n+++ ERROR +++ No model with p-values<0.1 can be found! Therefore this is the best attainable model. ''')
-                final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid)
+                elif bad_monkey.keys()<int_p.keys(): #there are some predictors left to try
+                # elif failed==True and bad_monkey.keys()<int_p.keys(): #there are some predictors left to try
+                    log.write('\nNo acceptable model could be found by removing predictors with p-values>0.1. Now all possible combinations of predictors will be tested:\n')
+                    bad_monkey_all=dict(int_p) # put all p values from the intermediate model into a dictionary
+                    bad_monkey_allranked={key: rank for rank, key in enumerate(sorted(bad_monkey_all, key=bad_monkey_all.get, reverse=True), 1)} # sort by p value, i.e. highest p is worst
+                    lst = list(bad_monkey_allranked.values()) # make a list with all possible combinations of the ranks from https://stackoverflow.com/questions/8371887/making-all-possible-combinations-of-a-list-in-python
+                    lst.sort()
+                    combsall = list()
+                    for item in range(1, len(lst)+1):
+                        els = [list(x) for x in itertools.combinations(lst, item)]
+                        combsall.extend(els)
+                    del combsall[-1] # remove combination of all predictors
+                    rev_bad_monkey_allranked = dict((v,k) for k,v in bad_monkey_allranked.items())  #make ranks keys and variable names values
+                    replace_matched_items(combsall,rev_bad_monkey_allranked) # replace numbers with predictor name in list
+                    combsall = [c for c in combsall if c not in combs] # remove combinations already tried
+
+                    k=1 # counter
+                    for p in combsall: # go through every item in list to remove it from the model
+                        testall_preds=list(set(sel_preds)-set(p)) # remove p from list of predictors
+                        frml_snip="+".join(testall_preds)
+                        frml_testall=dep+'~'+frml_snip
+                        model_testall=smf.ols(formula=frml_testall,data=df,missing='drop').fit()
+                        testall_p=model_testall.pvalues[1:].to_dict() #get p values into dictionary
+                        if force_vars: # if forced vars, remove them from p-value check
+                            for var in force_vars:
+                                del testall_p[var]
+                        trash_panda_all=dict((k, v) for k, v in list(testall_p.items()) if v > 0.1) # add values >0.1 to dictionary
+                        testall_params=model_testall.params[1:].to_dict() # save parameter coefficients into a dictionary
+                        recode_coeff(testall_params) # recode into positive/negative
+                        if force_vars: # if forced vars, remove them from direction check
+                            for var in force_vars:
+                                del testall_params[var]
+
+                        #check results of models
+                        if len(trash_panda_all)==0 and direction_effect(testall_params,dict_lkup)==True:
+                            log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
+                            log.write(model_testall.summary().tables[1].as_text())
+                            log.write('\n>>> All p-values<0.1, direction of effect of predictors as assumed, model accepted.\n')
+                            final_model_out(dep,model_testall,frml_testall,df,out_path,db,df_resid)
+                            failed=False
+                            break
+                            arcpy.AddMessage("End of failed2")
+                            arcpy.AddMessage(failed)
+                        elif len(trash_panda_all)==0 and direction_effect(testall_params,dict_lkup)==False: #p values ok, but direction of effect is not
+                            log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
+                            log.write(model_testall.summary().tables[1].as_text())
+                            log.write('\n>>> All p-values<0.1, but direction of effect of predictors not as assumed, model not accepted.\n')
+                            k+=1
+                            if k>len(combs): # this was the last item in combs and all have failed
+                                failed_again=True # set failed marker to true
+                                failed=False
+                                break
+                                arcpy.AddMessage("End of failed3")
+                            # else:
+                            #     continue
+                        elif len(trash_panda_all)>0: #p value still greater than 0.1
+                            log.write('\n('+str(k)+') Predictor(s) removed from intermediate model: '+str(p)+'.\n')
+                            log.write(model_testall.summary().tables[1].as_text())
+                            log.write('\n>>> Some p-values>0.1, model not accepted.\n')
+                            i+=1
+                            if k>len(combs): # this was the last item in combs and all have failed
+                                failed_again=True # set failed marker to true
+                                failed=False
+                                break
+                                arcpy.AddMessage("End of failed4")
+                            # else:
+                            #     continue
+                        elif failed==False:
+                            break #to break out of for loop going through variables
+
+
 
             # if this still hasn't worked
             if failed_again==True:
-                log.write('''\n+++ ERROR +++ No model with p-values<0.1 can be found! Therefore this is the best attainable model. ''')
+                log.write('''\n+++ ERROR +++ No model with p-values<0.1 can be found and all combinations of predictors have been tested. The intermediate model will be used as the final model.''')
                 final_model_out(dep,model_int,frml_int,df,out_path,db,df_resid)
+
+            #then it moves on to the next dependent variable
+
 
         # check spatial autocorrelation of residuals
         df_resid.to_csv(out_path+'\\Residuals.csv',index=False) # save residuals in csv file
@@ -6889,6 +6911,7 @@ class WizardPanel4(wx.Panel):
 
         log.write("\n\nSpatial autocorrelation of residuals\n")
         log.write(df.to_string())
+
 
 
         #-------------------------------------------------------------------------------

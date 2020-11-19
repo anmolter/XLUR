@@ -31,6 +31,7 @@ from statsmodels.graphics.gofplots import ProbPlot
 import itertools
 import math
 import string
+from string import punctuation,whitespace
 import random
 import shutil
 
@@ -345,6 +346,12 @@ ascii_char = ascii_lower + ascii_upper + [8,9,127,314,316] #add delete etc
 ascii_num = list(range(48,58))
 ascii_underscore = [95]
 ascii_all = ascii_num + ascii_underscore + ascii_char
+
+#make table to replace punctuation and whitespace
+puncts = dict.fromkeys(string.punctuation)
+whitesp = dict.fromkeys(string.whitespace)
+punctswhitesp = {**puncts,**whitesp}
+table_punctswhitesp = str.maketrans(punctswhitesp)
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 # Time code
@@ -489,14 +496,14 @@ class WizardPanel1(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing a polygon of the study area'))
-        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark5 = wx.StaticText(self,-1,label=mark_empty)
         self.mark5.SetForegroundColour((0,255,0))
         self.mark5.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark5, pos=(13,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark5, pos=(13,4), flag=wx.ALL, border=5)
 
         self.sizer.Add(wx.StaticLine(self), pos=(14, 0), span=(1, 6),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
@@ -1570,28 +1577,28 @@ class WizardPanel3A(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the polygon data'))
-        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(13,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(13,4), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Category Field")
         self.sizer.Add(text4, pos=(14, 0), flag=wx.ALL, border=10)
 
         self.cb2 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb2.SetToolTip(wx.ToolTip('From the dropdown list select the field containing the categories'))
-        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb2.Bind(wx.EVT_COMBOBOX, self.onCb2)
         self.cb2.Disable()
 
         self.mark4 = wx.StaticText(self,-1,label=mark_empty)
         self.mark4.SetForegroundColour((0,255,0))
         self.mark4.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark4, pos=(14,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark4, pos=(14,4), flag=wx.ALL, border=5)
 
         self.radio_bx = wx.RadioBox(self,-1,label="Aggregation Method",choices=["Total area","Area weighted value","Area * Value"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
         self.sizer.Add(self.radio_bx, pos=(15,0), span=(1,6), flag=wx.ALL|wx.EXPAND, border=10)
@@ -1604,14 +1611,14 @@ class WizardPanel3A(wx.Panel):
 
         self.cb3 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb3.SetToolTip(wx.ToolTip('From the dropdown list select the field containing values to be area weighted'))
-        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb3.Bind(wx.EVT_COMBOBOX, self.onCb3)
         self.cb3.Disable()
 
         self.mark6 = wx.StaticText(self,-1,label=mark_empty)
         self.mark6.SetForegroundColour((0,255,0))
         self.mark6.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark6, pos=(16,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark6, pos=(16,4), flag=wx.ALL, border=5)
 
         self.sizer.Add(wx.StaticLine(self), pos=(17, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
@@ -1668,8 +1675,8 @@ class WizardPanel3A(wx.Panel):
         self.sizer.Add(self.cancBtn1, pos=(25,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         self.SetSizer(self.sizer)
-        self.sizer.AddGrowableRow(7)
-        self.sizer.AddGrowableRow(17)
+        self.sizer.AddGrowableRow(8)
+        self.sizer.AddGrowableRow(19)
         self.sizer.AddGrowableCol(1)
         self.GetParent().SendSizeEvent()
         self.Layout()
@@ -1884,13 +1891,10 @@ class WizardPanel3A(wx.Panel):
                 del pA_fldsNamesDict[k]
         global pA_cat
         pA_cat = self.cb2.GetValue()
-        # strip any endspaces from strings and remove underscore,space and full stop
+        # strip any whitespaces and punctuation from strings
         with arcpy.da.UpdateCursor(pA, pA_cat) as cursor:
             for row in cursor:
-                row=[i.strip() if i is not None else None for i in row]
-                row=[i.replace(" ","") if i is not None else None for i in row]
-                row=[i.replace("_","") if i is not None else None for i in row]
-                row=[i.replace(".","") if i is not None else None for i in row]
+                row=[i.translate(table_punctswhitesp) if i is not None else None for i in row]
                 cursor.updateRow(row)
         # Get list of unique values in field
         pACats= unique_values(pA,pA_cat)
@@ -2425,28 +2429,28 @@ class WizardPanel3B(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the line data'))
-        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(13,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(13,4), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Category Field")
         self.sizer.Add(text4, pos=(14, 0), flag=wx.ALL, border=10)
 
         self.cb2 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb2.SetToolTip(wx.ToolTip('From the dropdown list select the field containing the categories'))
-        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb2.Bind(wx.EVT_COMBOBOX, self.onCb2)
         self.cb2.Disable()
 
         self.mark4 = wx.StaticText(self,-1,label=mark_empty)
         self.mark4.SetForegroundColour((0,255,0))
         self.mark4.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark4, pos=(14,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark4, pos=(14,4), flag=wx.ALL, border=5)
 
         self.radio_bx = wx.RadioBox(self,-1,label="Aggregation Method",choices=["Total length","Length weighted value","Length * Value"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
         self.sizer.Add(self.radio_bx, pos=(15,0), span=(1,6), flag=wx.TOP|wx.ALL|wx.EXPAND, border=10)
@@ -2459,14 +2463,14 @@ class WizardPanel3B(wx.Panel):
 
         self.cb3 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb3.SetToolTip(wx.ToolTip('From the dropdown list select the field containing values to be length weighted'))
-        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb3.Bind(wx.EVT_COMBOBOX, self.onCb3)
         self.cb3.Disable()
 
         self.mark6 = wx.StaticText(self,-1,label=mark_empty)
         self.mark6.SetForegroundColour((0,255,0))
         self.mark6.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark6, pos=(16,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark6, pos=(16,4), flag=wx.ALL, border=5)
 
         self.sizer.Add(wx.StaticLine(self), pos=(17, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
@@ -2523,8 +2527,8 @@ class WizardPanel3B(wx.Panel):
         self.sizer.Add(self.cancBtn1, pos=(25,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         self.SetSizer(self.sizer)
-        self.sizer.AddGrowableRow(7)
-        self.sizer.AddGrowableRow(17)
+        self.sizer.AddGrowableRow(8)
+        self.sizer.AddGrowableRow(19)
         self.sizer.AddGrowableCol(1)
         self.GetParent().SendSizeEvent()
         self.Layout()
@@ -2735,13 +2739,10 @@ class WizardPanel3B(wx.Panel):
                 del pB_fldsNamesDict[k] # delete if there
         global pB_cat
         pB_cat = self.cb2.GetValue()
-        # strip any endspaces from strings and replace whitespace with underscore
+        # strip any whitespaces and punctuation from strings
         with arcpy.da.UpdateCursor(pB, pB_cat) as cursor:
             for row in cursor:
-                row=[i.strip() if i is not None else None for i in row]
-                row=[i.replace(" ","") if i is not None else None for i in row]
-                row=[i.replace("_","") if i is not None else None for i in row]
-                row=[i.replace(".","") if i is not None else None for i in row]
+                row=[i.translate(table_punctswhitesp) if i is not None else None for i in row]
                 cursor.updateRow(row)
         # Get list of unique values in field
         pBCats= unique_values(pB,pB_cat)
@@ -3274,28 +3275,28 @@ class WizardPanel3C(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the point data'))
-        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(13, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(13,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(13,4), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Category Field")
         self.sizer.Add(text4, pos=(14, 0), flag=wx.ALL, border=10)
 
         self.cb2 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb2.SetToolTip(wx.ToolTip('From the dropdown list select the field containing the categories'))
-        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb2, pos=(14, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb2.Bind(wx.EVT_COMBOBOX, self.onCb2)
         self.cb2.Disable()
 
         self.mark4 = wx.StaticText(self,-1,label=mark_empty)
         self.mark4.SetForegroundColour((0,255,0))
         self.mark4.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark4, pos=(14,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark4, pos=(14,4), flag=wx.ALL, border=5)
 
         self.radio_bx = wx.RadioBox(self,-1,label="Aggregation Method",choices=["Point count","Sum of values","Mean of values","Median of values"], majorDimension=0, style=wx.RA_SPECIFY_COLS)
         self.sizer.Add(self.radio_bx, pos=(15,0), span=(1,6), flag=wx.TOP|wx.ALL, border=10)
@@ -3308,14 +3309,14 @@ class WizardPanel3C(wx.Panel):
 
         self.cb3 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb3.SetToolTip(wx.ToolTip('From the dropdown list select the field containing values to be summarised'))
-        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb3, pos=(16, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb3.Bind(wx.EVT_COMBOBOX, self.onCb3)
         self.cb3.Disable()
 
         self.mark6 = wx.StaticText(self,-1,label=mark_empty)
         self.mark6.SetForegroundColour((0,255,0))
         self.mark6.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark6, pos=(16,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark6, pos=(16,4), flag=wx.ALL, border=5)
 
         self.sizer.Add(wx.StaticLine(self), pos=(17, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 
@@ -3372,8 +3373,8 @@ class WizardPanel3C(wx.Panel):
         self.sizer.Add(self.cancBtn1, pos=(25,6),flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
 
         self.SetSizer(self.sizer)
-        self.sizer.AddGrowableRow(7)
-        self.sizer.AddGrowableRow(17)
+        self.sizer.AddGrowableRow(8)
+        self.sizer.AddGrowableRow(19)
         self.sizer.AddGrowableCol(1)
         self.GetParent().SendSizeEvent()
         self.Layout()
@@ -3584,16 +3585,14 @@ class WizardPanel3C(wx.Panel):
                 del pC_fldsNamesDict[k]
         global pC_cat
         pC_cat = self.cb2.GetValue()
-        # strip any endspaces from strings and replace whitespace with underscore
+        # strip any spaces and punctuation from strings
         with arcpy.da.UpdateCursor(pC, pC_cat) as cursor:
             for row in cursor:
-                row=[i.strip() if i is not None else None for i in row]
-                row=[i.replace(" ","") if i is not None else None for i in row]
-                row=[i.replace("_","") if i is not None else None for i in row]
-                row=[i.replace(".","") if i is not None else None for i in row]
+                row=[i.translate(table_punctswhitesp) if i is not None else None for i in row]
                 cursor.updateRow(row)
         # Get list of unique values in field
         pCCats= unique_values(pC,pC_cat)
+
         # add buffer distances to names
         global pCCatsBuffer
         pCCatsBuffer=[]
@@ -4159,14 +4158,14 @@ class WizardPanel3D(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the polygon data'))
-        self.sizer.Add(self.cb1, pos=(9, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(9, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(9,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(9,4), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Value Field(s)")
         self.sizer.Add(text4, pos=(10, 0), flag=wx.ALL, border=10)
@@ -4771,14 +4770,14 @@ class WizardPanel3E(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the line data'))
-        self.sizer.Add(self.cb1, pos=(9, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(9, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(9,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(9,4), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Value Field(s)")
         self.sizer.Add(text4, pos=(10, 0), flag=wx.ALL, border=10)
@@ -5383,14 +5382,14 @@ class WizardPanel3F(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the feature class containing the point data'))
-        self.sizer.Add(self.cb1, pos=(9, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(9, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(9,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(9,4), flag=wx.ALL, border=5)
 
         text4 = wx.StaticText(self,-1,label="Value Field(s)")
         self.sizer.Add(text4, pos=(10, 0), flag=wx.ALL, border=10)
@@ -5965,14 +5964,14 @@ class WizardPanel3G(wx.Panel):
 
         self.cb1 = wx.ComboBox(self,choices=[],style=wx.CB_DROPDOWN)
         self.cb1.SetToolTip(wx.ToolTip('From the dropdown list select the file containing the raster data'))
-        self.sizer.Add(self.cb1, pos=(6, 1), span=(1,2),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
+        self.sizer.Add(self.cb1, pos=(6, 1), span=(1,3),flag=wx.TOP|wx.RIGHT|wx.BOTTOM|wx.EXPAND, border=5)
         self.cb1.Bind(wx.EVT_COMBOBOX, self.onCb1)
         self.cb1.Disable()
 
         self.mark3 = wx.StaticText(self,-1,label=mark_empty)
         self.mark3.SetForegroundColour((0,255,0))
         self.mark3.SetFont(wx.Font(12,wx.SWISS, wx.NORMAL,wx.BOLD))
-        self.sizer.Add(self.mark3, pos=(6,3), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mark3, pos=(6,4), flag=wx.ALL, border=5)
 
         self.sizer.Add(wx.StaticLine(self), pos=(7, 0), span=(1, 7),flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=5)
 

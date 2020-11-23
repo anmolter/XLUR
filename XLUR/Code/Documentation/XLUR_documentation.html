@@ -14,10 +14,11 @@
 <!-- Material Design fonts -->
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="XLUR_documentation_files/header-attrs-2.5/header-attrs.js"></script>
 <script src="XLUR_documentation_files/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="XLUR_documentation_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
-<script src="XLUR_documentation_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<link href="XLUR_documentation_files/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+<script src="XLUR_documentation_files/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script src="XLUR_documentation_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <script src="XLUR_documentation_files/navigation-1.1/tabsets.js"></script>
 <script src="XLUR_documentation_files/navigation-1.1/codefolding.js"></script>
@@ -29,6 +30,8 @@
 <script src="XLUR_documentation_files/bootstrap_material-0.1/ripples.min.js"></script>
 <link href="XLUR_documentation_files/material-0.1/material.css" rel="stylesheet" />
 <script src="XLUR_documentation_files/material-0.1/material.js"></script>
+<link href="XLUR_documentation_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="XLUR_documentation_files/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 
@@ -36,7 +39,7 @@
 <!-- tabsets -->
 <script>
 $(document).ready(function () {
-  window.buildTabsets("TOC");
+  window.buildTabsets("toc");
 });
 </script>
 
@@ -52,7 +55,7 @@ $(document).ready(function () {
             <div class="col-xs-3">
         <div id="header">
     <h1 class="title">XLUR Wizard</h1>
-                <h4 class="date"><em>v.2020-06-04</em></h4>
+                <h4 class="date">v.2020-11-23</h4>
         </div>
     </div>
 </div>
@@ -62,7 +65,8 @@ $(document).ready(function () {
 
 <div class="container-fluid main-container">
     <div class="row">
-      <nav class="col-xs-3 menu" id="toc">
+      <nav class="col-xs-3 menu">
+        <div id="toc">
         <ul>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#general-information">General Information</a></li>
@@ -72,6 +76,10 @@ $(document).ready(function () {
         <li><a href="#troubleshooting">Troubleshooting</a></li>
         <li><a href="#tutorial">Tutorial</a></li>
         </ul>
+        </div>
+        
+        
+        
       </nav>
      <div class="pages col-xs-9">
      <div class="row">
@@ -112,29 +120,29 @@ $(document).ready(function () {
 <ul>
 <li>statsmodels</li>
 </ul>
-<p><img src="Images/manager4c.jpg" /></p>
+<p><img src="Images/manager4c.JPG" /></p>
 <ul>
 <li>seaborn</li>
 </ul>
-<p><img src="Images/manager4d.jpg" /></p>
+<p><img src="Images/manager4d.JPG" /></p>
 <ul>
 <li>wxpython</li>
 </ul>
-<p><img src="Images/manager4e.jpg" /></p>
+<p><img src="Images/manager4e.JPG" /></p>
 <ol start="6" style="list-style-type: decimal">
 <li><p>If you are planning to use raster data in your analysis, click on Licensing in the menu on the left hand side. Under Esri Extensions check that Spatial Analyst is licensed.</p></li>
 <li><p>Click the back arrow in the menu on the left hand side. Click Open another project, browse to the XLUR.aprx ArcGIS Pro Project file and double-click to open it. The XLUR.aprx file can be found in the XLUR folder in the XLUR repository. In the Catalog window double-click Toolboxes, then double-click XLUR.tbx. This will open the XLUR toolbox, which contains the BuildLUR and ApplyLUR scripts. Running either of these script will open the Build LUR or Apply LUR wizard, respectively.</p></li>
 </ol>
 </div>
 <div id="general-information" class="section level1 tabset tabset-pills">
-<h1>General Information</h1>
+<h1 class="tabset tabset-pills">General Information</h1>
 <div id="what-is-lur" class="section level2">
 <h2>What is LUR?</h2>
 <p><strong>Classic LUR</strong></p>
 <p>Land use regression (LUR) is a statistical method, which uses geospatial data to develop prediction models in environmental sciences. It is predominantly used in air pollution research to predict pollutant concentrations empirically within a given a study area. However, it has also been used for other environmental phenomena such as noise, air temperature and water microbiology.</p>
 <p>The underlying principle of LUR is that a measured quantity (e.g. pollutant concentration, noise level, temperature etc) at a given location depends on characteristics of the surrounding environment, in particular on the presence and absence of sources and sinks, which increase and decrease values respectively.</p>
 <p>LUR models are developed by using measured data from a number of monitoring sites as the dependent variable and data on the surrounding environment extracted as potential predictor variables in a multiple linear regression analysis. For example, in an air pollution study particulate matter concentrations might be measured at fifty monitoring sites. Then for each monitoring site potential predictor variables are extracted such as the area of industrial land use around the monitoring site, the distance to the nearest road, the number of motor vehicles on the nearest road etc. The particulate matter concentrations and the potential predictors are entered into a supervised machine learning process, which will try to construct a parsimonious multiple linear regression model. This model can then be used to predict particulate matter concentrations at any point within the study area.</p>
-<p>The supervised machine learning process is based on the methodology used in the European Study of Cohorts for Air Pollution Effects (ESCAPE), which can be downloaded from <a href="http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf" class="uri">http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf</a> (a copy can be found in the Documentation folder). The ESCAPE exposure manual provides a detailed description of the steps required to construct a parsimonious multiple linear regression model; therefore, only a brief summary is presented here:</p>
+<p>The supervised machine learning process is based on the methodology used in the European Study of Cohorts for Air Pollution Effects (ESCAPE), which can be downloaded from <a href="http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf">http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf</a> (a copy can be found in the Documentation folder). The ESCAPE exposure manual provides a detailed description of the steps required to construct a parsimonious multiple linear regression model; therefore, only a brief summary is presented here:</p>
 <ol style="list-style-type: decimal">
 <li>Prior to the statistical analysis a positive or negative direction of effect is assigned to each potential predictor variable by the user based on <em>a priori</em> knowledge of the subject area.</li>
 <li>Using the dependent variable univariate linear regression models are created for each potential predictor variable. The linear regression models are ranked by their adjusted R<sup>2</sup> value. The model with the highest adjusted R<sup>2</sup> and in which the coefficient of the predictor variable matches the assigned direction of effect (see previous step) is selected as the starting model.<br />
@@ -144,28 +152,28 @@ $(document).ready(function () {
 </ol>
 <p>XLUR will provide a range of diagnosics for the final model which can be used to further analyse the suitability and robustness of the final model.</p>
 <p><strong>Hybrid LUR</strong></p>
-<p>Hybrid models can also be developed. Hybrid models in XLUR are based on an extension of the ESCAPE methodology developed by de Hoogh et al. (see <a href="DOI:%2010.1016/j.envres.2016.07.005">https://doi.org/10.1016/j.envres.2016.07.005</a>). In the XLUR tool a hybrid model is a model in which one or more mandatory variables are selected by the user. These mandatory variables are forced into the model prior to the starting model, regardless of the amount of variance that they explain or their direction of effect. Once the mandatory variables have been entered potential predictor variables are added and models are selected in the same way as described for the Classic LUR model. It should be noted that mandatory variables will not be removed during step 4 described above. They will remain in the model regardless of their sigficance level.</p>
+<p>Hybrid models can also be developed. Hybrid models in XLUR are based on an extension of the ESCAPE methodology developed by de Hoogh et al. (see <a href="DOI:%2010.1016/j.envres.2016.07.005">https://doi.org/10.1016/j.envres.2016.07.005</a>). In the XLUR tool a hybrid model is a model in which one or more mandatory variables are selected by the user. These mandatory variables are forced into the model prior to the starting model, regardless of the amount of variance that they explain or their direction of effect. Once the mandatory variables have been entered potential predictor variables are added and models are selected in the same way as described for the Classic LUR model. It should be noted that mandatory variables will not be removed during step 4 described above. They will remain in the model regardless of their sigficance level.</p>
 <p>An example of this would be using the output from dispersion models run at a coarse spatial resolution as a mandatory variable, which could add a measure of global variability to the measures of local variability used in LUR.</p>
 </div>
 <div id="the-xlur-wizard" class="section level2">
 <h2>The XLUR Wizard</h2>
 <p>The XLUR wizard guides the user through building and applying LUR models from within the ArcGIS software. The user must complete each input field in the wizard starting at the top of the page and then moving downwards. The statusbar at the bottom of wizard indicates if an input field is ready for an entry or if it is currently being processed. <em>Some inputs may take a while to be processed.</em> Once an input has been completed a green tick mark will appear next to it. Clicking on the question mark button next to each section heading will open a help window with further information on how to complete each section. The user may exit the wizard at any time by clicking on the Cancel button; however, all progress made in the wizard will be lost.</p>
 <p>The wizard window can be resized by dragging the sides or by clicking on the maximise button in the title bar.</p>
-<p><img src="Images/wizard_features.png" /></p>
+<p><img src="Images/wizard_features.PNG" /></p>
 <p>There are three types of windows that may appear during the process of completing the wizard.</p>
 <div id="information-windows" class="section level3">
 <h3>Information Windows</h3>
-<p><img src="Images/example_info.jpg" /></p>
+<p><img src="Images/example_info.JPG" /></p>
 <p>Information windows simply confirm a choice made by the user. They are non-critical.</p>
 </div>
 <div id="warning-windows" class="section level3">
 <h3>Warning Windows</h3>
-<p><img src="Images/example_warning.jpg" /></p>
+<p><img src="Images/example_warning.JPG" /></p>
 <p>A warning window highlights a potential problem in the dataset selected by the user. This problem may be critical or non-critical and it is up to the user to decide whether to proceed.</p>
 </div>
 <div id="error-windows" class="section level3">
 <h3>Error Windows</h3>
-<p><img src="Images/example_error.jpg" /></p>
+<p><img src="Images/example_error.JPG" /></p>
 <p>An error window indicates that an incorrect entry has been made into an input field, that an invalid selection has been made or that a dataset has a critical problem. This is a critical problem and needs to be addressed before proceeding with the wizard. In some cases, for example if the dataset has a critical problem, the user may need to exit the wizard, address the problem and then start afresh.</p>
 </div>
 </div>
@@ -176,7 +184,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="data-preparation" class="section level1 tabset tabset-pills">
-<h1>Data Preparation</h1>
+<h1 class="tabset tabset-pills">Data Preparation</h1>
 <p>It is essential to prepare the data carefully prior to using XLUR. XLUR will carry out some very basic checks of the data, i.e. it will check that features are located within the study area and if necessary display a warning message. <strong>XLUR will not clean or prepare the data for use in the BuildLUR wizard.</strong> Users should carefully check all feature classes and raster files that they intend to use. In particular, feature classes should be checked for spatial duplicates (e.g. using the Find Identical and Delete Identical tools) and invalid geometries (e.g. using the Check Geometry and Repair Geometry tools).</p>
 <p>To be used by the BuildLUR tool all feature classes and raster files must be stored in <strong>the same File Geodatabase</strong>.</p>
 <p>The following tabs show further information for different input datasets.</p>
@@ -199,29 +207,29 @@ $(document).ready(function () {
 <li><p>one or more numeric fields with monitored values (e.g. pollutant concentrations, temperatures, bacterial counts).</p></li>
 </ul>
 <p>The table below shows an example of an attribute table of a monitoring sites feature class. The feature class may contain other fields. These will be ignored during the analysis, but they may slow down the performance of the XLUR tools.</p>
-<p><img src="Images/Example_DepVar.jpg" /></p>
+<p><img src="Images/Example_DepVar.JPG" /></p>
 </div>
 <div id="predictor-variables" class="section level2 tabset tabset-pills">
-<h2>Predictor Variables</h2>
+<h2 class="tabset tabset-pills">Predictor Variables</h2>
 <p>Predictor variables can be derived from both vector data and raster data. Multiple predictor variables can be derived from a single vector dataset, depending on additional criteria such as the number of buffers, attribute categories and aggregation methods. In contrast, only a single predictor can be derived from a raster dataset. To build a LUR model, typically hundreds of potential predictor variables are extracted and then assessed in the statistical analysis. Technically, the BuildLUR tool can be run with only one predictor, but the resulting model will be very limited.</p>
 <div id="vector-maps" class="section level3 tabset tabset-pills">
-<h3>Vector maps</h3>
+<h3 class="tabset tabset-pills">Vector maps</h3>
 <p>From vector data predictor variables can be extracted based on circular buffers around the monitoring sites or based on the distance to the nearest feature. Each of these methods can be applied to polygon, line or point vector data.</p>
 <div id="buffer-based-predictors" class="section level4">
 <h4>Buffer based Predictors</h4>
 <p>XLUR will draw one or more circular buffers around each monitoring site (the radius of the buffer is determined by the user). It will then use the Intersect tool to extract features and their associated attributes from a polygon, line or point feature class selected by the user. Geometric attributes are automatically recalculated.</p>
 <p>This feature class <strong>must contain</strong>:</p>
 <ul>
-<li>a text field which identifies the category that each feature belongs to. For example, a polygon feature class of land use would contain a text field that identifies which land use category (e.g. residential, commercial, industrial) each polygon feature belongs to. A road feature class would contain a text field that identifies the road type (e.g. motorway, primary, secondary) of each line feature. A tree feature class might contain a text field that shows the species of each point feature. The text of the category field will be used as part of the variable naming schema, for details of the name schema see Step 3 - Predictors. Any whitespace or underscores in the text of the category field will be removed.</li>
+<li>a text field which identifies the category that each feature belongs to. For example, a polygon feature class of land use would contain a text field that identifies which land use category (e.g. residential, commercial, industrial) each polygon feature belongs to. A road feature class would contain a text field that identifies the road type (e.g. motorway, primary, secondary) of each line feature. A tree feature class might contain a text field that shows the species of each point feature. The text of the category field will be used as part of the variable naming schema, for details of the name schema see Step 3 - Predictors. It is strongly recommended to only use alphanumeric characters in the text of the category field. Non-alphanumeric characters can cause problems and may stop XLUR from running. Please note that the BuildLUR tool will remove any whitespace and punctuation from the category field, before using it.</li>
 </ul>
-<p><img src="Images/Example_Buffer1.png" /></p>
+<p><img src="Images/Example_Buffer1.PNG" /></p>
 <p>If the features of the feature class cannot be categorised, then a text field should be used in which all features have the same value. For example, a polygon feature class of population density would not need a category; therefore a “dummy” text field should be added with identical values. In a line feature class of roads it may also be useful to analyse all roads as well as roads by category, therefore to this feature class an additional text field could be added in which all fields are set to “all”. The tables below show some examples of “dummy” category fields.</p>
-<p><img src="Images/Example_Buffer2.png" /></p>
+<p><img src="Images/Example_Buffer2.PNG" /></p>
 <p>The feature class <strong>may contain</strong>:</p>
 <ul>
 <li>one or more numeric fields showing attribute values for each feature. If the chosen aggregation method is total area, total length or point count, a numeric field is not required. However, if the chosen aggregation method is area weighted value, area*value, length weighted value, length*value, sum of values, mean of values or median of values, then the feature class must contain at least one numeric field (see <em>Build LUR Step 3 - Predictors</em> for further information on aggregation methods). For example, a line feature class of roads may contain one or more fields showing traffic counts for each feature (line segment or row in the attribute table). A point feature class of chimney stacks may contain a field showing emission rates for each feature. The attribute tables below show some examples of value fields.</li>
 </ul>
-<p><img src="Images/Example_Buffer3.png" /></p>
+<p><img src="Images/Example_Buffer3.PNG" /></p>
 </div>
 <div id="distance-based-predictors" class="section level4">
 <h4>Distance based Predictors</h4>
@@ -230,27 +238,27 @@ $(document).ready(function () {
 <ul>
 <li>one or more numeric fields showing attribute values for each feature. If the chosen method is distance, inverse distance or inverse distance squared, then a numeric field is not required. However, if the chosen method is value, value*distance, value*inverse distance or value*inverse distance squared, then the feature class must contain at least one numeric field. For example, a line feature class of roads may contain one or more fields showing traffic counts for each feature (line segment or row in attribute table). A point feature class of chimney stacks may contain a field showing emission rates for each feature. The attribute tables below show some examples of value fields.</li>
 </ul>
-<p><img src="Images/Example_Distance1.png" /></p>
+<p><img src="Images/Example_Distance1.PNG" /></p>
 </div>
 </div>
 <div id="raster-maps" class="section level3 tabset tabset-pills">
-<h3>Raster maps</h3>
+<h3 class="tabset tabset-pills">Raster maps</h3>
 <p>From raster data only the value of the raster cell that is spatially coincident with the monitoring site point can be extracted. Since standard raster grids can only hold one value per cell, no table schema is required.</p>
 </div>
 </div>
 </div>
 <div id="build-lur" class="section level1 tabset tabset-pills">
-<h1>Build LUR</h1>
+<h1 class="tabset tabset-pills">Build LUR</h1>
 <p>To create a new LUR model double-click the BuildLUR script in the XLUR toolbox. The BuildLUR tool will appear in the Geoprocessing pane. Click the Run button in the bottom right corner to run the tool.</p>
-<p><img src="Images/build_tool.jpg" /></p>
+<p><img src="Images/build_tool.JPG" /></p>
 <p>This will open the BuildLUR wizard. The wizard will guide you through the process of creating a LUR model by using the following steps:</p>
 <div id="step-1---settings" class="section level2 tabset tabset-pills">
-<h2>Step 1 - Settings</h2>
+<h2 class="tabset tabset-pills">Step 1 - Settings</h2>
 <p>This step is required to specify some general settings to build a LUR model.</p>
 <p><img src="Images/Settings.jpg" /></p>
 <div id="set-project-name" class="section level3">
 <h3>Set Project Name</h3>
-<p><img src="Images/p1_SetProject.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p1_SetProject.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -404,12 +412,12 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="step-2---outcomes" class="section level2 tabset tabset-pills">
-<h2>Step 2 - Outcomes</h2>
+<h2 class="tabset tabset-pills">Step 2 - Outcomes</h2>
 <p>In this step the dependent or outcome variables of the regression analysis are specified.</p>
 <p><img src="Images/Outcomes.JPG" /></p>
 <div id="set-dependent-variable" class="section level3">
 <h3>Set Dependent Variable</h3>
-<p><img src="Images/SetDependent.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetDependent.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -440,14 +448,14 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="step-3---predictors" class="section level2 tabset tabset-pills">
-<h2>Step 3 - Predictors</h2>
+<h2 class="tabset tabset-pills">Step 3 - Predictors</h2>
 <p>In this step the predictor or independent variables of the regression analysis are specified.</p>
 <p>Predictor variables can be derived from vector data and from raster data. From vector data predictor variables can be extracted based on circular buffers around the monitoring site point locations or based on the distance to the nearest feature. Since vector data can be polygons, lines or points, this results in six possible types of predictor variables. From raster data only the value of the raster cell that is spatially coincident with the monitoring site point can be extracted, adding one more possible type of predictor. Therefore, in total seven types of predictor variables can be extracted and entered into the statistical analysis. Each type of variable can produce multiple predictors, depending on additional settings such as the number of buffer distances, the number of categories within a feature class, or the aggregation/extraction method specified.</p>
-<p><img src="Images/Predictors.jpg" /></p>
+<p><img src="Images/Predictors.JPG" /></p>
 <div id="buffer-based-predictors-1" class="section level3 tabset tabset-pills">
-<h3>Buffer based Predictors</h3>
+<h3 class="tabset tabset-pills">Buffer based Predictors</h3>
 <div id="polygon-area-or-value-within-buffer" class="section level4 tabset tabset-pills">
-<h4>Polygon Area or Value within Buffer</h4>
+<h4 class="tabset tabset-pills">Polygon Area or Value within Buffer</h4>
 <p>For this type of variable a polygon feature class should be used, which has a spatial extent that is larger than: the study area + the largest buffer distance. The polygon feature class should not contain duplicates or invalid geometries (if uncertain about invalid geometries, run the Repair Geometries tool prior to running the wizard). The polygon feature class must contain a text field, which identifies a category for each polygon. If the feature class contains only one category, a dummy text field should be created with all rows set to the same value.</p>
 <p><strong>Polygon Area within Buffer</strong></p>
 <p><img src="Images/PolyInBuffer_MultCategories.jpg" width="500px" height="500px" /></p>
@@ -463,24 +471,24 @@ $(document).ready(function () {
 <p><img src="Images/PolyInBuffer_MultCatValue.jpg" width="500px" height="500px" /></p>
 <p>This example diagram is based on a polygon feature class with four categories (A,B,C,D) and each polygon has a numeric value attribute (“Value”). For a given buffer distance the wizard will calculate the total area weighted value for each category within the buffer, e.g.</p>
 <ul>
-<li>Total area weighted value of category A = ((Area of A<sub>1</sub> inside buffer ÷ Total Area of A<sub>1</sub>) × Value of A<sub>1</sub>) + ((Area of A<sub>2</sub> inside buffer ÷ Total Area of A<sub>2</sub>) × Value of A<sub>2</sub>)</li>
-<li>Total area weighted value of category B = ((Area of B<sub>1</sub> inside buffer ÷ Total Area of B<sub>1</sub>) × Value of B<sub>1</sub>) + ((Area of B<sub>2</sub> inside buffer ÷ Total Area of B<sub>2</sub>) × Value of B<sub>2</sub>)</li>
-<li>Total area weighted value of category C = ((Area of C<sub>1</sub> inside buffer ÷ Total Area of C<sub>1</sub>) × Value of C<sub>1</sub>) + ((Area of C<sub>2</sub> inside buffer ÷ Total Area of C<sub>2</sub>) × Value of C<sub>2</sub>)</li>
-<li>Total area weighted value of category D = ((Area of D<sub>1</sub> inside buffer ÷ Total Area of D<sub>1</sub>) × Value of D<sub>1</sub>) + ((Area of D<sub>2</sub> inside buffer ÷ Total Area of D<sub>2</sub>) × Value of D<sub>2</sub>)</li>
+<li>Total area weighted value of category A = ((Area of A<sub>1</sub> inside buffer / Total Area of A<sub>1</sub>) x Value of A<sub>1</sub>) + ((Area of A<sub>2</sub> inside buffer / Total Area of A<sub>2</sub>) x Value of A<sub>2</sub>)</li>
+<li>Total area weighted value of category B = ((Area of B<sub>1</sub> inside buffer / Total Area of B<sub>1</sub>) x Value of B<sub>1</sub>) + ((Area of B<sub>2</sub> inside buffer / Total Area of B<sub>2</sub>) x Value of B<sub>2</sub>)</li>
+<li>Total area weighted value of category C = ((Area of C<sub>1</sub> inside buffer / Total Area of C<sub>1</sub>) x Value of C<sub>1</sub>) + ((Area of C<sub>2</sub> inside buffer / Total Area of C<sub>2</sub>) x Value of C<sub>2</sub>)</li>
+<li>Total area weighted value of category D = ((Area of D<sub>1</sub> inside buffer / Total Area of D<sub>1</sub>) x Value of D<sub>1</sub>) + ((Area of D<sub>2</sub> inside buffer / Total Area of D<sub>2</sub>) x Value of D<sub>2</sub>)</li>
 </ul>
 <p>A real life example of this variable type would be a polygon feature class of population density.</p>
 <p>Alternatively, the wizard can calculate the total sum of the product of the polygon area and the polygon value, e.g.</p>
 <ul>
-<li>Total sum of product of area and value of category A = (Area of A<sub>1</sub> inside buffer × Value of A<sub>1</sub>) + (Area of A<sub>2</sub> inside buffer × Value of A<sub>2</sub>)</li>
-<li>Total sum of product of area and value of category B = (Area of B<sub>1</sub> inside buffer × Value of B<sub>1</sub>) + (Area of B<sub>2</sub> inside buffer × Value of B<sub>2</sub>)</li>
-<li>Total sum of product of area and value of category C = (Area of C<sub>1</sub> inside buffer × Value of C<sub>1</sub>) + (Area of C<sub>2</sub> inside buffer × Value of C<sub>2</sub>)</li>
-<li>Total sum of product of area and value of category D = (Area of D<sub>1</sub> inside buffer × Value of D<sub>1</sub>) + (Area of D<sub>2</sub> inside buffer × Value of D<sub>2</sub>)</li>
+<li>Total sum of product of area and value of category A = (Area of A<sub>1</sub> inside buffer x Value of A<sub>1</sub>) + (Area of A<sub>2</sub> inside buffer x Value of A<sub>2</sub>)</li>
+<li>Total sum of product of area and value of category B = (Area of B<sub>1</sub> inside buffer x Value of B<sub>1</sub>) + (Area of B<sub>2</sub> inside buffer x Value of B<sub>2</sub>)</li>
+<li>Total sum of product of area and value of category C = (Area of C<sub>1</sub> inside buffer x Value of C<sub>1</sub>) + (Area of C<sub>2</sub> inside buffer x Value of C<sub>2</sub>)</li>
+<li>Total sum of product of area and value of category D = (Area of D<sub>1</sub> inside buffer x Value of D<sub>1</sub>) + (Area of D<sub>2</sub> inside buffer x Value of D<sub>2</sub>)</li>
 </ul>
 <p>A real life example of this variable type would be a polygon feature class of area emission sources such as fugitive emissions from land use categories based on different estimated car parking densities. Another example is anthropogenic heat emissions from different residential land uses depending on housing characteristics and estimated energy use.</p>
 <p><img src="Images/p3A.JPG" /></p>
 <div id="set-variable-name" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -494,26 +502,26 @@ $(document).ready(function () {
     Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Enter</span> button.</p>
   <div style="border:2px; border-style:solid; border-color:#0000FF;background-color:#e6f0ff; padding:5px">
   <h3 style="font-size:110%; margin-top:0;font-weight:normal;">Name Schema for Polygon Area or Value within Buffer</h3>
-    Predictor variables extracted through this method will appear in the following name schema:</p>
-    <p><em><font color="blue">pA</font>_<font color="green">[name entered by user]</font>_<font color="blue">[category name]</font>_<font color="blue">[buffer distance]</font>_<font color="blue">[aggregation method]</font></em></p>
-    <p>where:</p>
-    <ul>
-      <li><em><font color="blue">pA</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>A</em> indicates the type of predictor
+  <p>Predictor variables extracted through this method will appear in the following name schema:</p>
+  <p><em><font color="blue">pA</font>_<font color="green">[name entered by user]</font>_<font color="blue">[category name]</font>_<font color="blue">[buffer distance]</font>_<font color="blue">[aggregation method]</font></em></p>
+  <p>where:</p>
+  <ul>
+  <li><em><font color="blue">pA</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>A</em> indicates the type of predictor
         variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
-      <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-      <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the polygon feature class must contain a text field, which identifies a category for
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the polygon feature class must contain a text field, which identifies a category for
         each polygon. This text field will be selected under <strong>Set Input Data</strong>. This part of the name schema identifies the category that the predictor variable belongs to. If the feature class contains
         only one category, a dummy text field should be created with all rows set to the same text string. This is the text string that would be shown in this part of the name.</l>
-      <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
+  <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
         under <strong>Set Buffer Sizes</strong>.</l>
-      <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
-        <ul>
-        <li><em>sum</em> = sum of polygon area</l>
-        <li><em>wtv</em> = area weighted value</l>
-        <li><em>mtv</em> = area * value</l>
-        </ul>
-      </l>
-    </ul>
+  <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
+  <ul>
+  <li><em>sum</em> = sum of polygon area</l>
+  <li><em>wtv</em> = area weighted value</l>
+  <li><em>mtv</em> = area * value</l>
+  </ul>
+  </l>
+  </ul>
   <p><span style="text-decoration: underline;">Examples:</span></p>
   <p><em>pA_landusearea_residential_500_sum</em> - This predictor variable was extracted using a land use polygon feature class. The feature class contained a number of land use categories and this predictor
     contains the total area of residential land use within a 500m buffer</p>
@@ -526,14 +534,19 @@ $(document).ready(function () {
 </div>
 <div id="set-buffer-sizes" class="section level5">
 <h5>Set Buffer Sizes</h5>
-<p><img src="Images/SetBuffer.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetBuffer.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
 </head>
 <body style="font-family:'Arial'">
   <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Buffer Sizes</h1>
-  <h2 style="font-size:125%;font-weight:normal;">Buffer Distance</h2>
+  <h2 style="font-size:125%;font-weight:normal;">Buffers</h2>
+  <p>You can choose between creating a new set of one or more buffers or you can use a previous set of buffers.</p>
+  <p>If this is the first time in this Build LUR session that a buffer based predictor is created, then no previous buffers will be available, and you have to
+    select <em>Create new buffer</em>. If you have already created a buffer based predictor during this Build LUR session, then you can re-use the buffers by selecting
+    <em>Use previous buffer</em>.</p>
+  <h2 style="font-size:125%;font-weight:normal;">Create Buffer Distance</h2>
   <p>Type in a buffer distance. The unit of the buffer distance is the same as the <strong>map unit of the projected coordinate system</strong>.
     Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Add</span> button. The buffer distance will be listed
     in the box. To add another buffer type in another buffer distance and click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Add</span> button.</p>
@@ -541,13 +554,16 @@ $(document).ready(function () {
     <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Remove</span> button.</p>
   <p>After all required buffer distances have been added, click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Done</span> button.
   This will create a multiple ring buffer feature class in the <em>LURdata</em> feature dataset. </p>
+  <h2 style="font-size:125%;font-weight:normal;">Select Buffer Distance</h2>
+  <p>From the dropdown menu select the set of buffers that you would like to use again. Click on the set of buffers that you would like to use to ensure that it is selected.
+    Then click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Done</span> button.</p>
 </body>
 </html>
 <p><br></p>
 </div>
 <div id="set-input-data" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3A_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3A_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -581,7 +597,7 @@ $(document).ready(function () {
 </div>
 <div id="set-direction-of-effect" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -605,7 +621,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="line-length-or-value-within-buffer" class="section level4 tabset tabset-pills">
-<h4>Line Length or Value within Buffer</h4>
+<h4 class="tabset tabset-pills">Line Length or Value within Buffer</h4>
 <p>For this type of variable a line feature class should be used, which has a spatial extent that is larger than: the study area + the largest buffer distance. The line feature class should not contain duplicates.The line feature class must contain a text field, which identifies a category for each line. If the feature class contains only one category, a dummy text field should be created with all rows set to the same value.</p>
 <p><strong>Line Length within Buffer</strong></p>
 <p><img src="Images/LineInBuffer_MultCat.jpg" width="500px" height="500px" /></p>
@@ -619,20 +635,20 @@ $(document).ready(function () {
 <p><img src="Images/LineInBuffer_MultValue.jpg" width="500px" height="500px" /></p>
 <p>This example diagram is based on a line feature class with two categories (A,B) and each line has a numeric value. For a given buffer distance the wizard will calculate the total length weighted value for each category within the buffer, e.g.</p>
 <ul>
-<li>Total length weighted value of category A = ((Length of A<sub>1</sub> inside buffer ÷ Total Length of A<sub>1</sub>) × Value of A<sub>1</sub>) + ((Length of A<sub>2</sub> inside buffer ÷ Total Length of A<sub>2</sub>) × Value of A<sub>2</sub>)</li>
-<li>Total length weighted value of category B = ((Length of B<sub>1</sub> inside buffer ÷ Total Length of B<sub>1</sub>) × Value of B<sub>1</sub>) + ((Length of B<sub>2</sub> inside buffer ÷ Total Length of B<sub>2</sub>) × Value of B<sub>2</sub>) + ((Length of B<sub>3</sub> inside buffer ÷ Total Length of B<sub>3</sub>) × Value of B<sub>3</sub>) + ((Length of B<sub>4</sub> inside buffer ÷ Total Length of B<sub>4</sub>) × Value of B<sub>4</sub>) + ((Length of B<sub>5</sub> inside buffer ÷ Total Length of B<sub>5</sub>) × Value of B<sub>5</sub>) + ((Length of B<sub>6</sub> inside buffer ÷ Total Length of B<sub>6</sub>) × Value of B<sub>6</sub>)</li>
+<li>Total length weighted value of category A = ((Length of A<sub>1</sub> inside buffer / Total Length of A<sub>1</sub>) x Value of A<sub>1</sub>) + ((Length of A<sub>2</sub> inside buffer / Total Length of A<sub>2</sub>) x Value of A<sub>2</sub>)</li>
+<li>Total length weighted value of category B = ((Length of B<sub>1</sub> inside buffer / Total Length of B<sub>1</sub>) x Value of B<sub>1</sub>) + ((Length of B<sub>2</sub> inside buffer / Total Length of B<sub>2</sub>) x Value of B<sub>2</sub>) + ((Length of B<sub>3</sub> inside buffer / Total Length of B<sub>3</sub>) x Value of B<sub>3</sub>) + ((Length of B<sub>4</sub> inside buffer / Total Length of B<sub>4</sub>) x Value of B<sub>4</sub>) + ((Length of B<sub>5</sub> inside buffer / Total Length of B<sub>5</sub>) x Value of B<sub>5</sub>) + ((Length of B<sub>6</sub> inside buffer / Total Length of B<sub>6</sub>) x Value of B<sub>6</sub>)</li>
 </ul>
 <p>A real life example of this variable type would be a line feature class of traffic counts.</p>
 <p>Alternatively, the wizard can calculate the total sum of the product of the line length and the line value, e.g.</p>
 <ul>
-<li>Total sum of product of length and value of category A = (Length of A<sub>1</sub> inside buffer × Value of A<sub>1</sub>) + (Length of A<sub>2</sub> inside buffer × Value of A<sub>2</sub>)</li>
-<li>Total sum of product of length and value of category B = (Length of B<sub>1</sub> inside buffer × Value of B<sub>1</sub>) + (Length of B<sub>2</sub> inside buffer × Value of B<sub>2</sub>) + (Length of B<sub>3</sub> inside buffer × Value of B<sub>3</sub>) + (Length of B<sub>4</sub> inside buffer × Value of B<sub>4</sub>) + (Length of B<sub>5</sub> inside buffer × Value of B<sub>5</sub>) + (Length of B<sub>6</sub> inside buffer × Value of B<sub>6</sub>) +</li>
+<li>Total sum of product of length and value of category A = (Length of A<sub>1</sub> inside buffer x Value of A<sub>1</sub>) + (Length of A<sub>2</sub> inside buffer x Value of A<sub>2</sub>)</li>
+<li>Total sum of product of length and value of category B = (Length of B<sub>1</sub> inside buffer x Value of B<sub>1</sub>) + (Length of B<sub>2</sub> inside buffer x Value of B<sub>2</sub>) + (Length of B<sub>3</sub> inside buffer x Value of B<sub>3</sub>) + (Length of B<sub>4</sub> inside buffer x Value of B<sub>4</sub>) + (Length of B<sub>5</sub> inside buffer x Value of B<sub>5</sub>) + (Length of B<sub>6</sub> inside buffer x Value of B<sub>6</sub>)</li>
 </ul>
 <p>A real life example of this variable type would be a line feature class of proxy emissions loadings represented by average vehicle-kilometres per day.</p>
 <p><img src="Images/p3B.JPG" /></p>
 <div id="set-variable-name-1" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -646,25 +662,25 @@ $(document).ready(function () {
     Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Enter</span> button.</p>
   <div style="border:2px; border-style:solid; border-color:#0000FF; background-color:#e6f0ff;padding:5px">
   <h3 style="font-size:110%; margin-top:0;font-weight:normal;">Name Schema for Line Length or Value within Buffer</h3>
-  Predictor variables extracted through this method will appear in the following name schema:</p>
+  <p>Predictor variables extracted through this method will appear in the following name schema:</p>
   <p><em><font color="blue">pB</font>_<font color="green">[name entered by user]</font>_<font color="blue">[category name]</font>_<font color="blue">[buffer distance]</font>_<font color="blue">[aggregation method]</font></em></p>
   <p>where:</p>
   <ul>
-    <li><em><font color="blue">pA</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>B</em> indicates the type of predictor
-      variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
-    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-    <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the line feature class must contain a text field, which identifies a category for
-      each line. This text field will be selected under <strong>Set Input Data</strong>. This part of the name schema identifies the category that the predictor variable belongs to. If the feature class contains
-      only one category, a dummy text field should be created with all rows set to the same text string. This is the text string that would be shown in this part of the name.</l>
-    <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
-      under <strong>Set Buffer Sizes</strong>.</l>
-    <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
-        <ul>
-        <li><em>sum</em> = sum of line lengths</l>
-        <li><em>wtv</em> = length weighted value</l>
-        <li><em>mtv</em> = length * value</l>
-        </ul>
-    </l>
+  <li><em><font color="blue">pA</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>B</em> indicates the type of predictor
+    variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the line feature class must contain a text field, which identifies a category for
+    each line. This text field will be selected under <strong>Set Input Data</strong>. This part of the name schema identifies the category that the predictor variable belongs to. If the feature class contains
+    only one category, a dummy text field should be created with all rows set to the same text string. This is the text string that would be shown in this part of the name.</l>
+  <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
+    under <strong>Set Buffer Sizes</strong>.</l>
+  <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
+  <ul>
+  <li><em>sum</em> = sum of line lengths</l>
+  <li><em>wtv</em> = length weighted value</l>
+  <li><em>mtv</em> = length * value</l>
+  </ul>
+  </l>
   </ul>
   <p><span style="text-decoration: underline;">Examples:</span></p>
   <p><em>pB_roadlenth_motorway_500_sum</em> - This predictor variable was extracted using a line feature class of roads. The feature class contained a number of road categories and this predictor
@@ -678,14 +694,19 @@ $(document).ready(function () {
 </div>
 <div id="set-buffer-sizes-1" class="section level5">
 <h5>Set Buffer Sizes</h5>
-<p><img src="Images/SetBuffer.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetBuffer.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
 </head>
 <body style="font-family:'Arial'">
   <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Buffer Sizes</h1>
-  <h2 style="font-size:125%;font-weight:normal;">Buffer Distance</h2>
+  <h2 style="font-size:125%;font-weight:normal;">Buffers</h2>
+  <p>You can choose between creating a new set of one or more buffers or you can use a previous set of buffers.</p>
+  <p>If this is the first time in this Build LUR session that a buffer based predictor is created, then no previous buffers will be available, and you have to
+    select <em>Create new buffer</em>. If you have already created a buffer based predictor during this Build LUR session, then you can re-use the buffers by selecting
+    <em>Use previous buffer</em>.</p>
+  <h2 style="font-size:125%;font-weight:normal;">Create Buffer Distance</h2>
   <p>Type in a buffer distance. The unit of the buffer distance is the same as the <strong>map unit of the projected coordinate system</strong>.
     Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Add</span> button. The buffer distance will be listed
     in the box. To add another buffer type in another buffer distance and click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Add</span> button.</p>
@@ -693,13 +714,16 @@ $(document).ready(function () {
     <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Remove</span> button.</p>
   <p>After all required buffer distances have been added, click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Done</span> button.
   This will create a multiple ring buffer feature class in the <em>LURdata</em> feature dataset. </p>
+  <h2 style="font-size:125%;font-weight:normal;">Select Buffer Distance</h2>
+  <p>From the dropdown menu select the set of buffers that you would like to use again. Click on the set of buffers that you would like to use to ensure that it is selected.
+    Then click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Done</span> button.</p>
 </body>
 </html>
 <p><br></p>
 </div>
 <div id="set-input-data-1" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3B_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3B_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -733,7 +757,7 @@ $(document).ready(function () {
 </div>
 <div id="set-direction-of-effect-1" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -757,7 +781,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="point-count-or-value-within-buffer" class="section level4 tabset tabset-pills">
-<h4>Point Count or Value within Buffer</h4>
+<h4 class="tabset tabset-pills">Point Count or Value within Buffer</h4>
 <p>For this type of variable a point feature class should be used, which has a spatial extent that is larger than: the study area + the largest buffer distance. The point feature class should not contain duplicates. The point feature class must contain a text field, which identifies a category for each point. If the feature class contains only one category, a dummy text field should be created with all rows set to the same value.</p>
 <p><strong>Point Count within Buffer</strong></p>
 <p><img src="Images/PointInBuffer_MultCat.jpg" width="500px" height="500px" /></p>
@@ -779,15 +803,15 @@ $(document).ready(function () {
 <p>A real life example of this variable type would be a point feature class of chimney stacks with different emission rates (e.g. grammes of NOx per hour).</p>
 <p>Alternatively, the wizard can calculate the mean or median of the values, e.g.</p>
 <ul>
-<li>Mean of values of category A = (Value of A<sub>1</sub> + Value of A<sub>2</sub>) ÷ Number of points within buffer belonging to category A</li>
-<li>Mean of values of category B = Value of B<sub>1</sub> ÷ Number of points within buffer belonging to category B</li>
-<li>Mean of values of category C = (Value of C<sub>1</sub> + Value of C) ÷ Number of points within buffer belonging to category C<sub>2</sub></li>
+<li>Mean of values of category A = (Value of A<sub>1</sub> + Value of A<sub>2</sub>) / Number of points within buffer belonging to category A</li>
+<li>Mean of values of category B = Value of B<sub>1</sub> / Number of points within buffer belonging to category B</li>
+<li>Mean of values of category C = (Value of C<sub>1</sub> + Value of C) / Number of points within buffer belonging to category C<sub>2</sub></li>
 </ul>
 <p>A real life example of this variable type would be tree height.</p>
 <p><img src="Images/p3C.JPG" /></p>
 <div id="set-variable-name-2" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -801,26 +825,26 @@ $(document).ready(function () {
     Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Enter</span> button.</p>
   <div style="border:2px; border-style:solid; border-color:#0000FF; background-color:#e6f0ff; padding:5px">
   <h3 style="font-size:110%; margin-top:0;font-weight:normal;">Name Schema for Point Count or Value within Buffer</h3>
-  Predictor variables extracted through this method will appear in the following name schema:</p>
+  <p>Predictor variables extracted through this method will appear in the following name schema:</p>
   <p><em><font color="blue">pC</font>_<font color="green">[name entered by user]</font>_<font color="blue">[category name]</font>_<font color="blue">[buffer distance]</font>_<font color="blue">[aggregation method]</font></em></p>
   <p>where:</p>
   <ul>
-    <li><em><font color="blue">pC</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>C</em> indicates the type of predictor
-      variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
-    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-    <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the point feature class must contain a text field, which identifies a category for
-      each point. This text field will be selected under <strong>Set Input Data</strong>. This part of the name schema identifies the category that the predictor variable belongs to. If the feature class contains
-      only one category, a dummy text field should be created with all rows set to the same text string. This is the text string that would be shown in this part of the name.</l>
-    <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
-      under <strong>Set Buffer Sizes</strong>.</l>
-    <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
-        <ul>
-        <li><em>num</em> = the number of points within the buffer</l>
-        <li><em>sum</em> = the sum of point values within the buffer</l>
-        <li><em>avg</em> = the mean of the point values</l>
-        <li><em>med</em> = the median of the point values</l>
-        </ul>
-    </l>
+  <li><em><font color="blue">pC</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>C</em> indicates the type of predictor
+    variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">[category name]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the point feature class must contain a text field, which identifies a category for
+    each point. This text field will be selected under <strong>Set Input Data</strong>. This part of the name schema identifies the category that the predictor variable belongs to. If the feature class contains
+    only one category, a dummy text field should be created with all rows set to the same text string. This is the text string that would be shown in this part of the name.</l>
+  <li><em><font color="blue">[buffer distance]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the buffer distance used to extract this variable. Buffer distances will be entered
+    under <strong>Set Buffer Sizes</strong>.</l>
+  <li><em><font color="blue">[aggregation method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the method used to aggregate the extracted data:
+  <ul>
+  <li><em>num</em> = the number of points within the buffer</l>
+  <li><em>sum</em> = the sum of point values within the buffer</l>
+  <li><em>avg</em> = the mean of the point values</l>
+  <li><em>med</em> = the median of the point values</l>
+  </ul>
+  </l>
   </ul>
   <p><span style="text-decoration: underline;">Examples:</span></p>
   <p><em>pC_chimneycount_industrial_500_num</em> - This predictor variable was extracted using a point feature class of chimney stacks. The feature class contained a number of building categories and this predictor
@@ -834,14 +858,19 @@ $(document).ready(function () {
 </div>
 <div id="set-buffer-sizes-2" class="section level5">
 <h5>Set Buffer Sizes</h5>
-<p><img src="Images/SetBuffer.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetBuffer.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
 </head>
 <body style="font-family:'Arial'">
   <h1 style="color:#4485b8; font-size:150%;font-weight:normal;">Set Buffer Sizes</h1>
-  <h2 style="font-size:125%;font-weight:normal;">Buffer Distance</h2>
+  <h2 style="font-size:125%;font-weight:normal;">Buffers</h2>
+  <p>You can choose between creating a new set of one or more buffers or you can use a previous set of buffers.</p>
+  <p>If this is the first time in this Build LUR session that a buffer based predictor is created, then no previous buffers will be available, and you have to
+    select <em>Create new buffer</em>. If you have already created a buffer based predictor during this Build LUR session, then you can re-use the buffers by selecting
+    <em>Use previous buffer</em>.</p>
+  <h2 style="font-size:125%;font-weight:normal;">Create Buffer Distance</h2>
   <p>Type in a buffer distance. The unit of the buffer distance is the same as the <strong>map unit of the projected coordinate system</strong>.
     Click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Add</span> button. The buffer distance will be listed
     in the box. To add another buffer type in another buffer distance and click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Add</span> button.</p>
@@ -849,13 +878,16 @@ $(document).ready(function () {
     <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Remove</span> button.</p>
   <p>After all required buffer distances have been added, click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Done</span> button.
   This will create a multiple ring buffer feature class in the <em>LURdata</em> feature dataset. </p>
+  <h2 style="font-size:125%;font-weight:normal;">Select Buffer Distance</h2>
+  <p>From the dropdown menu select the set of buffers that you would like to use again. Click on the set of buffers that you would like to use to ensure that it is selected.
+    Then click the <span style="border:1px; border-style:solid; border-color:#040404; background-color:#C4C4C4; padding:0px 2px">Done</span> button.</p>
 </body>
 </html>
 <p><br></p>
 </div>
 <div id="set-input-data-2" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3C_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3C_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -892,7 +924,7 @@ $(document).ready(function () {
 </div>
 <div id="set-direction-of-effect-2" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -917,20 +949,20 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="distance-based-predictors-1" class="section level3 tabset tabset-pills">
-<h3>Distance based Predictors</h3>
+<h3 class="tabset tabset-pills">Distance based Predictors</h3>
 <div id="distance-to-andor-value-of-nearest-polygon" class="section level4 tabset tabset-pills">
-<h4>Distance to and/or Value of nearest Polygon</h4>
+<h4 class="tabset tabset-pills">Distance to and/or Value of nearest Polygon</h4>
 <p>For this type of variable a polygon feature class should be used, which ideally has a spatial extent that is larger than the study area. The polygon feature class must not contain spatial duplicates or invalid geometries (if uncertain about invalid geometries, run the Repair Geometries tool prior to running the wizard).</p>
 <p><img src="Images/PolygonDistance.jpg" /></p>
 <p>This example diagram shows a feature class of non-contiguous polygons with different values for each feature. For each each point feature representing a monitoring site the wizard will identify the nearest polygon and calculate one or more of the following options:</p>
 <ul>
 <li>Distance = The distance to the nearest polygon edge (in the map unit of the projected coordinate system)</li>
-<li>Inverse distance = 1 ÷ distance to the nearest polygon edge</li>
-<li>Inverse distance squared = 1 ÷ (distance to the nearest polygon edge)<sup>2</sup></li>
+<li>Inverse distance = 1 / distance to the nearest polygon edge</li>
+<li>Inverse distance squared = 1 / (distance to the nearest polygon edge)<sup>2</sup></li>
 <li>Value = The value of the nearest polygon</li>
-<li>Value * Distance = The value of the nearest polygon × the distance to the nearest polygon edge</li>
-<li>Value * Inverse distance = The value of the nearest polygon × (1 ÷ distance to the nearest polygon edge)</li>
-<li>Value * Inverse distance squared = The value of the nearest polygon × (1 ÷ (distance to the nearest polygon edge)<sup>2</sup>)</li>
+<li>Value * Distance = The value of the nearest polygon x the distance to the nearest polygon edge</li>
+<li>Value * Inverse distance = The value of the nearest polygon x (1 / distance to the nearest polygon edge)</li>
+<li>Value * Inverse distance squared = The value of the nearest polygon x (1 / (distance to the nearest polygon edge)<sup>2</sup>)</li>
 </ul>
 <p>A real life example of this variable type would be proximity to water bodies with the potential to reduce air temperatures monitored at weather stations or the impact of fugitive emission sources from industrial sites on air quality. Inverse squared distance values are useful to represent the importance of distance, i.e. to give greater importance to nearby polygon features compared with those further away. A Value attribute field might be useful if the size of the feature is important, e.g. livestock densities on agricultural land parcels in the case of ambient ammonia concentrations.</p>
 <style>
@@ -942,7 +974,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <p><br> <img src="Images/p3D.JPG" /></p>
 <div id="set-variable-name-3" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -960,59 +992,59 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
   <p><em><font color="blue">pD</font>_<font color="green">[name entered by user]</font>_<font color="blue">[name of value field or none]</font>_<font color="blue">[distance method]</font></em></p>
   <p>where:</p>
   <ul>
-    <li><em><font color="blue">pD</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>D</em> indicates the type of predictor
-      variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
-    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-    <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
-      then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
-      then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
-    <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span>: the distance method used to extract this variable. Distance methods will be set under
-      <strong>Set Method</strong> and are coded as follows:</l>
-    </ul>
-    <style>
-      table {border-collapse:collapse;
-        margin-left:10px}
-      th,td {border: 1px solid #808080;
-        padding:5px;
-        text-align: left;}
-      th {background-color: #336699; color: white;}
-      tr:nth-child(even) {background-color: #eee;}
-      tr:nth-child(odd) {background-color: #fff;}
-    </style>
-    <table>
-      <tr>
-        <th align="left">Distance method</th>
-        <th align="left">Code</th>
-      </tr>
-      <tr>
-        <td>Distance</td>
-        <td>dist</td>
-      </tr>
-      <tr>
-        <td>Inverse distance</td>
-        <td>invd</td>
-      </tr>
-      <tr>
-        <td>Inverse distance squared</td>
-        <td>invsq</td>
-      </tr>
-      <tr>
-        <td>Value</td>
-        <td>val</td>
-      </tr>
-      <tr>
-        <td>Value * Distance</td>
-        <td>valdist</td>
-      </tr>
-      <tr>
-        <td>Value * Inverse distance</td>
-        <td>valinvd</td>
-      </tr>
-      <tr>
-        <td>Value * Inverse distance squared</td>
-        <td>valinvsq</td>
-      </tr>
-    </table>
+  <li><em><font color="blue">pD</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>D</em> indicates the type of predictor
+    variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
+    then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
+    then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
+  <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span>: the distance method used to extract this variable. Distance methods will be set under
+    <strong>Set Method</strong> and are coded as follows:</l>
+  </ul>
+  <style>
+  table {border-collapse:collapse;
+    margin-left:10px}
+  th,td {border: 1px solid #808080;
+    padding:5px;
+    text-align: left;}
+  th {background-color: #336699; color: white;}
+  tr:nth-child(even) {background-color: #eee;}
+  tr:nth-child(odd) {background-color: #fff;}
+  </style>
+  <table>
+  <tr>
+  <th align="left">Distance method</th>
+  <th align="left">Code</th>
+  </tr>
+  <tr>
+  <td>Distance</td>
+  <td>dist</td>
+  </tr>
+  <tr>
+  <td>Inverse distance</td>
+  <td>invd</td>
+  </tr>
+  <tr>
+  <td>Inverse distance squared</td>
+  <td>invsq</td>
+  </tr>
+  <tr>
+  <td>Value</td>
+  <td>val</td>
+  </tr>
+  <tr>
+  <td>Value * Distance</td>
+  <td>valdist</td>
+  </tr>
+  <tr>
+  <td>Value * Inverse distance</td>
+  <td>valinvd</td>
+  </tr>
+  <tr>
+  <td>Value * Inverse distance squared</td>
+  <td>valinvsq</td>
+  </tr>
+  </table>
   <br>
   <p><span style="text-decoration: underline;">Examples:</span></p>
   <p><em>pD_forest_none_invd</em> - This predictor variable was extracted using a polygon feature class of forests. The naming schema shows that this predictor variable contains the inverse
@@ -1026,7 +1058,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-method" class="section level5">
 <h5>Set Method</h5>
-<p><img src="Images/SetMethod.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetMethod.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1052,7 +1084,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-input-data-3" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3D_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3D_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1072,7 +1104,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-direction-of-effect-3" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1099,17 +1131,17 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="distance-to-andor-value-of-nearest-line" class="section level4 tabset tabset-pills">
-<h4>Distance to and/or Value of nearest Line</h4>
+<h4 class="tabset tabset-pills">Distance to and/or Value of nearest Line</h4>
 <p>For this type of variable a line feature class should be used, which ideally has a spatial extent that is larger than the study area. The line feature class must not contain spatial duplicates.</p>
 <p><img src="Images/LineDistance.jpg" /></p>
 <p>This example diagram shows a line feature class with different values for each feature. For each point feature representing a monitoring site loaction the wizard will identify the nearest line and calculate one or more of the following options:</p>
 <ul>
 <li>Distance = The distance to the nearest line (in the map unit of the projected coordinate system)</li>
-<li>Inverse distance = 1 ÷ distance to the nearest line</li>
-<li>Inverse distance squared = 1 ÷ (distance to the nearest line)<sup>2</sup> - Value = The value of the nearest line</li>
-<li>Value * Distance = The value of the nearest line × the distance to the nearest line</li>
-<li>Value * Inverse distance = The value of the nearest line × (1 ÷ distance to the nearest line)</li>
-<li>Value * Inverse distance squared = The value of the nearest line × (1 ÷ (distance to the nearest line)<sup>2</sup>)</li>
+<li>Inverse distance = 1 / distance to the nearest line</li>
+<li>Inverse distance squared = 1 / (distance to the nearest line)<sup>2</sup> - Value = The value of the nearest line</li>
+<li>Value * Distance = The value of the nearest line x the distance to the nearest line</li>
+<li>Value * Inverse distance = The value of the nearest line x (1 / distance to the nearest line)</li>
+<li>Value * Inverse distance squared = The value of the nearest line x (1 / (distance to the nearest line)<sup>2</sup>)</li>
 </ul>
 <p>A real life example of this variable type would be proximity to the nearest road feature to represent the potential for higher ambient air pollutant concentrations due to vehicular emissions or proximity to the nearest river to represent the potential for lower air temperatures at nearby weather stations. Inverse squared distance values are useful to represent the importance of distance, i.e. to give greater importance to nearby line features compared with those further away. A Value attribute field might be useful if the size of the feature is important, e.g. roads with an attribute representing traffic volume.</p>
 <div class="red">
@@ -1118,7 +1150,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <p><br> <img src="Images/p3E.JPG" /></p>
 <div id="set-variable-name-4" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1136,59 +1168,59 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
   <p><em><font color="blue">pE</font>_<font color="green">[name entered by user]</font>_<font color="blue">[name of value field or none]</font>_<font color="blue">[distance method]</font></em></p>
   <p>where:</p>
   <ul>
-    <li><em><font color="blue">pE</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>E</em> indicates the type of predictor
-      variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
-    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-    <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
-      then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
-      then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
-    <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span>: the distance method used to extract this variable. Distance methods will be set under
-      <strong>Set Method</strong> and are coded as follows:</l>
-    </ul>
-    <style>
-      table {border-collapse:collapse;
-          margin-left:10px}
-      th,td {border: 1px solid #808080;
-        padding:5px;
-        text-align: left;}
-      th {background-color: #336699; color: white;}
-      tr:nth-child(even) {background-color: #eee;}
-      tr:nth-child(odd) {background-color: #fff;}
-    </style>
-    <table>
-      <tr>
-        <th align="left">Distance method</th>
-        <th align="left">Code</th>
-      </tr>
-      <tr>
-        <td>Distance</td>
-        <td>dist</td>
-      </tr>
-      <tr>
-        <td>Inverse distance</td>
-        <td>invd</td>
-      </tr>
-      <tr>
-        <td>Inverse distance squared</td>
-        <td>invsq</td>
-      </tr>
-      <tr>
-        <td>Value</td>
-        <td>val</td>
-      </tr>
-      <tr>
-        <td>Value * Distance</td>
-        <td>valdist</td>
-      </tr>
-      <tr>
-        <td>Value * Inverse distance</td>
-        <td>valinvd</td>
-      </tr>
-      <tr>
-        <td>Value * Inverse distance squared</td>
-        <td>valinvsq</td>
-      </tr>
-    </table>
+  <li><em><font color="blue">pE</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>E</em> indicates the type of predictor
+    variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
+    then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
+    then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
+  <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span>: the distance method used to extract this variable. Distance methods will be set under
+    <strong>Set Method</strong> and are coded as follows:</l>
+  </ul>
+  <style>
+  table {border-collapse:collapse;
+      margin-left:10px}
+  th,td {border: 1px solid #808080;
+    padding:5px;
+    text-align: left;}
+  th {background-color: #336699; color: white;}
+  tr:nth-child(even) {background-color: #eee;}
+  tr:nth-child(odd) {background-color: #fff;}
+  </style>
+  <table>
+  <tr>
+  <th align="left">Distance method</th>
+  <th align="left">Code</th>
+  </tr>
+  <tr>
+  <td>Distance</td>
+  <td>dist</td>
+  </tr>
+  <tr>
+  <td>Inverse distance</td>
+  <td>invd</td>
+  </tr>
+  <tr>
+  <td>Inverse distance squared</td>
+  <td>invsq</td>
+  </tr>
+  <tr>
+  <td>Value</td>
+  <td>val</td>
+  </tr>
+  <tr>
+  <td>Value * Distance</td>
+  <td>valdist</td>
+  </tr>
+  <tr>
+  <td>Value * Inverse distance</td>
+  <td>valinvd</td>
+  </tr>
+  <tr>
+  <td>Value * Inverse distance squared</td>
+  <td>valinvsq</td>
+  </tr>
+  </table>
   <br>
   <p><span style="text-decoration: underline;">Examples:</span></p>
   <p><em>pE_roads_none_invd</em> - This predictor variable was extracted using a line feature class of roads. The naming schema shows that this predictor variable contains the inverse
@@ -1202,7 +1234,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-method-1" class="section level5">
 <h5>Set Method</h5>
-<p><img src="Images/SetMethod.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetMethod.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1228,7 +1260,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-input-data-4" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3E_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3E_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1247,7 +1279,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-direction-of-effect-4" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1275,17 +1307,17 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="distance-to-andor-value-of-nearest-point" class="section level4 tabset tabset-pills">
-<h4>Distance to and/or Value of nearest Point</h4>
+<h4 class="tabset tabset-pills">Distance to and/or Value of nearest Point</h4>
 <p>For this type of variable a point feature class should be used, which ideally has a spatial extent that is larger than the study area. The point feature class must not contain spatial duplicates.</p>
 <p><img src="Images/PointDistance.jpg" /></p>
 <p>This example diagram shows a point feature class with different values for each feature. For each monitoring site the wizard will identify the nearest point and calculate one or more of the following options:</p>
 <ul>
 <li>Distance = The distance to the nearest point (in the map unit of the projected coordinate system)</li>
-<li>Inverse distance = 1 ÷ distance to the nearest point</li>
-<li>Inverse distance squared = 1 ÷ (distance to the nearest point)<sup>2</sup> - Value = The value of the nearest point</li>
-<li>Value * Distance = The value of the nearest point × the distance to the nearest point</li>
-<li>Value * Inverse distance = The value of the nearest point × (1 ÷ distance to the nearest point)</li>
-<li>Value * Inverse distance squared = The value of the nearest point × (1 ÷ (distance to the nearest point)<sup>2</sup>)</li>
+<li>Inverse distance = 1 / distance to the nearest point</li>
+<li>Inverse distance squared = 1 / (distance to the nearest point)<sup>2</sup> - Value = The value of the nearest point</li>
+<li>Value * Distance = The value of the nearest point x the distance to the nearest point</li>
+<li>Value * Inverse distance = The value of the nearest point x (1 / distance to the nearest point)</li>
+<li>Value * Inverse distance squared = The value of the nearest point x (1 / (distance to the nearest point)<sup>2</sup>)</li>
 </ul>
 <p>A real life example of this variable type would be proximity to the nearest point feature representing a chimney stack. In this case closer distances are more likely to result in higher pollutant concentrations. Inverse squared distance values are useful to represent the importance of distance, i.e. to give greater importance to nearby point features compared with those further away. A Value attribute field might be useful if the size of the feature is important, e.g. the emission rate from the chimney stack.</p>
 <div class="red">
@@ -1295,7 +1327,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <p><img src="Images/p3F.JPG" /></p>
 <div id="set-variable-name-5" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1313,59 +1345,59 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
   <p><em><font color="blue">pF</font>_<font color="green">[name entered by user]</font>_<font color="blue">[name of value field or none]</font>_<font color="blue">[distance method]</font></em></p>
   <p>where:</p>
   <ul>
-    <li><em><font color="blue">pF</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>F</em> indicates the type of predictor
-      variable. <a href="p3_TypeOfPredictor.html">Click here</a> to see a list of the possible types of predictor variables.</l>
-    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-    <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
-      then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
-      then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
-    <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the distance method used to extract this variable. Distance methods will be set under
-      <strong>Set Method</strong> and are coded as follows:</l>
-    </ul>
-    <style>
-      table {border-collapse:collapse;
-        margin-left:10px}
-      th,td {border: 1px solid #808080;
-        padding:5px;
-        text-align: left;}
-      th {background-color: #336699; color: white;}
-      tr:nth-child(even) {background-color: #eee;}
-      tr:nth-child(odd) {background-color: #fff;}
-    </style>
-    <table>
-      <tr>
-        <th align="left">Distance method</th>
-        <th align="left">Code</th>
-      </tr>
-      <tr>
-        <td>Distance</td>
-        <td>dist</td>
-      </tr>
-      <tr>
-        <td>Inverse distance</td>
-        <td>invd</td>
-      </tr>
-      <tr>
-        <td>Inverse distance squared</td>
-        <td>invsq</td>
-      </tr>
-      <tr>
-        <td>Value</td>
-        <td>val</td>
-      </tr>
-      <tr>
-        <td>Value * Distance</td>
-        <td>valdist</td>
-      </tr>
-      <tr>
-        <td>Value * Inverse distance</td>
-        <td>valinvd</td>
-      </tr>
-      <tr>
-        <td>Value * Inverse distance squared</td>
-        <td>valinvsq</td>
-      </tr>
-    </table>
+  <li><em><font color="blue">pF</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>F</em> indicates the type of predictor
+    variable. <a href="p3_TypeOfPredictor.html">Click here</a> to see a list of the possible types of predictor variables.</l>
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">[name of value field or none]</font></em> - <span style="text-decoration: underline;">set automatically:</span> if only the distance, inverse distance or inverse distance squared is extracted,
+    then this part of the name schema will be set to <em>none</em>. If the methods selected under <strong>Set Method</strong> include Value, Value * Distance, Value * Inverse distance or Value * Inverse distance squared,
+    then this part of the name schema will be set to the name of the value field selected under <strong>Set Input Data</strong>.</l>
+  <li><em><font color="blue">[distance method]</font></em> - <span style="text-decoration: underline;">set automatically:</span> the distance method used to extract this variable. Distance methods will be set under
+    <strong>Set Method</strong> and are coded as follows:</l>
+  </ul>
+  <style>
+  table {border-collapse:collapse;
+    margin-left:10px}
+  th,td {border: 1px solid #808080;
+    padding:5px;
+    text-align: left;}
+  th {background-color: #336699; color: white;}
+  tr:nth-child(even) {background-color: #eee;}
+  tr:nth-child(odd) {background-color: #fff;}
+  </style>
+  <table>
+  <tr>
+  <th align="left">Distance method</th>
+  <th align="left">Code</th>
+  </tr>
+  <tr>
+  <td>Distance</td>
+  <td>dist</td>
+  </tr>
+  <tr>
+  <td>Inverse distance</td>
+  <td>invd</td>
+  </tr>
+  <tr>
+  <td>Inverse distance squared</td>
+  <td>invsq</td>
+  </tr>
+  <tr>
+  <td>Value</td>
+  <td>val</td>
+  </tr>
+  <tr>
+  <td>Value * Distance</td>
+  <td>valdist</td>
+  </tr>
+  <tr>
+  <td>Value * Inverse distance</td>
+  <td>valinvd</td>
+  </tr>
+  <tr>
+  <td>Value * Inverse distance squared</td>
+  <td>valinvsq</td>
+  </tr>
+  </table>
   <br>
   <p><span style="text-decoration: underline;">Examples:</span></p>
   <p><em>pF_chimneystack_none_invd</em> - This predictor variable was extracted using a point feature class of chimney stacks. The naming schema shows that this predictor variable contains the inverse
@@ -1379,7 +1411,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-method-2" class="section level5">
 <h5>Set Method</h5>
-<p><img src="Images/SetMethod.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetMethod.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1405,7 +1437,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-input-data-5" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3F_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3F_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1425,7 +1457,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-direction-of-effect-5" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1454,15 +1486,15 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="raster-based-predictors" class="section level3 tabset tabset-pills">
-<h3>Raster based Predictors</h3>
+<h3 class="tabset tabset-pills">Raster based Predictors</h3>
 <div id="value-of-raster-cell" class="section level4 tabset tabset-pills">
-<h4>Value of Raster cell</h4>
+<h4 class="tabset tabset-pills">Value of Raster cell</h4>
 <p>You must have a <strong>Spatial Analyst license</strong> to create this type of predictor. For this type of variable a raster grid file should be used, which ideally has a spatial extent that is larger than the study area. The wizard will extract the value of the raster cell that is spatially coincident with the point location representing the monitoring site (dependent variable).</p>
 <p>An example of the use of this predictor variable type is elevation. Elevation is commonly sourced from a Digital Elevation Model stored as a raster grid.</p>
 <p><img src="Images/p3G.JPG" /></p>
 <div id="set-variable-name-6" class="section level5">
 <h5>Set Variable Name</h5>
-<p><img src="Images/SetVariableName.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetVariableName.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1480,10 +1512,10 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
   <p><em><font color="blue">pG</font>_<font color="green">[name entered by user]</font>_<font color="blue">raster_val</font></em></p>
   <p>where:</p>
   <ul>
-    <li><em><font color="blue">pG</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>G</em> indicates the type of predictor
-      variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
-    <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
-    <li><em><font color="blue">raster_val</font></em> - <span style="text-decoration: underline;">set automatically:</span> shows that this is a value extracted from a raster file.</l>
+  <li><em><font color="blue">pG</font></em> - <span style="text-decoration: underline;">set automatically:</span> <em>p</em> indicates that this is a predictor variable, <em>G</em> indicates the type of predictor
+    variable. <a href="p3_TypeOfPredictor.html" target="blank">Click here</a> to see a list of the possible types of predictor variables.</l>
+  <li><em><font color="green">[name entered by user]</font></em> - <span style="text-decoration: underline;">set by user:</span> the variable name entered by the user.</l>
+  <li><em><font color="blue">raster_val</font></em> - <span style="text-decoration: underline;">set automatically:</span> shows that this is a value extracted from a raster file.</l>
   </ul>
   <p><span style="text-decoration: underline;">Example:</span></p>
   <p><em>pG_digiterrain_raster_val</em> - This predictor variable was extracted from a raster file of digital terrain data. The naming schema shows that a cell value from a raster file was extracted.</p>
@@ -1494,7 +1526,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-input-data-6" class="section level5">
 <h5>Set Input Data</h5>
-<p><img src="Images/p3G_SetInput.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/p3G_SetInput.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1509,7 +1541,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 <div id="set-direction-of-effect-6" class="section level5">
 <h5>Set Direction of Effect</h5>
-<p><img src="Images/SetSourceSink.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/SetSourceSink.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1533,12 +1565,12 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="step-4---model" class="section level2 tabset tabset-pills">
-<h2>Step 4 - Model</h2>
+<h2 class="tabset tabset-pills">Step 4 - Model</h2>
 <p>This is the final step of the Build LUR wizard. In this step the LUR model will be created.</p>
 <p><img src="Images/Model.JPG" /></p>
 <div id="export-data" class="section level3">
 <h3>Export data</h3>
-<p><img src="Images/ExportData.jpg" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/ExportData.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
 <head>
   <title>XLUR Wizard</title>
@@ -1585,12 +1617,12 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="apply-lur" class="section level1 tabset tabset-pills">
-<h1>Apply LUR</h1>
+<h1 class="tabset tabset-pills">Apply LUR</h1>
 <p>To apply a LUR model built with the wizard to estimate values for a number of receptor point locations double-click the ApplyLUR script in the XLUR toolbox. The ApplyLUR tool will appear in the Geoprocessing pane. Click the Run button in the bottom right corner to run the tool.</p>
-<p><img src="Images/apply_tool.jpg" /></p>
+<p><img src="Images/apply_tool.JPG" /></p>
 <p>This will open the ApplyLUR wizard. The wizard will guide you through the process of applying a LUR model by using the following steps:</p>
 <div id="step-1---settings-1" class="section level2 tabset tabset-pills">
-<h2>Step 1 - Settings</h2>
+<h2 class="tabset tabset-pills">Step 1 - Settings</h2>
 <p>This step is required to specify some general settings to apply a LUR model.</p>
 <p><img src="Images/apply_p1.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <div id="set-output-name" class="section level3">
@@ -1662,7 +1694,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="step-2---receptors" class="section level2 tabset tabset-pills">
-<h2>Step 2 - Receptors</h2>
+<h2 class="tabset tabset-pills">Step 2 - Receptors</h2>
 <p>This step is required to specify the receptor locations. Receptor locations must be point feature classes. They denote the locations for which estimates of the value of the dependent variable will be made.</p>
 <p><img src="Images/apply_p2.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
@@ -1770,7 +1802,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="step-3---apply-model" class="section level2 tabset tabset-pills">
-<h2>Step 3 - Apply Model</h2>
+<h2 class="tabset tabset-pills">Step 3 - Apply Model</h2>
 <p>This is the final step, which will apply the LUR model to the receptor points.</p>
 <p><img src="Images/apply_p3.JPG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <html>
@@ -1793,7 +1825,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </div>
 </div>
 <div id="troubleshooting" class="section level1 tabset tabset-pills">
-<h1>Troubleshooting</h1>
+<h1 class="tabset tabset-pills">Troubleshooting</h1>
 <div id="known-issues" class="section level2">
 <h2>Known issues</h2>
 <ol style="list-style-type: decimal">
@@ -1874,7 +1906,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed Settings page should look like this:</p>
-<p><img src="Images/Example_P1.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P1.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue.</p>
 </div>
 <div id="outcomes" class="section level2">
@@ -1889,7 +1921,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed Outcomes page should look like this:</p>
-<p><img src="Images/Example_P2.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P2.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue.</p>
 </div>
 <div id="predictors" class="section level2">
@@ -1906,7 +1938,8 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 <li><strong>Set Buffer Sizes</strong>
 <ul>
-<li>In the box next to Buffer Distance type in 100 (this will create a buffer with a radius of 100m), then click Add. The buffer distance that you have added will appear in the box below.</li>
+<li>Under Buffers select Create new buffer.</li>
+<li>In the box next to Create Buffer Distance type in 100 (this will create a buffer with a radius of 100m), then click Add. The buffer distance that you have added will appear in the box below.</li>
 <li>Repeat this step to add buffer distances of 300, 500, 1000, and 5000. If you make a mistake, select the incorrect buffer distance and click remove.</li>
 <li>Once all buffer distances have been entered click Done.</li>
 </ul></li>
@@ -1922,7 +1955,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3A.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3A.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again (this may take a while). You can see that in the box below Predictors Added the new predictors have been added together with their assumed direction of effect.</p>
 <p>You will now create predictors that show oxides of nitrogen (NOx) emitted from the area within buffers surrounding the monitoring sites. Data on NOx emission rates comes in different formats and for this predictor variable you will use emission rates aggregated at an area level (in this case regular square polygons). Since the buffers do not match the emission polygons exactly, the emission rate values need to be area weighted.</p>
 <p>Click the Add button next to A. Polygon Area or Value within Buffer.</p>
@@ -1933,7 +1966,9 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 <li><strong>Set Buffer Sizes</strong>
 <ul>
-<li>For the buffer distances enter 100, 300, 500, 1000, and 5000.</li>
+<li>Under Buffers select Use previous buffer.</li>
+<li>From the dropdown menu next to Select Buffer Distance select [100, 300, 500, 1000, 5000]. Make sure to click on this set of distances, to select it (it will briefly appear with a blue background, if it has been selected).</li>
+<li>Click Done.</li>
 </ul></li>
 <li><strong>Set Input Data</strong>
 <ul>
@@ -1948,7 +1983,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3A_2.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3A_2.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. You may see a Warning box. Click OK and the warning will disappear and the Predictors page will open (this may take a while).</p>
 <p>Click the Add button next to B. Line Length or Value within Buffer.</p>
 </div>
@@ -1962,6 +1997,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 <li><strong>Set Buffer Sizes</strong>
 <ul>
+<li>Under Buffers select Create new buffer.</li>
 <li>For the buffer distances enter 25, 50, 100, 300, 500, and 1000.<br />
 </li>
 </ul></li>
@@ -1977,7 +2013,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3B.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3B.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again (this may take a while).</p>
 <p>Click the Add button next to C. Point Count or Value within Buffer.</p>
 </div>
@@ -1991,8 +2027,9 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 <li><strong>Set Buffer Sizes</strong>
 <ul>
-<li>For the buffer distances enter 100, 300, 500, 1000, and 5000.<br />
-</li>
+<li>Under Buffers select Use previous buffer.</li>
+<li>From the dropdown menu next to Select Buffer Distance select [100, 300, 500, 1000, 5000]. Make sure to click on this set of distances, to select it (it will briefly appear with a blue background, if it has been selected).</li>
+<li>Click Done.</li>
 </ul></li>
 <li><strong>Set Input Data</strong>
 <ul>
@@ -2007,7 +2044,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3C.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3C.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again (this may take a while).</p>
 <p>Click the Add button next to D. Distance to and/or Value of nearest Polygon.</p>
 </div>
@@ -2034,7 +2071,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3D.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3D.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again.</p>
 <p>Click the Add button next to E. Distance to and/or Value of nearest Line.</p>
 </div>
@@ -2060,7 +2097,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3E.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3E.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again.</p>
 <p>Click the Add button next to F. Distance to and/or Value of nearest Point.</p>
 </div>
@@ -2087,7 +2124,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3F.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3F.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again.</p>
 <p>If you have a Spatial Analyst license, click the Add button next to G. Value of Raster cell. If you do not have a Spatial Analyst license, skip this step and click Next &gt;.</p>
 </div>
@@ -2110,7 +2147,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P3G.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P3G.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next &gt; to continue. The Predictors page will open again. You can scroll through the list under Predictors Added to check that you have added all potential predictors that you would like to analyse.</p>
 <p>Click Next &gt;.</p>
 </div>
@@ -2130,10 +2167,10 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_P4.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_P4.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Finish.</p>
 <p>Go to the directory of your output folder. Inside this folder you should see a new folder with the project name that you chose on the Settings page followed by a date and time stamp. Inside this new folder are the databases and files created by Build LUR:</p>
-<p><img src="Images/Example_outputfolder.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_outputfolder.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p><a href="p1_SetDirectories.html">Click here</a> for an overview of the files created in the Output folder.</p>
 <p>Open the lur_var_data_[Date_Time].csv file. This is the text file that you exported on the Model page, which contains the dependent variable and all potential predictor variables. Scroll to the right and find the pD_EmissionAreaVal_NOxEmission_val variable and the pG_EmAreaRaster_raster_val variable. The values of these two variables are identical, which confirms that the value of nearest polygon and value of raster cell methods produced the same result when run on the same data.</p>
 <p>Open the LOG_[Date_Time].txt file. This text file records all entries made into the Build LUR wizard, any warning or error messages, and the model development process. Scroll through this file until you find Predictor variables created. This lists all of the variables created through the Predictors pages of the wizard. You may notice that some variables are missing, e.g. pA_landuseArea_Port_100_sum is not there even though a buffer distance of 100 was specified for all land use categories. The missing variable is due to the fact that no Port land use area was found within any of the 100m buffers around the monitoring sites. Similarly, pC_EmissionPoint_Chemical_1000_sum, pC_EmissionPoint_Chemical_500_sum, pC_EmissionPoint_Chemical_300_sum, and pC_EmissionPoint_Chemical_100_sum are missing, because no point emission source from the chemical sector was present in the 1000m, 500m, 300m, or 100m buffers.</p>
@@ -2173,7 +2210,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_AppP1.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_AppP1.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next&gt; to continue.</p>
 </div>
 <div id="receptors" class="section level2">
@@ -2190,7 +2227,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_AppP2B.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_AppP2B.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Next&gt; to continue.</p>
 </div>
 </div>
@@ -2204,10 +2241,10 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 </ul></li>
 </ol>
 <p>The completed page should look like this:</p>
-<p><img src="Images/Example_AppP3.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_AppP3.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Click Finish to close the Apply LUR wizard.</p>
 <p>Go to the directory of your output folder. Inside your MyFirstLUR_[Date_Time] folder you should see a new folder called LURApply_[DateTime]. Go inside this new folder. You should see two databases and two text files:</p>
-<p><img src="Images/Example_applyfolder.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_applyfolder.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>Open the Apply_Log.txt file. Similar to the Build LUR wizard this text file records all entries made into the Apply LUR wizard. In addition, it indicates the time it took to extract values for each predictor variable and to calculate predicted values.</p>
 <p>The out_pred.csv file contains the coordinates of the receptor points, the values of the predictor variables at each receptor point and the predicted values of NO<sub>2</sub> at each receptor point. This data has also been added as a feature class to the LURApply file geodatabase. This enables the user to use the predicted values in further analyses or to report them as results on a map.</p>
 <p>To quickly view the predicted values calculated by the Apply LUR wizard:</p>
@@ -2221,7 +2258,7 @@ div.red {border:2px; border-style:solid; border-color:#FF0000; background-color:
 <li>Choose a suitable number for Classes (e.g. 5) and a suitable Color scheme (e.g. Prediction).</li>
 </ol>
 <p>You should see something similar to this:</p>
-<p><img src="Images/Example_applymap.png" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
+<p><img src="Images/Example_applymap.PNG" style="border:1px; border-style:solid; border-color:#8c8c8c;" /></p>
 <p>The <a href="https://github.com/anmolter/XLUR/tree/master/TutorialOutput">TutorialOutput folder</a> contains examples of the variable data, descriptive analyses, correlation matrix, diagnostic plots, log file, residuals, and leave one out crossvalidation plot created during the Build LUR step. The <a href="https://github.com/anmolter/XLUR/tree/master/TutorialOutput/LURApply">LURApply subfolder</a> contains examples of the log file and output value file created during the Apply LUR step.</p>
 </div>
 </div>
@@ -2258,7 +2295,8 @@ $(document).ready(function () {
   $('.pages').magnificPopup({
 	      type:'image',
 	      closeOnContentClick: false,
-	      delegate: 'img',
+	      closeBtnInside: false,
+        delegate: 'img',
 	      gallery: {enabled: false },
           removalDelay: 500,
           callbacks: {
@@ -2274,6 +2312,69 @@ $(document).ready(function () {
 	      }
  	    });
  	
+    
+    $('#toc ul li').first().addClass("active");
+    $('#toc ul li').attr("data-target", function() {
+        return($(this).children("a").attr("href"));
+    })
+    $('body .section.level1').first().addClass("active");
+    $('body .section.level1').not('.active').hide();
+    
+    $('#toc a[href*="#"]').click(function() {
+
+      var id = $(this).attr("href");
+      if (id === "#") return;
+      if (id.substring(0, 8) === "#dyntab-") return;
+      toggle_page(id);
+
+      // Menu
+      var menu_entry = $(".menu li[data-target='"+id+"']");
+      menu_entry.addClass("active");
+      $(".menu li").not(menu_entry).removeClass("active"); 
+      
+
+    });
+
+    function toggle_page(id) {
+      $(".page").not(page).removeClass("active").hide();
+      window.page = id;
+      var page = $(window.page);
+      window.location.hash = window.page;
+      //$(this).addClass("active");
+
+      page.show();
+
+      var totop = setInterval(function () {
+        $(".pages").animate({scrollTop: 0}, 0);
+      }, 10);
+
+      setTimeout(function () {
+        page.addClass("active");
+        setTimeout(function () {
+          clearInterval(totop);
+        }, 1000);
+      }, 100);
+
+      window.dispatchEvent(new Event('resize'));
+
+    }
+
+
+    $(".menu li").click(function () {
+
+      toggle_page($(this).data("target"));
+
+      // Menu
+      if (!$(this).data("target")) return;
+      if ($(this).is(".active")) return;
+      $(".menu li").not($(this)).removeClass("active");
+      $(this).addClass("active");
+
+    });
+  
+    
+
+
     window.page = window.location.hash;
     if (window.page != "") {
       $(".menu").find("li[data-target=" + window.page + "]").trigger("click");

@@ -26,7 +26,7 @@ modules/packages are required:
 * matplotlib (https://matplotlib.org/)
 
 
-## Installation required via Python Package Manager
+## Installation required via Python Package Manager or Command Prompt 
 * seaborn (http://seaborn.pydata.org/)
 * patsy (https://github.com/pydata/patsy)
 * statsmodels (https://www.statsmodels.org/stable/index.html)

@@ -142,6 +142,10 @@ pre > code {
     white-space: pre !important;
 }
 
+code a {
+  color: inherit;
+}
+
 /* menu */
 
 #toc .nav>li.active>a:focus,
@@ -204,7 +208,7 @@ h2, h3, h4 {
     display: table;
 }
 
-img.image-thumb {
+.pages .page img.image-thumb {
     max-width: 250px;
 }
 
@@ -285,6 +289,10 @@ table .panel-body {
   font-size: 80%;
 }
 
+.dataTables_wrapper {
+    overflow-x: auto;
+}
+
 /* Tables */
 .table {
     width: auto !important;
@@ -295,3 +303,8 @@ table .panel-body {
 .table td {
   padding: 8px 15px;
 }
+
+.pagedtable-index-current {
+  font-weight: bold;
+}
+

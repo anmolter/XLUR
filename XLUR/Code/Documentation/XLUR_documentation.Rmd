@@ -24,7 +24,7 @@ output:
 <!--     toc: TRUE -->
 ---
   
-```{r knitr_init, echo=FALSE, cache=FALSE}
+```{r knitr_init, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(rmdformats)
 
@@ -112,7 +112,7 @@ The underlying principle of LUR is that a measured quantity (e.g. pollutant conc
 
 LUR models are developed by using measured data from a number of monitoring sites as the dependent variable and data on the surrounding environment extracted as potential predictor variables in a multiple linear regression analysis. For example, in an air pollution study particulate matter concentrations might be measured at fifty monitoring sites. Then for each monitoring site potential predictor variables are extracted such as the area of industrial land use around the monitoring site, the distance to the nearest road, the number of motor vehicles on the nearest road etc. The particulate matter concentrations and the potential predictors are entered into a supervised machine learning process, which will try to construct a parsimonious multiple linear regression model. This model can then be used to predict particulate matter concentrations at any point within the study area.
 
-The supervised machine learning process is based on the methodology used in the European Study of Cohorts for Air Pollution Effects (ESCAPE), which can be downloaded from [http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf](http://www.escapeproject.eu/manuals/ESCAPE_Exposure-manualv9.pdf) (a copy can be found in the Documentation folder). The ESCAPE exposure manual provides a detailed description of the steps required to construct a parsimonious multiple linear regression model; therefore, only a brief summary is presented here:
+The supervised machine learning process is based on the methodology used in the European Study of Cohorts for Air Pollution Effects (ESCAPE). A copy of the [Escape Exposure manual](ESCAPE_Exposure-manualv9.pdf) can be found in the Documentation folder. The ESCAPE exposure manual provides a detailed description of the steps required to construct a parsimonious multiple linear regression model; therefore, only a brief summary is presented here:
 
 1. Prior to the statistical analysis a positive or negative direction of effect is assigned to each potential predictor variable by the user based on *a priori* knowledge of the subject area. 
 2. Using the dependent variable univariate linear regression models are created for each potential predictor variable. The linear regression models are ranked by their adjusted R^2^ value. The model with the highest adjusted R^2^ and in which the coefficient of the predictor variable matches the assigned direction of effect (see previous step) is selected as the starting model.  

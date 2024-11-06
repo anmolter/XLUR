@@ -34,8 +34,9 @@ import string
 from string import punctuation,whitespace
 import random
 import shutil
+import json
 
-
+time.clock = time.time
 #------------------------------------------------------------------------------
 # User defined global functions
 #------------------------------------------------------------------------------
@@ -138,10 +139,10 @@ def plot_corr(df,width,height):
     corrmat=df.corr()
     fig,ax = plt.subplots()
     fig.set_size_inches(width,height) # prints to A4 landscape
-    labels = corrmat.where(np.triu(np.ones(corrmat.shape)).astype(np.bool))
+    labels = corrmat.where(np.triu(np.ones(corrmat.shape)).astype(np.bool_))
     labels = np.round(labels,decimals=2)
     labels = labels.replace(np.nan,' ', regex=True)
-    mask = np.triu(np.ones(corrmat.shape)).astype(np.bool)
+    mask = np.triu(np.ones(corrmat.shape)).astype(np.bool_)
     ax = seaborn.heatmap(corrmat, mask=mask, cmap='bwr', fmt='', square=True, vmin=-1, vmax=1,linewidths=0.5,linecolor='black')
     mask = np.ones(corrmat.shape)-mask
     ax = seaborn.heatmap(corrmat, mask=mask, cmap=ListedColormap(['white']),annot=labels,cbar=False, fmt='', linewidths=0.5,linecolor='black')
@@ -199,99 +200,103 @@ def qq_plot(model,var):
     plt_qq.axes[0].set_ylabel('Standardized Residuals')
 #------------------------------------------------------------------------------
 # function to create residual plots
-def res_plot(model,var):
+def res_plot(model, var):
     model_pred = model.fittedvalues # predicted values
     model_res = model.resid # Residuals
     plt_res = plt.figure(1)
     plt_res.set_figheight(8)
     plt_res.set_figwidth(12)
-    plt_res.axes[0] = seaborn.residplot(model_pred,model_res,lowess=True,scatter_kws={'alpha': 0.5},line_kws={'color': 'red', 'lw': 1, 'alpha': 0.8})
-    plt_res.axes[0].set_title(var+' Residuals vs Predicted')
+    plt_res.axes[0] = seaborn.residplot(x=model_pred, y=model_res, lowess=True, 
+                                        scatter_kws={'alpha': 0.5}, 
+                                        line_kws={'color': 'red', 'lw': 1, 'alpha': 0.8})
+    plt_res.axes[0].set_title(var + ' Residuals vs Predicted')
     plt_res.axes[0].set_xlabel('Predicted values')
     plt_res.axes[0].set_ylabel('Residuals')
 #------------------------------------------------------------------------------
 # function to create scale location plots to check for heteroskedasticity
-def scloc_plot(model,var):
+def scloc_plot(model, var):
     model_std_res = model.get_influence().resid_studentized_internal # get standardized residuals
-    model_std_res_abs_sqrt = np.sqrt(abs(model_std_res)) # square root of absolute standardised residual
+    model_std_res_abs_sqrt = np.sqrt(abs(model_std_res)) # square root of absolute standardized residuals
     model_pred = model.fittedvalues # in lm fitted values are the same as predicted values
     plt_scloc = plt.figure(3)
     plt_scloc.set_figheight(8)
     plt_scloc.set_figwidth(12)
     plt.scatter(model_pred, model_std_res_abs_sqrt, alpha=0.5)
-    seaborn.regplot(model_pred, model_std_res_abs_sqrt,scatter=False, ci=False, lowess=True,line_kws={'color': 'red', 'lw': 1, 'alpha': 0.8})
-    plt_scloc.axes[0].set_title(var+' Scale-Location')
+    seaborn.regplot(x=model_pred, y=model_std_res_abs_sqrt, scatter=False, ci=False, lowess=True, line_kws={'color': 'red', 'lw': 1, 'alpha': 0.8})
+    plt_scloc.axes[0].set_title(var + ' Scale-Location')
     plt_scloc.axes[0].set_xlabel('Predicted values')
-    plt_scloc.axes[0].set_ylabel('$\sqrt{|Standardized Residuals|}$');
-#------------------------------------------------------------------------------
+    plt_scloc.axes[0].set_ylabel('$\sqrt{|Standardized Residuals|}$')
+    
 # function for leave one out cross validation
-def loocv(dataframe,formula,dependent):
-    loopred=pd.DataFrame()
+def loocv(dataframe, formula, dependent):
+    loopred = pd.DataFrame()
     for i in range(len(dataframe)):
-        tempdf=dataframe.drop(dataframe.index[[i]])
-        model_cv=smf.ols(formula=formula,data=tempdf,missing='drop').fit()
-        lpred=model_cv.predict(dataframe[i:i+1]).to_frame()
-        loopred = loopred.append(lpred,ignore_index=True)
-    loocv_df=dataframe[[dependent]]
-    loocv_df=loocv_df.join(loopred).dropna()
-    loocv_df.columns=['observed','predicted']
-    loocv_df['squRes']=(loocv_df['observed']-loocv_df['predicted'])**2
-    pearson=round(loocv_df['observed'].corr(loocv_df['predicted']),2)
-    lm=smf.ols(formula='predicted~observed',data=loocv_df).fit()
-    r2=round(lm.rsquared_adj,2)
-    mse=loocv_df['squRes'].mean()
-    rmse=round(math.sqrt(mse),2)
-    axmax=max(loocv_df['observed'].max(),loocv_df['predicted'].max())*1.1
+        tempdf = dataframe.drop(dataframe.index[[i]])
+        model_cv = smf.ols(formula=formula, data=tempdf, missing='drop').fit()
+        lpred = model_cv.predict(dataframe.iloc[i:i+1]).to_frame()
+        loopred = pd.concat([loopred, lpred], ignore_index=True)
+        
+    loocv_df = dataframe[[dependent]]
+    loocv_df = loocv_df.join(loopred).dropna()
+    loocv_df.columns = ['observed', 'predicted']
+    loocv_df['squRes'] = (loocv_df['observed'] - loocv_df['predicted']) ** 2
+    pearson = round(loocv_df['observed'].corr(loocv_df['predicted']), 2)
+    lm = smf.ols(formula='predicted~observed', data=loocv_df).fit()
+    r2 = round(lm.rsquared_adj, 2)
+    mse = loocv_df['squRes'].mean()
+    rmse = round(math.sqrt(mse), 2)
+    axmax = max(loocv_df['observed'].max(), loocv_df['predicted'].max()) * 1.1
+    
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.scatter(loocv_df['observed'],loocv_df['predicted'],color='blue')
-    ax.plot([0, 1], [0, 1], color='black', linewidth=1.5, linestyle='dashed',transform=ax.transAxes)
-    ax.set_ylim(ymin=0,ymax=axmax)
-    ax.set_xlim(xmin=0,xmax=axmax)
+    ax.scatter(loocv_df['observed'], loocv_df['predicted'], color='blue')
+    ax.plot([0, 1], [0, 1], color='black', linewidth=1.5, linestyle='dashed', transform=ax.transAxes)
+    ax.set_ylim(ymin=0, ymax=axmax)
+    ax.set_xlim(xmin=0, xmax=axmax)
     ax.set_xlabel('Observed')
     ax.set_ylabel('Predicted')
-    ax.set_title('Leave one out cross validation of '+dependent)
-    ax.text(0.05,0.95, 'Pearson r= '+str(pearson)+'\n$Adj. R^2= $'+str(r2)+'\nRMSE= '+str(rmse),ha='left', va='top', transform=ax.transAxes)
+    ax.set_title('Leave one out cross validation of ' + dependent)
+    ax.text(0.05, 0.95, f'Pearson r= {pearson}\n$Adj. R^2= ${r2}\nRMSE= {rmse}', ha='left', va='top', transform=ax.transAxes)
     ax.grid(True)
-#------------------------------------------------------------------------------
+#---------------------------------------------------------
 # function to save final model description
-def final_model_out(dependent,model,formula,dataframe,filepath,sqliteconnection,dataframe_residuals):
+def final_model_out(dependent, model, formula, dataframe, filepath, sqliteconnection, dataframe_residuals):
     log.write('\n\nFinal model for '+dependent+':\n')
     log.write(model.summary().as_text())
     log.write('\n\nVariance Inflation of model\n')
-    vif=var_inf_fac(formula,dataframe)
+    vif = var_inf_fac(formula, dataframe)
     log.write(vif.to_string())
     log.write('\n\nCase summaries\n')
     log.write(model.get_influence().summary_table().as_text())
     log.write('\n\nDF Betas\n')
-    dfbetas=model.get_influence().summary_frame().filter(regex="dfb")
+    dfbetas = model.get_influence().summary_frame().filter(regex="dfb")
     log.write(dfbetas.to_string())
     log.write('\n')
-    timestamp=time.strftime("%Y%m%d_%H%M%S")
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
     with PdfPages(filepath+'\\Diagnostic_plots_'+dependent+'_'+timestamp+'.pdf') as pdf:
-        qq_plot(model,dependent)
+        qq_plot(model, dependent)
         pdf.savefig()
         plt.close()
-        res_plot(model,dependent)
+        res_plot(model, dependent) # call res_plot with model and dependent
         pdf.savefig()
         plt.close()
-        scloc_plot(model,dependent)
+        scloc_plot(model, dependent) # call scloc_plot with model and dependent
         pdf.savefig()
         plt.close()
-    loocv(dataframe,formula,dependent)
+    loocv(dataframe, formula, dependent)
     plt.savefig(filepath+'\\LOOCV_'+dependent+'_'+timestamp+'.pdf')
     plt.close()
-    df_coef=model.params.to_frame() # save model parameters to dataframe
+    df_coef = model.params.to_frame() # save model parameters to dataframe
     df_coef.reset_index(inplace=True) # make index column
-    df_coef.columns=['X','coefficient'] # rename columns
-    df_coef.to_sql('MODEL_'+dependent,sqliteconnection,if_exists='replace') # add to sqlite as table
-    df_resid2=model.resid.to_frame() # save residuals to dataframe
-    df_resid2.columns=['RES_'+dependent] # rename column to show var name
+    df_coef.columns = ['X', 'coefficient'] # rename columns
+    df_coef.to_sql('MODEL_'+dependent, sqliteconnection, if_exists='replace') # add to sqlite as table
+    df_resid2 = model.resid.to_frame() # save residuals to dataframe
+    df_resid2.columns = ['RES_'+dependent] # rename column to show var name
     df_resid2.reset_index(inplace=True) # make index column
     df_resid2['siteID_INT'] = df_resid2['index']+1 # make siteID_INT column based on index
     del df_resid2['index'] # delete index column
     global df_resid
-    df_resid=dataframe_residuals.merge(df_resid2,on='siteID_INT',how='left') # join to dataframe based on siteID_INT
+    df_resid = dataframe_residuals.merge(df_resid2, on='siteID_INT', how='left') # join to dataframe based on siteID_INT
 
 
 #------------------------------------------------------------------------------
@@ -6879,10 +6884,9 @@ class WizardPanel4(wx.Panel):
 
             #then it moves on to the next dependent variable
 
-
         # check spatial autocorrelation of residuals
-        df_resid.to_csv(out_path+'\\Residuals.csv',index=False) # save residuals in csv file
-        resVar=list(df_resid) # make list of variables
+        df_resid.to_csv(out_path + '\\Residuals.csv', index=False)  # save residuals in csv file
+        resVar = list(df_resid)  # make list of variables
         try:
             resVar.remove('siteID_INT')
         except ValueError:
@@ -6891,35 +6895,35 @@ class WizardPanel4(wx.Panel):
             resVar.remove('siteID')
         except ValueError:
             pass
-
-        if arcpy.Exists(out_fgdb+'\\modelResid'): # delete file if exists
-            arcpy.Delete_management(out_fgdb+'\\modelResid')
-        arcpy.TableToTable_conversion (out_path+'\\Residuals.csv', out_fgdb, "modelResid") # save csv to out_fgdb
-        arcpy.JoinField_management (depVar, "siteID_INT", out_fgdb+'\\modelResid', "siteID_INT") # join to monitoring sites
-
-        df=pd.DataFrame()
+        
+        if arcpy.Exists(out_fgdb + '\\modelResid'):  # delete file if exists
+            arcpy.Delete_management(out_fgdb + '\\modelResid')
+        arcpy.TableToTable_conversion(out_path + '\\Residuals.csv', out_fgdb, "modelResid")  # save csv to out_fgdb
+        arcpy.JoinField_management(depVar, "siteID_INT", out_fgdb + '\\modelResid', "siteID_INT")  # join to monitoring sites
+        
+        data = [] #create empty list to append dataframes
         for var in resVar:
             arcpy.SpatialAutocorrelation_stats (depVar, var, "NO_REPORT","INVERSE_DISTANCE", "EUCLIDEAN_DISTANCE", "NONE")
-            messages=arcpy.GetMessages()
-            sIndex = messages.find('''Moran's Index:''')
-            eIndex = messages.find('''Distance measured in Meters''') # what if unit isn't metres?
-            moransSum = messages[sIndex : eIndex]
-            res_dict=dict(item.split(':') for item in moransSum.rstrip('\n').split('\n'))
-            res_dict.update({'VarName':str(var)})
-            df = df.append(res_dict,ignore_index=True)
-
+            messages=arcpy.GetMessages() #get output message
+            sIndex = messages.find('''json''') #find start of json part in message
+            eIndex = messages.find('''Succeeded''') #find end of json part in message
+            moransSum = messages[sIndex+7 : eIndex-2] #extract string that is in json format
+            res_dict = json.loads(moransSum) #read it in based on json
+            df_sac = pd.DataFrame(res_dict["data"]) #put data part from json into dataframe
+            df_sac['VarName'] = str(var) #add variable name
+            data.append(df_sac) #append to data list
+            
+        df = pd.concat(data, ignore_index = True) #merge all dataframes
         log.write("\n\nSpatial autocorrelation of residuals\n")
-        log.write(df.to_string())
-
-
+        log.write(df.to_string()) #write dataframe to log
 
         #-------------------------------------------------------------------------------
         time2=time.clock()
         m, s = divmod((time2-time1), 60)
         h, m = divmod(m, 60)
-        log.write(time.strftime("\nEnding statistical analysis: %A %d %b %Y %H:%M:%S\n", time.localtime()))
+        log.write(time.strftime("\n\nEnding statistical analysis: %A %d %b %Y %H:%M:%S\n", time.localtime()))
         arcpy.AddMessage(("Elapsed time statistical analysis: %d:%02d:%02d" % (h, m, s)))
-        log.write("\n\nElapsed time statistical analysis: %d:%02d:%02d" % (h, m, s))
+        log.write("\nElapsed time statistical analysis: %d:%02d:%02d" % (h, m, s))
 
         self.mark3.SetLabel(mark_done)
         self.finBtn.Enable()

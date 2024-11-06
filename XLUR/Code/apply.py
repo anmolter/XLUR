@@ -23,7 +23,7 @@ import math
 import string
 import random
 import csv
-
+time.clock = time.time
 #------------------------------------------------------------------------------
 # User defined global functions
 #------------------------------------------------------------------------------
